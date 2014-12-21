@@ -17,11 +17,18 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x = this.x + this.sX * dt;
+    if (this.x > 5 * 101){
+        this.x = -1 * 101;
+        this.y = Math.floor((Math.random()*3)+1) * 83 - 20;
+        this.sX = Math.random()*80 + 20;
+    }
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+    ctx.scale(1,1);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+ //   ctx.scale(0.25,0.25);
 };
 
 // Now write your own player class
@@ -54,11 +61,13 @@ Player.prototype.handleInput = function() {
 
 var allEnemies = [];
 
-allEnemies.push(function(){
-    var bad = new Enemy( 0 * 101, 1*83-40, 10);
-    return bad;
-}());
-console.log(allEnemies[0]);
+for (var i = 0; i < 3; i++){
+    allEnemies.push(function(){
+        return new Enemy( -1 * 101, i*83, 100);
+    }());
+    console.log(allEnemies[i]);
+}
+
 
 var player = new Player(4 * 101, 5 * 83-40, 5);
 
