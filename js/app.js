@@ -4,6 +4,8 @@ var Enemy = function(positionX, positionY, speed, scale) {
     // we've provided one for you to get started
     this.speed = speed;
     this.scale = scale;
+    this.tileX = positionX;
+    this.tileY = positionY;
     this.x = positionX - 101/2 * this.scale;
     this.y = positionY - 135 * this.scale;
     // The image/sprite for our enemies, this uses
@@ -47,8 +49,8 @@ Enemy.prototype.render = function() {
 var Player = function(positionX, positionY, speed, scale){
     this.speed = speed;
     this.scale = scale;
-    this.tileX = positionX; // - 101/2 * this.scale;
-    this.tileY = positionY; // - 135 * this.scale;
+    this.tileX = positionX;
+    this.tileY = positionY;
     this.sprite = 'images/char-boy.png';
     this.collisionCircle = 0;
 };
@@ -59,8 +61,8 @@ Player.prototype.footPosition = function(postionX, positionY){
 
 Player.prototype.update = function() {
 //var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
-    this.x = this.tileX * 101;
-    this.y = this.tileY * 83 - 25;
+    this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
+    this.y = - 120 * this.scale + this.tileY * 83 + 83;
 };
 
 Player.prototype.render = function() {
@@ -68,9 +70,9 @@ Player.prototype.render = function() {
     ctx.beginPath();
     ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 125 * this.scale, 15 * this.scale, 0, 2 * Math.PI, false);
     ctx.fill();
-    ctx.beginPath();
-    ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 95 * this.scale, 33 * this.scale, 0, 2 * Math.PI, false);
-    ctx.fill();
+//    ctx.beginPath();
+//    ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 95 * this.scale, 33 * this.scale, 0, 2 * Math.PI, false);
+//    ctx.fill();
 };
 
 Player.prototype.handleInput = function(key) {
@@ -113,7 +115,7 @@ for (var i = 1; i < 4; i++){
     console.log(allEnemies[i]);
 }
 
-var player = new Player( 2, 5, 5, 1);
+var player = new Player( 0, 0, 5, 1);
 
 console.log(player);
 
