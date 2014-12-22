@@ -17,6 +17,13 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x = this.x + this.speed * dt / this.scale;
+    if (this.x > (-101/2 + 101 * 6 ) * (this.scale < 1 ? 1 : this.scale)){
+        this.scale = Math.random()*1.5+0.5;
+        this.speed = 50 + Math.random()*50;
+        this.x = -101 * (this.scale < 1 ? 1 : this.scale);
+        this.y = Math.floor(1+Math.random()*3)*80 + 120 - (135 * this.scale);
+    }
 
 };
 
@@ -25,8 +32,10 @@ Enemy.prototype.render = function() {
     ctx.scale(1,1);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 101 * this.scale, 171 * this.scale);
     ctx.beginPath();
-    ctx.arc(this.x + (101/2 + 20) * this.scale, this.y + 108 * this.scale, 30 * this.scale, 0, 2 * Math.PI, false);
-    //ctx.fillStyle = rgba(0,0,0, 126);
+    ctx.arc(this.x + (101/2 + 20) * this.scale, this.y + 108 * this.scale, 25 * this.scale, 0, 2 * Math.PI, false);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(this.x + (101/2 + 44) * this.scale, this.y + 113 * this.scale, 5 * this.scale, 0, 2 * Math.PI, false);
     ctx.fill();
  //   ctx.scale(0.25,0.25);
 };
@@ -41,6 +50,7 @@ var Player = function(positionX, positionY, speed, scale){
     this.x = positionX - 101/2 * this.scale;
     this.y = positionY - 135 * this.scale;
     this.sprite = 'images/char-boy.png';
+    this.collisionCircle = 0;
 };
 
 Player.prototype.footPosition = function(postionX, positionY){
@@ -50,7 +60,6 @@ Player.prototype.footPosition = function(postionX, positionY){
 Player.prototype.update = function() {
 
 };
-
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 101 * this.scale, 171 * this.scale);
@@ -74,15 +83,15 @@ Player.prototype.handleInput = function() {
 
 var allEnemies = [];
 
-for (var i = 0; i < 3; i++){
+for (var i = 1; i < 4; i++){
     allEnemies.push(function(){
-        return new Enemy( 330, 200 + 80 * 1, 0, 1);
+        return new Enemy( 101 , 120 + 80 * i , 100, 2);
     }());
     console.log(allEnemies[i]);
 }
 
 
-var player = new Player( -101/2 + 101 * 4, 200 + 80 * 2, 5, 1);
+var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
 console.log(player);
 
 // This listens for key presses and sends the keys to your
