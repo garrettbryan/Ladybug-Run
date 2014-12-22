@@ -47,8 +47,8 @@ Enemy.prototype.render = function() {
 var Player = function(positionX, positionY, speed, scale){
     this.speed = speed;
     this.scale = scale;
-    this.x = positionX - 101/2 * this.scale;
-    this.y = positionY - 135 * this.scale;
+    this.tileX = positionX; // - 101/2 * this.scale;
+    this.tileY = positionY; // - 135 * this.scale;
     this.sprite = 'images/char-boy.png';
     this.collisionCircle = 0;
 };
@@ -58,7 +58,9 @@ Player.prototype.footPosition = function(postionX, positionY){
 }
 
 Player.prototype.update = function() {
-
+//var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
+    this.x = this.tileX * 101;
+    this.y = this.tileY * 83 - 25;
 };
 
 Player.prototype.render = function() {
@@ -74,16 +76,24 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(key) {
     switch(key){
         case "left":
-            this.x = this.x - 101;
+            if (this.tileX > 0){
+                this.tileX = this.tileX - 1;
+            }
             break;
         case "right":
-            this.x = this.x + 101;
+            if (this.tileX < 4){
+                this.tileX = this.tileX + 1;
+            }
             break;
         case "up":
-            this.y = this.y - 80;
+            if (this.tileY > 0){
+                this.tileY = this.tileY - 1;
+            }
             break;
         case "down":
-            this.y = this.y + 80;
+            if (this.tileY < 5){
+                this.tileY = this.tileY + 1;
+            }
             break;
     }
 };
@@ -103,8 +113,8 @@ for (var i = 1; i < 4; i++){
     console.log(allEnemies[i]);
 }
 
+var player = new Player( 2, 5, 5, 1);
 
-var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
 console.log(player);
 
 // This listens for key presses and sends the keys to your
