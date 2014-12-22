@@ -6,8 +6,8 @@ var Enemy = function(positionX, positionY, speed, scale) {
     this.scale = scale;
     this.tileX = positionX;
     this.tileY = positionY;
-    this.x = positionX - 101/2 * this.scale;
-    this.y = positionY - 135 * this.scale;
+//    this.x = positionX - 101/2 * this.scale;
+//    this.y = positionY - 135 * this.scale;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -19,9 +19,23 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.tileX = this.tileX + this.speed * dt / this.scale;
+    this.x = -101/2  * this.scale + this.tileX * (101 + 101/2);
+    this.y = - 120 * this.scale + this.tileY * 83 + 83;
+
+    if (this.x > -101/2  * this.scale + 5 * 101 + 101/2 *this.scale){
+        this.scale = Math.random()*1.75+0.25;
+        this.speed = 0.5 + Math.random() * 0.5;
+        this.tileX = -1;
+        //this.tileY = Math.floor(1+Math.random()*3);
+
+
+    }
+
+
     this.x = this.x + this.speed * dt / this.scale;
     if (this.x > (-101/2 + 101 * 6 ) * (this.scale < 1 ? 1 : this.scale)){
-        this.scale = Math.random()*1.5+0.5;
+        this.scale = Math.random()*2;
         this.speed = 50 + Math.random()*50;
         this.x = -101 * (this.scale < 1 ? 1 : this.scale);
         this.y = Math.floor(1+Math.random()*3)*80 + 120 - (135 * this.scale);
@@ -34,7 +48,7 @@ Enemy.prototype.render = function() {
     ctx.scale(1,1);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 101 * this.scale, 171 * this.scale);
     ctx.beginPath();
-    ctx.arc(this.x + (101/2 + 20) * this.scale, this.y + 108 * this.scale, 25 * this.scale, 0, 2 * Math.PI, false);
+    ctx.arc(this.x + (101/2 + 25) * this.scale, this.y + 108 * this.scale, 20 * this.scale, 0, 2 * Math.PI, false);
     ctx.fill();
     ctx.beginPath();
     ctx.arc(this.x + (101/2 + 44) * this.scale, this.y + 113 * this.scale, 5 * this.scale, 0, 2 * Math.PI, false);
@@ -63,6 +77,10 @@ Player.prototype.update = function() {
 //var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
     this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
     this.y = - 120 * this.scale + this.tileY * 83 + 83;
+    if (this.tileY < 1){
+        this.tileX = 2;
+        this.tileY = 5;
+    }
 };
 
 Player.prototype.render = function() {
@@ -70,9 +88,9 @@ Player.prototype.render = function() {
     ctx.beginPath();
     ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 125 * this.scale, 15 * this.scale, 0, 2 * Math.PI, false);
     ctx.fill();
-//    ctx.beginPath();
-//    ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 95 * this.scale, 33 * this.scale, 0, 2 * Math.PI, false);
-//    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 95 * this.scale, 33 * this.scale, 0, 2 * Math.PI, false);
+    ctx.fill();
 };
 
 Player.prototype.handleInput = function(key) {
@@ -110,12 +128,12 @@ var allEnemies = [];
 
 for (var i = 1; i < 4; i++){
     allEnemies.push(function(){
-        return new Enemy( 101 , 120 + 80 * i , 100, 2);
+        return new Enemy( -1, i, 1, 1);
     }());
-    console.log(allEnemies[i]);
+    console.log(allEnemies[0]);
 }
 
-var player = new Player( 0, 0, 5, 1);
+var player = new Player( 2, 5, 5, 1);
 
 console.log(player);
 
