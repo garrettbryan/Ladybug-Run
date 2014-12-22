@@ -71,8 +71,21 @@ Player.prototype.render = function() {
     ctx.fill();
 };
 
-Player.prototype.handleInput = function() {
-
+Player.prototype.handleInput = function(key) {
+    switch(key){
+        case "left":
+            this.x = this.x - 101;
+            break;
+        case "right":
+            this.x = this.x + 101;
+            break;
+        case "up":
+            this.y = this.y - 80;
+            break;
+        case "down":
+            this.y = this.y + 80;
+            break;
+    }
 };
 
 // Now instantiate your objects.
