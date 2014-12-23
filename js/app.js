@@ -29,13 +29,14 @@ Enemy.prototype.update = function(dt) {
     this.x = -101/2  * this.scale + this.tileX * (101 + 101/2);
     this.y = - 120 * this.scale + this.tileY * 83 + 83;
 
-    this.collisionCircles[0].x = this.x + (101/2 + 25) * this.scale;
+    this.collisionCircles[0].x = this.x + (101/2 + 30) * this.scale;
     this.collisionCircles[0].y = this.y + 108 * this.scale;
 
-    if (this.x > -101/2  * this.scale + 5 * 101 + 101/2 *this.scale){
-        this.scale = Math.random()*1.75+0.25;
-        this.speed = 0.5 + Math.random() * 0.5;
+    if (this.x > -101/2  * this.scale + 10 * 101 + 101/2 *this.scale){
+        this.scale = Math.random()*2.75+0.25;
+        this.speed = 2 + Math.random() * 1;
         this.tileX = -1;
+        this.collisionCircles[0].r = 20 * this.scale;
         //this.tileY = Math.floor(1+Math.random()*3);
     }
 
@@ -45,11 +46,9 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 101 * this.scale, 171 * this.scale);
 //    ctx.beginPath();
-//    ctx.arc(this.collisionCircles[0].x, this.collisionCircles[0].y, 20 * this.scale, 0, 2 * Math.PI, false);
+//    ctx.arc(this.collisionCircles[0].x , this.collisionCircles[0].y,  this.collisionCircles[0].r, 0, 2 * Math.PI, false);
 //    ctx.fill();
-//    ctx.beginPath();
-//    ctx.arc(this.x + (101/2 + 44) * this.scale, this.y + 113 * this.scale, 5 * this.scale, 0, 2 * Math.PI, false);
-//    ctx.fill();
+
 };
 
 
@@ -150,7 +149,7 @@ Player.prototype.render = function() {
 //    ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 125 * this.scale, 15 * this.scale, 0, 2 * Math.PI, false);
 //    ctx.fill();
 //    ctx.beginPath();
-//    ctx.arc(this.collisionCircles[0].x , this.collisionCircles[0].y , 33 * this.scale, 0, 2 * Math.PI, false);
+//    ctx.arc(this.collisionCircles[0].x , this.collisionCircles[0].y , this.collisionCircles[0].r, 0, 2 * Math.PI, false);
 //    ctx.fill();
 };
 
@@ -162,7 +161,7 @@ Player.prototype.handleInput = function(key) {
             }
             break;
         case "right":
-            if (this.tileX < 4){
+            if (this.tileX < 9){
                 this.tileX = this.tileX + 1;
             }
             break;
@@ -187,9 +186,9 @@ Player.prototype.handleInput = function(key) {
 
 var allEnemies = [];
 
-for (var i = 1; i < 4; i++){
+for (var i = 1; i < 7; i++){
     allEnemies.push(function(){
-        return new Enemy( -1, i, 1, 1);
+        return new Enemy( -1, Math.ceil(i/2), 3, 1);
     }());
     console.log(allEnemies[0]);
 }
