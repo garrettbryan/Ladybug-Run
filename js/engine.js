@@ -107,6 +107,7 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
+        var whiteBlock = 'images/white-block.png';
         var rowImages = [
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
@@ -123,6 +124,9 @@ var Engine = (function(global) {
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
+        for (i = 0; i < numCols; i++){
+            ctx.drawImage(Resources.get(whiteBlock), i * 101, 0);
+        }
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
                 /* The drawImage function of the canvas' context element
@@ -168,11 +172,24 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
-        'images/stone-block.png',
-        'images/water-block.png',
-        'images/grass-block.png',
-        'images/enemy-bug.png',
-        'images/char-boy.png'
+	'images/char-boy.png',
+	'images/char-cat-girl.png',
+	'images/char-horn-girl.png',
+	'images/char-pink-girl.png',
+	'images/char-princess-girl.png',
+	'images/enemy-bug.png',
+	'images/Gem Blue.png',
+	'images/Gem Green.png',
+	'images/Gem Orange.png',
+	'images/grass-block.png',
+	'images/Heart.png',
+	'images/Key.png',
+	'images/Rock.png',
+	'images/Selector.png',
+	'images/Star.png',
+	'images/stone-block.png',
+	'images/water-block.png',
+    'images/white-block.png'
     ]);
     Resources.onReady(init);
 

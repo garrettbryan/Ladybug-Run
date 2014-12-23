@@ -56,12 +56,36 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function(positionX, positionY, speed, scale){
+var Player = function(positionX, positionY, speed, scale, character){
     this.speed = speed;
     this.scale = scale;
     this.tileX = positionX;
     this.tileY = positionY;
-    this.sprite = 'images/char-boy.png';
+    this.characters = [
+        {
+            name: "Bug Boy",
+            sprite :'images/char-boy.png',
+        },
+        {
+            name: "Cat Girl",
+            sprite: 'images/char-cat-girl.png',
+        },
+        {
+            name: "Goth Girl with Issues",
+            sprite: 'images/char-horn-girl.png',
+        },
+        {
+            name: "Pinky",
+            sprite: 'images/char-pink-girl.png',
+        },
+        {
+            name: 'Princess Lily',
+            sprite: 'images/char-princess-girl.png',
+        }
+    ];
+    this.character = character;
+    this.sprite = this.characters[character].sprite;
+    this.name = this.characters[character].name;
     this.collisionCircles = [
         {
             "name": "head",
@@ -84,13 +108,11 @@ Player.prototype.collisionCheck = function(enemy){
         var d = (enemy.collisionCircles[ecc].x - this.collisionCircles[0].x) *
             (enemy.collisionCircles[ecc].x - this.collisionCircles[0].x) +
             (enemy.collisionCircles[ecc].y - this.collisionCircles[0].y) *
-            (enemy.collisionCircles[ecc].y - this.collisionCircles[0].y)
-            ;
+            (enemy.collisionCircles[ecc].y - this.collisionCircles[0].y);
         var r = (enemy.collisionCircles[ecc].r + this.collisionCircles[0].r) *
              (enemy.collisionCircles[ecc].r + this.collisionCircles[0].r);
         if (d < r) {
-            this.tileX = 2;
-            this.tileY = 5;
+            player.death();
         }
         //console.log(d + " " + r);
     }
@@ -101,8 +123,7 @@ Player.prototype.update = function() {
     this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
     this.y = - 120 * this.scale + this.tileY * 83 + 83;
     if (this.tileY < 1){
-        this.tileX = 2;
-        this.tileY = 5;
+        player.death();
     }
     this.collisionCircles[0].x = this.x + (101/2 + 1) * this.scale;
     this.collisionCircles[0].y = this.y + 95 * this.scale;
@@ -110,6 +131,17 @@ Player.prototype.update = function() {
     for ( var enemy in allEnemies){
         player.collisionCheck(allEnemies[enemy]);
     }
+
+
+
+    this.sprite = this.characters[this.character].sprite;
+    this.name = this.characters[this.character].name;
+};
+
+Player.prototype.death = function(){
+    this.character = Math.floor(Math.random()*5);
+    this.tileX = 2;
+    this.tileY = 5;
 };
 
 Player.prototype.render = function() {
@@ -162,7 +194,7 @@ for (var i = 1; i < 4; i++){
     console.log(allEnemies[0]);
 }
 
-var player = new Player( 2, 5, 5, 1);
+var player = new Player( 2, 5, 5, 1, 2);
 
 console.log(player);
 
