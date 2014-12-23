@@ -11,10 +11,10 @@ var Enemy = function(positionX, positionY, speed, scale) {
     this.sprite = 'images/enemy-bug.png';
     this.collisionCircles = [
         {
-            "name": "head",
-            "r": 20 * this.scale,
-            "x": 0,
-            "y": 0
+            'name': 'head',
+            'r': 20 * this.scale,
+            'x': 0,
+            'y': 0
         }
     ];
 };
@@ -62,19 +62,19 @@ var Player = function(positionX, positionY, speed, scale, character){
     this.tileY = positionY;
     this.characters = [
         {
-            name: "Bug Boy",
+            name: 'Bug Boy',
             sprite :'images/char-boy.png',
         },
         {
-            name: "Cat Girl",
+            name: 'Cat Girl',
             sprite: 'images/char-cat-girl.png',
         },
         {
-            name: "Goth Girl with Issues",
+            name: 'Goth Girl with Issues',
             sprite: 'images/char-horn-girl.png',
         },
         {
-            name: "Pinky",
+            name: 'Pinky',
             sprite: 'images/char-pink-girl.png',
         },
         {
@@ -87,16 +87,16 @@ var Player = function(positionX, positionY, speed, scale, character){
     this.name = this.characters[character].name;
     this.collisionCircles = [
         {
-            "name": "head",
-            "r": 33 * this.scale,
-            "x": 0,
-            "y": 0
+            'name': 'head',
+            'r': 33 * this.scale,
+            'x': 0,
+            'y': 0
         },
         {
-            "name": "body",
-            "r": 15 * this.scale,
-            "x": 0,
-            "y": 0
+            'name': 'body',
+            'r': 15 * this.scale,
+            'x': 0,
+            'y': 0
         }
     ];
 };
@@ -113,7 +113,7 @@ Player.prototype.collisionCheck = function(enemy){
         if (d < r) {
             player.death();
         }
-        //console.log(d + " " + r);
+        //console.log(d + ' ' + r);
     }
 }
 
@@ -155,22 +155,22 @@ Player.prototype.render = function() {
 
 Player.prototype.handleInput = function(key) {
     switch(key){
-        case "left":
+        case 'left':
             if (this.tileX > 0){
                 this.tileX = this.tileX - 1;
             }
             break;
-        case "right":
+        case 'right':
             if (this.tileX < 9){
                 this.tileX = this.tileX + 1;
             }
             break;
-        case "up":
+        case 'up':
             if (this.tileY > 0){
                 this.tileY = this.tileY - 1;
             }
             break;
-        case "down":
+        case 'down':
             if (this.tileY < 5){
                 this.tileY = this.tileY + 1;
             }
