@@ -61,12 +61,12 @@ var sendbugMessage = function(dt, bugMessage){
             allEnemies.push(function(){
                 return new Enemy( bug[0],
                     bug[1],
-                    bug[2],
+                    bug[2]*2,
                     bug[3]
                 );
             }());
         }else{
-            bugMessage[i][4] -= 2.5*dt;
+            bugMessage[i][4] -= 5*dt;
         }
     }
 }
@@ -232,7 +232,7 @@ var allEnemies = [];
 //    console.log(allEnemies[0]);
 //}
 
-var player = new Player( 4, 7, 5, 2, 2);
+var player = new Player( 4, 7, 5, 1, 2);
 
 console.log(player);
 
@@ -716,6 +716,33 @@ var bugCharacterFormation = function(character){
                 [0,1,1,1,1]
                 ];
             break;
+        case "!":
+            bugArray = [
+                [0,0,1,0,0],
+                [0,0,1,0,0],
+                [0,0,1,0,0],
+                [0,0,0,0,0],
+                [0,0,1,0,0]
+                ];
+            break;
+        case "?":
+            bugArray = [
+                [0,1,1,1,0],
+                [0,0,0,1,0],
+                [0,0,1,0,0],
+                [0,0,0,0,0],
+                [0,0,1,0,0]
+                ];
+            break;
+        case ".":
+            bugArray = [
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,1,0,0]
+                ];
+            break;
 
         default:
     }
@@ -724,7 +751,7 @@ var bugCharacterFormation = function(character){
 
 
 
-var mess = createBugMessage("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz");
+var mess = createBugMessage("HaHa! Prepare to DIE!");
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
