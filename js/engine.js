@@ -46,6 +46,9 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
         update(dt);
+        console.log(mess);
+        sendbugMessage(dt,mess);
+        console.log("main");
         render();
 
         /* Set our lastTime variable which is used to determine the time delta
