@@ -139,8 +139,8 @@ Player.prototype.update = function() {
 
 Player.prototype.death = function(){
     this.character = Math.floor(Math.random()*5);
-    this.tileX = 2;
-    this.tileY = 5;
+    this.tileX = 4;
+    this.tileY = 7;
 };
 
 Player.prototype.render = function() {
@@ -171,7 +171,7 @@ Player.prototype.handleInput = function(key) {
             }
             break;
         case 'down':
-            if (this.tileY < 5){
+            if (this.tileY < 7){
                 this.tileY = this.tileY + 1;
             }
             break;
@@ -193,7 +193,7 @@ for (var i = 1; i < 7; i++){
     console.log(allEnemies[0]);
 }
 
-var player = new Player( 2, 5, 5, 1, 2);
+var player = new Player( 4, 7, 5, 2, 2);
 
 console.log(player);
 
