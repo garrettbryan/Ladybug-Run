@@ -43,7 +43,7 @@ var Enemy = function(posX, posY, speed, scale) {
     ];
 };
 
-Enemy.prototype = Object.create(GamePiece);
+Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
 // Update the enemy's position, required method for game
@@ -164,7 +164,7 @@ var Player = function(posX, posY, speed, scale, character){
     ];
 };
 
-Player.prototype = Object.create(GamePiece);
+Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 //Player.prototype.collisionCheck = function(enemy){
@@ -192,6 +192,8 @@ Player.prototype.update = function() {
     }
     this.collisionCircles[0].x = this.x + (101/2 + 1) * this.scale;
     this.collisionCircles[0].y = this.y + 95 * this.scale;
+
+    //console.log(this.collisionCheck(allEnemies[0]));
 
     for ( var enemy in allEnemies){
         this.collisionCheck(allEnemies[enemy]);
