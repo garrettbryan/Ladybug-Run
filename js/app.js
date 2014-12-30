@@ -1,11 +1,35 @@
-// Enemies our player must avoid
-var Enemy = function(positionX, positionY, speed, scale) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+var GamePiece = function(posX, posY, speed, scale) {
     this.speed = speed;
     this.scale = scale;
-    this.tileX = positionX;
-    this.tileY = positionY;
+    this.tileX = posX;
+    this.tileY = posY;
+}
+
+GamePiece.prototype.collisionCheck = function(gamePiece){
+    //console.log( gamePiece.collisionCircles[0].x );
+    for ( var cc in gamePiece.collisionCircles){
+        var d = (gamePiece.collisionCircles[cc].x - this.collisionCircles[0].x) *
+            (gamePiece.collisionCircles[cc].x - this.collisionCircles[0].x) +
+            (gamePiece.collisionCircles[cc].y - this.collisionCircles[0].y) *
+            (gamePiece.collisionCircles[cc].y - this.collisionCircles[0].y);
+        var r = (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r) *
+             (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r);
+        if (d < r) {
+            this.death();
+        } //else {
+         //   return false;
+        //}
+        //console.log(d + ' ' + r);
+    }
+}
+
+
+// Enemies our player must avoid
+var Enemy = function(posX, posY, speed, scale) {
+    // Variables applied to each of our instances go here,
+    // we've provided one for you to get started
+    GamePiece.call(this, posX, posY, speed, scale);
+
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -18,6 +42,9 @@ var Enemy = function(positionX, positionY, speed, scale) {
         }
     ];
 };
+
+Enemy.prototype = Object.create(GamePiece);
+Enemy.prototype.constructor = Enemy;
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -94,11 +121,8 @@ var createBugMessage = function(message){
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function(positionX, positionY, speed, scale, character){
-    this.speed = speed;
-    this.scale = scale;
-    this.tileX = positionX;
-    this.tileY = positionY;
+var Player = function(posX, posY, speed, scale, character){
+    GamePiece.call(this, posX, posY, speed, scale);
     this.characters = [
         {
             name: 'Bug Boy',
@@ -140,21 +164,24 @@ var Player = function(positionX, positionY, speed, scale, character){
     ];
 };
 
-Player.prototype.collisionCheck = function(enemy){
-    //console.log( enemy.collisionCircles[0].x );
-    for ( var ecc in enemy.collisionCircles){
-        var d = (enemy.collisionCircles[ecc].x - this.collisionCircles[0].x) *
-            (enemy.collisionCircles[ecc].x - this.collisionCircles[0].x) +
-            (enemy.collisionCircles[ecc].y - this.collisionCircles[0].y) *
-            (enemy.collisionCircles[ecc].y - this.collisionCircles[0].y);
-        var r = (enemy.collisionCircles[ecc].r + this.collisionCircles[0].r) *
-             (enemy.collisionCircles[ecc].r + this.collisionCircles[0].r);
-        if (d < r) {
-            player.death();
-        }
-        //console.log(d + ' ' + r);
-    }
-}
+Player.prototype = Object.create(GamePiece);
+Player.prototype.constructor = Player;
+
+//Player.prototype.collisionCheck = function(enemy){
+//    //console.log( enemy.collisionCircles[0].x );
+//    for ( var ecc in enemy.collisionCircles){
+//        var d = (enemy.collisionCircles[ecc].x - this.collisionCircles[0].x) *
+//            (enemy.collisionCircles[ecc].x - this.collisionCircles[0].x) +
+//            (enemy.collisionCircles[ecc].y - this.collisionCircles[0].y) *
+//            (enemy.collisionCircles[ecc].y - this.collisionCircles[0].y);
+//        var r = (enemy.collisionCircles[ecc].r + this.collisionCircles[0].r) *
+//             (enemy.collisionCircles[ecc].r + this.collisionCircles[0].r);
+//        if (d < r) {
+//            player.death();
+//        }
+//        //console.log(d + ' ' + r);
+//    }
+//}
 
 Player.prototype.update = function() {
 //var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
@@ -167,7 +194,7 @@ Player.prototype.update = function() {
     this.collisionCircles[0].y = this.y + 95 * this.scale;
 
     for ( var enemy in allEnemies){
-        player.collisionCheck(allEnemies[enemy]);
+        this.collisionCheck(allEnemies[enemy]);
     }
 
 
