@@ -16,9 +16,9 @@ for (var i = 1; i < 7; i++){
 var player = new Player( 4, 7, 5, 1, 2);
 
 var allCollectables = []
-for (var i = 0; i < 6; i++){
+for (var i = 0; i < 7; i++){
     allCollectables.push(function(){
-        return new Collectable(i, i, 1, 0.10, "Green");
+        return new Collectable(i, i, 1, 0.20, i);
     }());
     //console.log(allCollectables[i]);
 }

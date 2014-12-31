@@ -73,8 +73,8 @@ Player.prototype.update = function() {
     }
 
     for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].x = this.x + (20 + 10*i) * this.scale;
-        this.collectables[i].y = this.y + 50 * this.scale;
+        this.collectables[i].x = 101*i*this.collectables[i].scale -30 + this.x + 101/2 - 101/2  * this.collectables[i].scale;
+        this.collectables[i].y = -30 + this.y + 83 - 120 * this.collectables[i].scale;
     }
 
     this.sprite = this.characters[this.character].sprite;
