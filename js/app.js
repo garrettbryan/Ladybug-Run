@@ -6,12 +6,12 @@
 
 var allEnemies = [];
 
-//for (var i = 1; i < 7; i++){
-//    allEnemies.push(function(){
-//        return new Enemy( -1, Math.ceil(i/2), 3, 1);
-//    }());
-//    console.log(allEnemies[0]);
-//}
+for (var i = 1; i < 7; i++){
+    allEnemies.push(function(){
+        return new Enemy( -1, Math.ceil(i/2), 3, 1);
+    }());
+    console.log(allEnemies[0]);
+}
 
 var player = new Player( 4, 7, 5, 1, 2);
 var allCollectables = []

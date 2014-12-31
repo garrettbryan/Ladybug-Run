@@ -1,6 +1,6 @@
 var Collectable = function(posX, posY, speed, scale, type) {
   GamePiece.call(this, posX, posY, speed, scale);
-  this.types = {
+  var types = {
     'Blue': {
       name: 'Blue Gem',
       sprite: 'images/Gem Blue.png',
@@ -31,12 +31,12 @@ var Collectable = function(posX, posY, speed, scale, type) {
     },
   }
     this.type = type;
-    this.sprite = this.types[this.type].sprite;
-    this.name = this.types[this.type].name;
+    this.sprite = types[this.type].sprite;
+    this.name = types[this.type].name;
     this.collisionCircles = [
       {
         'name': 'main',
-        'r': 15 * this.scale,
+        'r': 110 * this.scale,
         'x': 0,
         'y': 0
       }

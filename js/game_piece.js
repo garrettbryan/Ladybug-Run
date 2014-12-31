@@ -15,8 +15,8 @@ GamePiece.prototype.collisionCheck = function(gamePiece, result){
         var r = (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r) *
              (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r);
         if (d < r) {
-            console.log("collision");
-            //this.result;
+            //console.log("collision");
+            result();
         }
     }
 }
@@ -34,7 +34,7 @@ GamePiece.prototype.update = function(dt) {
 GamePiece.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 101 * this.scale, 171 * this.scale);
     ctx.beginPath();
-    ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 125 * this.scale, 15 * this.scale, 0, 2 * Math.PI, false);
+    ctx.arc(this.x + (101/2 + 1) * this.scale, this.y + 125 * this.scale, this.collisionCircles[0].r * this.scale, 0, 2 * Math.PI, false);
     ctx.fill();
 };
 

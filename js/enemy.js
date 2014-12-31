@@ -43,12 +43,3 @@ Enemy.prototype.update = function(dt) {
     }
 
 };
-
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 101 * this.scale, 171 * this.scale);
-//    ctx.beginPath();
-//    ctx.arc(this.collisionCircles[0].x , this.collisionCircles[0].y,  this.collisionCircles[0].r, 0, 2 * Math.PI, false);
-//    ctx.fill();
-
-};
