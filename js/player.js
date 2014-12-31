@@ -42,7 +42,9 @@ var Player = function(posX, posY, speed, scale, character){
             'name': 'body',
             'r': 15 * this.scale,
             'x': 0,
-            'y': 0
+            'y': 0,
+            'xOffset': 0,
+            'yOffset': 0
         }
     ];
 };

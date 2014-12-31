@@ -8,7 +8,7 @@ var allEnemies = [];
 
 for (var i = 1; i < 7; i++){
     allEnemies.push(function(){
-        return new Enemy( -1, Math.ceil(i/2), 3, 1);
+        return new Enemy( -1, Math.ceil(i/2), 3, 2);
     }());
     console.log(allEnemies[0]);
 }

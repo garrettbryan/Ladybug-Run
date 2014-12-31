@@ -12,7 +12,9 @@ var Enemy = function(posX, posY, speed, scale) {
             'name': 'head',
             'r': 20 * this.scale,
             'x': 0,
-            'y': 0
+            'y': 0,
+            'xOffset': 30,
+            'yOffset': -5
         }
     ];
 };

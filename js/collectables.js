@@ -38,7 +38,9 @@ var Collectable = function(posX, posY, speed, scale, type) {
         'name': 'main',
         'r': 110 * this.scale,
         'x': 0,
-        'y': 0
+        'y': 0,
+        'xOffset': 0,
+        'yOffset': 0
       }
     ]
 
