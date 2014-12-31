@@ -3,6 +3,8 @@ var GamePiece = function(posX, posY, speed, scale) {
     this.scale = scale;
     this.tileX = posX;
     this.tileY = posY;
+    this.x = -101/2 * this.scale + this.tileX * 101 + 101/2;
+    this.y = -120 * this.scale + this.tileY * 83 + 83;
 }
 
 GamePiece.prototype.collisionCheck = function(gamePiece, result){
@@ -16,14 +18,16 @@ GamePiece.prototype.collisionCheck = function(gamePiece, result){
              (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r);
         if (d < r) {
             console.log(gamePiece);
-            result(gamePiece);
+            result.call(this, gamePiece);
         }
     }
 }
 
 GamePiece.prototype.update = function(dt) {
-    this.x = -101/2 * this.scale + this.tileX * 101 + 101/2;
-    this.y = -120 * this.scale + this.tileY * 83 + 83;
+    if (this.attachedTo){
+        this.x = this.attachedTo.x + 20 * this.attachedTo.scale;
+        this.y = this.attachedTo.y + 30 * this.attachedTo.scale;
+    }
     this.collisionCircles[0].x = this.x + (101/2 + 1) * this.scale;
     this.collisionCircles[0].y = this.y + 95 * this.scale;
 //    console.log(this.y);

@@ -52,6 +52,7 @@ Collectable.prototype.follow = function(player){ //TODO
 }
 
 Collectable.prototype.attach = function(player){
-  this.x = player.x - 40 * player.scale;
-  this.y = player.y -40 * player.scale;
+  this.collisionCircles[0].r1 = this.collisionCircles[0].r;
+  this.collisionCircles[0].r = 0;
+  this.attachedTo = player;
 }

@@ -102,9 +102,9 @@ Player.prototype.handleInput = function(key) {
 };
 
 Player.prototype.pickup = function(collectable){
-    console.log(this.characters);
-    this.collectables.push(collectable);
     console.log(collectable);
+    collectable.attach(this);
+    this.collectables.push(collectable);
     console.log("neat");
 }
 
