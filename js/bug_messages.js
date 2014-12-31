@@ -364,8 +364,8 @@ var bugCharacterFormation = function(character){
         case "r":
             bugArray = [
                 [0,0,0,0,0],
-                [0,0,0,0,0],
-                [0,1,1,1,0],
+                [0,1,0,1,0],
+                [0,1,1,0,1],
                 [0,1,0,0,0],
                 [0,1,0,0,0]
                 ];
@@ -522,4 +522,4 @@ var bugCharacterFormation = function(character){
 
 
 
-var mess = createBugMessage("I love Meredith");
+var mess = createBugMessage("I s love Meredith");

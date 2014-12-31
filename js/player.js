@@ -79,6 +79,9 @@ Player.prototype.update = function() {
         this.collisionCheck(allEnemies[enemy]);
     }
 
+    for ( var collectable in allCollectables){
+        this.collisionCheck(allCollectables[collectable]);
+    }
 
 
     this.sprite = this.characters[this.character].sprite;

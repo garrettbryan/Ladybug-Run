@@ -15,6 +15,13 @@ var allEnemies = [];
 //}
 
 var player = new Player( 4, 7, 5, 1, 2);
+var allCollectables = []
+for (var i = 0; i < 6; i++){
+    allCollectables.push(function(){
+        return new Collectable(i, i, 1, 0.25, "Green");
+    }());
+    //console.log(allCollectables[i]);
+}
 
 console.log(player);
 
