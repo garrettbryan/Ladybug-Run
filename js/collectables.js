@@ -46,3 +46,12 @@ var Collectable = function(posX, posY, speed, scale, type) {
 
 Collectable.prototype = Object.create(GamePiece.prototype);
 Collectable.prototype.constructor = Collectable;
+
+Collectable.prototype.follow = function(player){ //TODO
+
+}
+
+Collectable.prototype.attach = function(player){
+  this.x = player.x - 40 * player.scale;
+  this.y = player.y -40 * player.scale;
+}

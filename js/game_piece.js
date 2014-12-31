@@ -15,8 +15,8 @@ GamePiece.prototype.collisionCheck = function(gamePiece, result){
         var r = (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r) *
              (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r);
         if (d < r) {
-            //console.log("collision");
-            result();
+            console.log(gamePiece);
+            result(gamePiece);
         }
     }
 }
