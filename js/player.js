@@ -3,7 +3,7 @@
 // a handleInput() method.
 var Player = function(posX, posY, speed, scale, character){
     GamePiece.call(this, posX, posY, speed, scale);
-    this.collectables = ["1"];
+    this.collectables = [];
     this.characters = [
         {
             name: 'Bug Boy',
@@ -26,7 +26,6 @@ var Player = function(posX, posY, speed, scale, character){
             sprite: 'images/char-princess-girl.png',
         }
     ];
-    this.collectables.push("1");
 
     this.character = character;
     this.sprite = this.characters[character].sprite;
@@ -73,6 +72,10 @@ Player.prototype.update = function() {
         this.collisionCheck(allCollectables[collectable], this.pickup);
     }
 
+    for (var i = 0; i < this.collectables.length; i++){
+        this.collectables[i].x = this.x + (20 + 10*i) * this.scale;
+        this.collectables[i].y = this.y + 50 * this.scale;
+    }
 
     this.sprite = this.characters[this.character].sprite;
     this.name = this.characters[this.character].name;
@@ -104,10 +107,11 @@ Player.prototype.handleInput = function(key) {
 };
 
 Player.prototype.pickup = function(collectable){
-    console.log(collectable);
     collectable.attach(this);
+//    collectable.x = this.x + 20 * this.scale;
+//    collectable.y = this.y + 50 * this.scale;
     this.collectables.push(collectable);
-    console.log("neat");
+    console.log(this.collectables);
 }
 
 Player.prototype.death = function(){

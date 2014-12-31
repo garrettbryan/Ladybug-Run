@@ -14,6 +14,7 @@ for (var i = 1; i < 7; i++){
 }
 
 var player = new Player( 4, 7, 5, 1, 2);
+
 var allCollectables = []
 for (var i = 0; i < 6; i++){
     allCollectables.push(function(){
@@ -24,7 +25,7 @@ for (var i = 0; i < 6; i++){
 
 console.log(player);
 
-var mess = createBugMessage("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz");
+//var mess = createBugMessage("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz");
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

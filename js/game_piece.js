@@ -17,17 +17,17 @@ GamePiece.prototype.collisionCheck = function(gamePiece, result){
         var r = (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r) *
              (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r);
         if (d < r) {
-            console.log(gamePiece);
+            //console.log(gamePiece);
             result.call(this, gamePiece);
         }
     }
 }
 
 GamePiece.prototype.update = function(dt) {
-    if (this.attachedTo){
-        this.x = this.attachedTo.x + 20 ;
-        this.y = this.attachedTo.y + 30;
-    }
+//    if (this.attachedTo){
+//        this.x = this.attachedTo.x + 20 ;
+//        this.y = this.attachedTo.y + 30;
+//    }
     this.collisionCircles[0].x = this.x + (101/2 + 1) * this.scale;
     this.collisionCircles[0].y = this.y + 95 * this.scale;
 //    console.log(this.y);

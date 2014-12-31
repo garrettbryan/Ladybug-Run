@@ -21,7 +21,7 @@ var createBugMessage = function(message){
     var bugMessageFormation = [];
     for (var characterIndex = 0; characterIndex < message.length; characterIndex++){
         var character = bugCharacterFormation(message[characterIndex]);
-        console.log(character);
+//        console.log(character);
         for (var j = 0; j < 5; j++){ // Array index is ordered as such to send out columns at a time
             for (var i = 0; i < 5; i++){
                 if (character[i][j] >= 1){
