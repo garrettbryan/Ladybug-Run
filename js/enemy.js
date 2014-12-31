@@ -14,7 +14,7 @@ var Enemy = function(posX, posY, speed, scale) {
             'x': 0,
             'y': 0,
             'xOffset': 30,
-            'yOffset': -5
+            'yOffset': -15
         }
     ];
 };
