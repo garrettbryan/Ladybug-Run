@@ -135,6 +135,7 @@ var Engine = (function(global) {
          */
         for (i = 0; i < numCols; i++){
             ctx.drawImage(Resources.get(whiteBlock), i * 101, 0);
+            ctx.drawImage(Resources.get(whiteBlock), i * 101, numRows * 83)
         }
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
