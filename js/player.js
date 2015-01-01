@@ -63,7 +63,7 @@ Player.prototype.update = function() {
     //    window.alert(this.collectables[0]);
 
     //console.log(this.collisionCheck(allEnemies[0]));
-
+    //console.log(this.direction);
     for ( var enemy in allEnemies){
         this.collisionCheck(allEnemies[enemy], this.death);
     }
@@ -87,21 +87,41 @@ Player.prototype.handleInput = function(key) {
             if (this.tileX > 0){
                 this.tileX = this.tileX - 1;
             }
+            this.direction = {
+                'x': '-1',
+                'y': '0'
+            }
             break;
         case 'right':
             if (this.tileX < 9){
                 this.tileX = this.tileX + 1;
+            }
+            this.direction = {
+                'x': '1',
+                'y': '0'
             }
             break;
         case 'up':
             if (this.tileY > 0){
                 this.tileY = this.tileY - 1;
             }
+            this.direction = {
+                'x': '0',
+                'y': '-1'
+            }
             break;
         case 'down':
             if (this.tileY < 7){
                 this.tileY = this.tileY + 1;
             }
+            this.direction = {
+                'x': '0',
+                'y': '1'
+            }
+            break;
+        case 'space':
+            console.log('throw');
+            this.throw();
             break;
     }
 };
@@ -120,3 +140,15 @@ Player.prototype.death = function(){
 //    this.tileX = 4;
 //    this.tileY = 7;
 };
+
+Player.prototype.throw = function(){
+    if (this.collectables.length > 0){
+        var projectile = this.collectables.pop();
+        console.log(projectile);
+        projectile.x = this.x + 101/2 * this.scale - 101/2 * projectile.scale;
+        projectile.y = this.y + 120/2 * this.scale - 83/2 * projectile.scale;
+        projectile.attachedTo = "";
+        projectile.collisionCircles[0].r = projectile.collisionCircles[0].r1;
+        projectile.direction = this.direction;
+    }
+}
