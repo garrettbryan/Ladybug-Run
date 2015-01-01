@@ -146,7 +146,7 @@ Player.prototype.throw = function(){
         var projectile = this.collectables.pop();
         console.log(projectile);
         projectile.x = this.x + 101/2 * this.scale - 101/2 * projectile.scale;
-        projectile.y = this.y + 120/2 * this.scale - 83/2 * projectile.scale;
+        projectile.y = this.y + 120 * this.scale - 100 * projectile.scale;
         projectile.attachedTo = "";
         projectile.collisionCircles[0].r = projectile.collisionCircles[0].r1;
         projectile.direction = this.direction;

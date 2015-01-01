@@ -39,15 +39,11 @@ var Collectable = function(posX, posY, speed, scale, type) {
     };
     this.collisionCircles = [
       {
-        'name': 'stationary',
-        'r': 30 * this.scale,
-        'x': 0,
-        'y': 0,
-        'xOffset': 0,
-        'yOffset': 0
-      },
-      {
-        'name': 'projectile',
+        'name': 'primary',
+        'affects': [
+          'Player',
+          'Enemy'
+          ],
         'r': 30 * this.scale,
         'x': 0,
         'y': 0,
@@ -75,8 +71,8 @@ Collectable.prototype.update = function(dt) {
     this.x = this.speed * this.direction.x*dt + this.x;
     this.y = this.speed * this.direction.y*dt + this.y;
 
-    this.collisionCircles[0].x = this.x + (101/2 + 1) * this.scale;
-    this.collisionCircles[0].y = this.y + 95 * this.scale;
+    this.collisionCircles[0].x = this.x;
+    this.collisionCircles[0].y = this.y;
 //    console.log(this.y);
 //    this.sprite = this.types[this.type].sprite;
 //    this.name = this.types[this.type].name;
