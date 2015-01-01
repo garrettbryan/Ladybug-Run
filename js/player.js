@@ -38,7 +38,11 @@ var Player = function(posX, posY, speed, scale, character){
 //            'y': 0
 //        },
         {
-            'name': 'body',
+            'name': 'primary',
+            'affects': [
+              Collectable,
+              Enemy
+              ],
             'r': 15 * this.scale,
             'x': 0,
             'y': 0,

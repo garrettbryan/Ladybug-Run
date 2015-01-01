@@ -41,8 +41,8 @@ var Collectable = function(posX, posY, speed, scale, type) {
       {
         'name': 'primary',
         'affects': [
-          'Player',
-          'Enemy'
+          Player,
+          Enemy
           ],
         'r': 30 * this.scale,
         'x': 0,

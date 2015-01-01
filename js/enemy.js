@@ -9,7 +9,10 @@ var Enemy = function(posX, posY, speed, scale) {
     this.sprite = 'images/enemy-bug.png';
     this.collisionCircles = [
         {
-            'name': 'head',
+            'name': 'primary',
+            'affects': [
+              Player,
+              ],
             'r': 20 * this.scale,
             'x': 0,
             'y': 0,
