@@ -3,6 +3,7 @@ var Enemy = function(posX, posY, speed, scale) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     GamePiece.call(this, posX, posY, speed, scale);
+    this.center.height = 125 * this.scale;
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -16,8 +17,8 @@ var Enemy = function(posX, posY, speed, scale) {
             'r': 20 * this.scale,
             'x': 0,
             'y': 0,
-            'xOffset': 30,
-            'yOffset': -15
+            'xOffset': (30 + 101/2 + 1) * this.scale,
+            'yOffset': (-15 + this.height) * this.scale
         }
     ];
 };
@@ -35,15 +36,12 @@ Enemy.prototype.update = function(dt) {
     this.x = -101/2  * this.scale + this.tileX * (101 + 101/2);
     this.y = - 120 * this.scale + this.tileY * 83 + 83;
 
-    this.collisionCircles[0].x = this.x + (101/2 + 30) * this.scale;
-    this.collisionCircles[0].y = this.y + 108 * this.scale;
+    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
+    this.collisionCircles[0].y = this.y  + this.collisionCircles[0].yOffset;
 
-    if (this.x > -101/2  * this.scale + 10 * 101 + 101/2 *this.scale){
-        this.scale = 1; //Math.random()*2.75+0.25;
-        this.speed = 1; //2 + Math.random() * 1;
+    if (this.x > -101/2  * this.scale + 10 * 101 + 101/2 * this.scale){
         this.tileX = -1;
-        this.collisionCircles[0].r = 20 * this.scale;
-        //this.tileY = Math.floor(1+Math.random()*3);
+        this.tileY = Math.floor(1+Math.random()*5);
     }else if (this.x < -101/2 * this.scale) {
     }
 

@@ -1,5 +1,6 @@
 var Collectable = function(posX, posY, speed, scale, type) {
   GamePiece.call(this, posX, posY, speed, scale);
+  this.center.height = 125 * this.scale;
   var types = [
     {
       name: 'Blue Gem',
@@ -47,8 +48,8 @@ var Collectable = function(posX, posY, speed, scale, type) {
         'r': 30 * this.scale,
         'x': 0,
         'y': 0,
-        'xOffset': 0,
-        'yOffset': 0
+        'xOffset': (101/2 + 1) * this.scale,
+        'yOffset': 125 * this.scale
       }
     ]
 
@@ -71,8 +72,9 @@ Collectable.prototype.update = function(dt) {
     this.x = this.speed * this.direction.x*dt + this.x;
     this.y = this.speed * this.direction.y*dt + this.y;
 
-    this.collisionCircles[0].x = this.x;
-    this.collisionCircles[0].y = this.y;
+    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
+    this.collisionCircles[0].y = this.y  + this.collisionCircles[0].yOffset;
+
 //    console.log(this.y);
 //    this.sprite = this.types[this.type].sprite;
 //    this.name = this.types[this.type].name;

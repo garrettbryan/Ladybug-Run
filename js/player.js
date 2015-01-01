@@ -3,7 +3,9 @@
 // a handleInput() method.
 var Player = function(posX, posY, speed, scale, character){
     GamePiece.call(this, posX, posY, speed, scale);
+    this.center.height = 125 * this.scale;
     this.collectables = [];
+    this.collectablesWidth = 0;
     this.characters = [
         {
             name: 'Bug Boy',
@@ -46,8 +48,8 @@ var Player = function(posX, posY, speed, scale, character){
             'r': 15 * this.scale,
             'x': 0,
             'y': 0,
-            'xOffset': 0,
-            'yOffset': 0
+            'xOffset': (101/2 + 1) * this.scale,
+            'yOffset': 125 * this.scale
         }
     ];
 };
@@ -62,8 +64,8 @@ Player.prototype.update = function() {
     if (this.tileY < 1){
         player.death();
     }
-    this.collisionCircles[0].x = this.x + (101/2 + 1) * this.scale;
-    this.collisionCircles[0].y = this.y + 95 * this.scale;
+    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
+    this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;
     //    window.alert(this.collectables[0]);
 
     //console.log(this.collisionCheck(allEnemies[0]));
@@ -75,10 +77,12 @@ Player.prototype.update = function() {
     for ( var collectable in allCollectables){
         this.collisionCheck(allCollectables[collectable], this.pickup);
     }
-
+    var collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].x = 101*i*this.collectables[i].scale -30 + this.x + 101/2 - 101/2  * this.collectables[i].scale;
+        this.collectables[i].x = this.x + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
         this.collectables[i].y = -30 + this.y + 83 - 120 * this.collectables[i].scale;
+        collectablesSpacing += this.collectables[i].width;
+
     }
 
     this.sprite = this.characters[this.character].sprite;
@@ -135,6 +139,7 @@ Player.prototype.pickup = function(collectable){
 //    collectable.x = this.x + 20 * this.scale;
 //    collectable.y = this.y + 50 * this.scale;
     this.collectables.push(collectable);
+    this.collectablesWidth += collectable.width;
     console.log(this.collectables);
 }
 
@@ -148,11 +153,12 @@ Player.prototype.death = function(){
 Player.prototype.throw = function(){
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
+        this.collectablesWidth -= projectile.width;
         console.log(projectile);
-        projectile.x = this.x + 101/2 * this.scale - 101/2 * projectile.scale;
-        projectile.y = this.y + 120 * this.scale - 100 * projectile.scale;
-        projectile.attachedTo = "";
         projectile.collisionCircles[0].r = projectile.collisionCircles[0].r1;
+        projectile.x = this.x + this.center.width - projectile.center.width + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.x;
+        projectile.y = this.y + this.center.height - projectile.center.height + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.y;
+        projectile.attachedTo = "";
         projectile.direction = this.direction;
     }
 }
