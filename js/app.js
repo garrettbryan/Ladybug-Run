@@ -24,7 +24,7 @@ for (var i = 0; i < 4; i++){
 var allCollectables = [];
 for (var i = 0; i < 7; i++){
     allCollectables.push(function(){
-        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*4+1), 300, 0.2+0.2 *i, i);
+        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*4+1), 300, 0.3, i);
     }());
     //console.log(allCollectables[i]);
 }
@@ -32,7 +32,7 @@ for (var i = 0; i < 7; i++){
 var transporters = [];
 for (var i = 0; i < 2; i++){
     transporters.push(function(){
-        return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*7+1));
+        return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+1));
     }());
 }
 
