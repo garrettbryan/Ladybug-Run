@@ -15,13 +15,21 @@ for (var i = 1; i < 4; i++){
 
 var player = new Player( 4, 7, 5, 1, 2);
 
-var allCollectables = []
+var allCollectables = [];
 for (var i = 0; i < 7; i++){
     allCollectables.push(function(){
-        return new Collectable(i, i, 300, 0.2 + 0.30 * i , i);
+        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*4+1), 300, 0.2+0.2 *i, i);
     }());
     //console.log(allCollectables[i]);
 }
+
+var transporters = [];
+for (var i = 0; i < 2; i++){
+    transporters.push(function(){
+        return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*7+1));
+    }());
+}
+
 
 console.log(player);
 

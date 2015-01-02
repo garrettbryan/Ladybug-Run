@@ -72,8 +72,8 @@ Player.prototype.update = function() {
     }
     var collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].x = this.x + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].y = -30 + this.y + 83 - 120 * this.collectables[i].scale;
+        this.collectables[i].x = 0 + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
+        this.collectables[i].y = -30 +0 + 83 - 120 * this.collectables[i].scale;
         collectablesSpacing += this.collectables[i].width;
 
     }
@@ -146,12 +146,12 @@ Player.prototype.death = function(){
 Player.prototype.throw = function(){
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
+        projectile.direction = this.direction;
         this.collectablesWidth -= projectile.width;
         projectile.collisionCircles[0].r = projectile.collisionCircles[0].r1;
         projectile.x = this.x + this.center.width - projectile.center.width + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.x;
         projectile.y = this.y + this.center.height - projectile.center.height + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.y;
         projectile.attachedTo = "";
-        projectile.direction = this.direction;
         console.log(projectile.x + " " + projectile.y);
 
     }

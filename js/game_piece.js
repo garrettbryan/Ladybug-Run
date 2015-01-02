@@ -7,8 +7,8 @@ var GamePiece = function(posX, posY, speed, scale) {
     this.center = {
         width: 101 * this.scale / 2
     }
-    this.x = -101/2 * this.scale + this.tileX * 101 + 101/2;
-    this.y = -120 * this.scale + this.tileY * 83 + 83;
+    this.x = -this.width/2 + this.tileX * 101 + 101/2;
+    this.y = -123 * this.scale + this.tileY * 83 + 83;
 }
 
 GamePiece.prototype.collisionCheck = function(gamePiece, result){
@@ -32,8 +32,8 @@ GamePiece.prototype.update = function(dt) {
 //        this.x = this.attachedTo.x + 20 ;
 //        this.y = this.attachedTo.y + 30;
 //    }
-    this.collisionCircles[0].x = this.x + (101/2 + 1) * this.scale;
-    this.collisionCircles[0].y = this.y + this.center.height;
+    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
+    this.collisionCircles[0].y = this.y  + this.collisionCircles[0].yOffset;
 //    console.log(this.y);
 //    this.sprite = this.types[this.type].sprite;
 //    this.name = this.types[this.type].name;

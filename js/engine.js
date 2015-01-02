@@ -101,6 +101,11 @@ var Engine = (function(global) {
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);
         });
+
+        transporters.forEach(function(transporter) {
+            transporter.update(dt);
+        });
+
         player.update();
     }
 
@@ -162,12 +167,18 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+        transporters.forEach(function(transporter) {
+            transporter.render();
+        });
+
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
          allCollectables.forEach(function(collectable) {
             collectable.render();
         });
+
+
 
         player.render();
     }
