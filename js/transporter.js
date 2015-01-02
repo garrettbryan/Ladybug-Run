@@ -24,3 +24,6 @@ var Transporter = function(posX, posY) {
 Transporter.prototype = Object.create(GamePiece.prototype);
 Transporter.prototype.constructor = Transporter;
 
+Transporter.prototype.transport = function(player){
+
+}
