@@ -28,17 +28,10 @@ var Player = function(posX, posY, speed, scale, character){
             sprite: 'images/char-princess-girl.png',
         }
     ];
-
     this.character = character;
     this.sprite = this.characters[character].sprite;
     this.name = this.characters[character].name;
     this.collisionCircles = [
-//        {
-//            'name': 'head',
-//            'r': 33 * this.scale,
-//            'x': 0,
-//            'y': 0
-//        },
         {
             'name': 'primary',
             'affects': [
@@ -140,7 +133,7 @@ Player.prototype.pickup = function(collectable){
 //    collectable.y = this.y + 50 * this.scale;
     this.collectables.push(collectable);
     this.collectablesWidth += collectable.width;
-    console.log(this.collectables);
+    console.log(collectable.x);
 }
 
 Player.prototype.death = function(){
@@ -154,11 +147,12 @@ Player.prototype.throw = function(){
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
         this.collectablesWidth -= projectile.width;
-        console.log(projectile);
         projectile.collisionCircles[0].r = projectile.collisionCircles[0].r1;
         projectile.x = this.x + this.center.width - projectile.center.width + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.x;
         projectile.y = this.y + this.center.height - projectile.center.height + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.y;
         projectile.attachedTo = "";
         projectile.direction = this.direction;
+        console.log(projectile.x + " " + projectile.y);
+
     }
 }

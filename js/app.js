@@ -18,7 +18,7 @@ var player = new Player( 4, 7, 5, 1, 2);
 var allCollectables = []
 for (var i = 0; i < 7; i++){
     allCollectables.push(function(){
-        return new Collectable(i, i, 300, 0.2 + 0.30 * i, i);
+        return new Collectable(i, i, 300, 0.2 + 0.30 * i , i);
     }());
     //console.log(allCollectables[i]);
 }

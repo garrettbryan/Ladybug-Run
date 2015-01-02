@@ -48,8 +48,8 @@ var Collectable = function(posX, posY, speed, scale, type) {
         'r': 30 * this.scale,
         'x': 0,
         'y': 0,
-        'xOffset': (101/2 + 1) * this.scale,
-        'yOffset': 125 * this.scale
+        'xOffset': this.center.width,
+        'yOffset': this.center.height
       }
     ]
 
