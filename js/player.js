@@ -55,7 +55,7 @@ Player.prototype.update = function() {
     this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
     this.y = - 120 * this.scale + this.tileY * 83 + 83;
     if (this.tileY < 1){
-        player.death();
+        this.death();
     }
     this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
     this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;

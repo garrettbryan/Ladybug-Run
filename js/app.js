@@ -13,7 +13,13 @@ for (var i = 1; i < 4; i++){
     console.log(allEnemies[0]);
 }
 
-var player = new Player( 4, 7, 5, 1, 2);
+var allPlayers = [];
+for (var i = 0; i < 4; i++){
+    allPlayers.push(function(){
+        return new Player( Math.ceil(i/2) + 4, Math.floor(i/2) + 6, 300, 1, i+1);
+    }());
+    //console.log(allCollectables[i]);
+}
 
 var allCollectables = [];
 for (var i = 0; i < 7; i++){
@@ -31,7 +37,6 @@ for (var i = 0; i < 2; i++){
 }
 
 
-console.log(player);
 
 //var mess = createBugMessage("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz");
 
@@ -47,5 +52,5 @@ document.addEventListener('keyup', function(e) {
 
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    allPlayers[0].handleInput(allowedKeys[e.keyCode]);
 });

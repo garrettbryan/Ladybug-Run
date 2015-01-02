@@ -106,7 +106,9 @@ var Engine = (function(global) {
             transporter.update(dt);
         });
 
-        player.update();
+        allPlayers.forEach(function(player){
+            player.update(dt);
+        });
     }
 
     /* This function initially draws the "game level", it will then call
@@ -178,9 +180,9 @@ var Engine = (function(global) {
             collectable.render();
         });
 
-
-
-        player.render();
+        allPlayers.forEach(function(player){
+            player.render();
+        });
     }
 
     /* This function does nothing but it could have been a good place to
