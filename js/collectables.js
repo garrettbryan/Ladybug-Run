@@ -67,7 +67,7 @@ Collectable.prototype.attach = function(player){
   this.collisionCircles[0].y = 0;
   this.collisionCircles[0].r1 = this.collisionCircles[0].r;
   this.collisionCircles[0].r = 0;
-  this.attachedTo = 1;
+  this.attachedTo = player;
 }
 
 Collectable.prototype.update = function(dt) {

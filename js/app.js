@@ -8,16 +8,18 @@ var allEnemies = [];
 
 for (var i = 1; i < 4; i++){
     allEnemies.push(function(){
-        return new Enemy( -1, Math.ceil(i/2), 3, 1);
+        return new Enemy( -1, Math.ceil(i/2), 3, 2);
     }());
     console.log(allEnemies[0]);
 }
 
 var allPlayers = [];
-for (var i = 0; i < 4; i++){
-    allPlayers.push(function(){
-        return new Player( Math.ceil(i/2) + 4, Math.floor(i/2) + 6, 300, 1, i+1);
-    }());
+for (var i = 0, p = 1; i < 2; i++){
+    for (var j = 0; j < 2; j++, p++){
+            allPlayers.push(function(){
+                return new Player( 4+i, 6+j, 300, 1, p);
+        }());
+    }
     //console.log(allCollectables[i]);
 }
 

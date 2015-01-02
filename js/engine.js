@@ -106,8 +106,10 @@ var Engine = (function(global) {
             transporter.update(dt);
         });
 
+        allPlayers[0].update(dt);
+
         allPlayers.forEach(function(player){
-            player.update(dt);
+            player.catchIt();
         });
     }
 
@@ -190,7 +192,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+
     }
 
     /* Go ahead and load all of the images we know we're going to need to

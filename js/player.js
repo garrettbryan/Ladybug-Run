@@ -4,6 +4,10 @@
 var Player = function(posX, posY, speed, scale, character){
     GamePiece.call(this, posX, posY, speed, scale);
     this.center.height = 125 * this.scale;
+    this.direction = {
+        'x': '0',
+        'y': '0'
+    }
     this.collectables = [];
     this.collectablesWidth = 0;
     this.characters = [
@@ -45,6 +49,13 @@ var Player = function(posX, posY, speed, scale, character){
             'yOffset': 125 * this.scale
         }
     ];
+    this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
+    this.y = - 120 * this.scale + this.tileY * 83 + 83;
+    if (this.tileY < 1){
+        this.death();
+    }
+    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
+    this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;
 };
 
 Player.prototype = Object.create(GamePiece.prototype);
@@ -70,13 +81,18 @@ Player.prototype.update = function() {
     for ( var collectable in allCollectables){
         this.collisionCheck(allCollectables[collectable], this.pickup);
     }
+
+    for ( var i = 1; i < allPlayers.length; i++){
+        this.collisionCheck(allPlayers[i], this.tag)
+    }
+
     var collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
         this.collectables[i].x = 0 + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
         this.collectables[i].y = -30 +0 + 83 - 120 * this.collectables[i].scale;
         collectablesSpacing += this.collectables[i].width;
-
     }
+
 
     this.sprite = this.characters[this.character].sprite;
     this.name = this.characters[this.character].name;
@@ -127,17 +143,39 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
+Player.prototype.tag = function(p){
+    p.tileX = this.tileX + 1 * this.direction.x;
+    p.tileY = this.tileY + 1 * this.direction.y;
+    p.direction = this.direction;
+    for (var i = 1; i < allPlayers.length; i++){
+        if (allPlayers[i] === p){
+            console.log(allPlayers.length);
+            allPlayers.splice(i,1,allPlayers[0]);
+            allPlayers[0] = p;
+        }
+    }
+
+}
+
 Player.prototype.pickup = function(collectable){
     collectable.attach(this);
 //    collectable.x = this.x + 20 * this.scale;
 //    collectable.y = this.y + 50 * this.scale;
     this.collectables.push(collectable);
     this.collectablesWidth += collectable.width;
+    collectable.direction = {
+        x: 0,
+        y: 0
+    }
     console.log(collectable.x);
 }
 
 Player.prototype.death = function(){
+    allPlayers.shift();
     console.log("undude");
+    if (allPlayers.length === 0){
+        Engine.init();
+    }
 //    this.character = Math.floor(Math.random()*5);
 //    this.tileX = 4;
 //    this.tileY = 7;
@@ -154,5 +192,11 @@ Player.prototype.throw = function(){
         projectile.attachedTo = "";
         console.log(projectile.x + " " + projectile.y);
 
+    }
+}
+
+Player.prototype.catchIt = function(collectable){
+    for ( var collectable in allCollectables){
+        this.collisionCheck(allCollectables[collectable], this.pickup);
     }
 }
