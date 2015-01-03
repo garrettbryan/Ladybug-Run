@@ -32,20 +32,27 @@ Transporter.prototype.update = function(){
     this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;
 
     for (var player in allPlayers){
-      this.collisionCheck(allPlayers[player]),this.transporters);
+      this.collisionCheck(allPlayers[player],this.transport);
     }
 }
 
 Transporter.prototype.transport = function(p){
-    p.tileX = this.tileX + 1 * this.direction.x;
-    p.tileY = this.tileY + 1 * this.direction.y;
-    p.direction = this.direction;
-    for (var i = 1; i < transporters.length; i++){
-        if (transporters[i] === this){
-            console.log(transporters.length);
-            transporters.splice(i,1);
-            transporters.push(this);
-            allPlayers[0] = p;
-        }
-    }
+  console.log("transport");
+  for (var i = 0; i < transporters.length; i++){
+      if (transporters[i] === this){
+          console.log(transporters.length);
+          transporters.splice(i,1);
+          transporters.push(this);
+          transporters[0].collisions = false;
+          transporters[1].collisions = false;
+      }
+  }
+  p.tileX = transporters[0].tileX;
+  p.tileY = transporters[0].tileY;
+  transporters = [];
+  for (var i = 0; i < 2; i++){
+      transporters.push(function(){
+          return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+1));
+      }());
+  }
 }

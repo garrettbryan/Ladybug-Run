@@ -7,22 +7,26 @@ var GamePiece = function(posX, posY, speed, scale) {
     this.center = {
         width: 101 * this.scale / 2
     }
+    this.collisions = true;
+
     this.x = -this.width/2 + this.tileX * 101 + 101/2;
     this.y = -123 * this.scale + this.tileY * 83 + 83;
 }
 
 GamePiece.prototype.collisionCheck = function(gamePiece, result){
     //console.log( gamePiece.collisionCircles[0].x );
-    for ( var cc in gamePiece.collisionCircles){
-        var d = (gamePiece.collisionCircles[cc].x - this.collisionCircles[0].x) *
-            (gamePiece.collisionCircles[cc].x - this.collisionCircles[0].x) +
-            (gamePiece.collisionCircles[cc].y - this.collisionCircles[0].y) *
-            (gamePiece.collisionCircles[cc].y - this.collisionCircles[0].y);
-        var r = (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r) *
-             (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r);
-        if (d < r) {
-            //console.log(gamePiece);
-            result.call(this, gamePiece);
+    if (this.collisions){
+        for ( var cc in gamePiece.collisionCircles){
+            var d = (gamePiece.collisionCircles[cc].x - this.collisionCircles[0].x) *
+                (gamePiece.collisionCircles[cc].x - this.collisionCircles[0].x) +
+                (gamePiece.collisionCircles[cc].y - this.collisionCircles[0].y) *
+                (gamePiece.collisionCircles[cc].y - this.collisionCircles[0].y);
+            var r = (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r) *
+                 (gamePiece.collisionCircles[cc].r + this.collisionCircles[0].r);
+            if (d < r) {
+                //console.log(gamePiece);
+                result.call(this, gamePiece);
+            }
         }
     }
 }
