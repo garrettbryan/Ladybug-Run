@@ -63,11 +63,12 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
 //var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
-    this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
-    this.y = - 120 * this.scale + this.tileY * 83 + 83;
     if (this.tileY < 1){
         this.death();
     }
+    this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
+    this.y = - 120 * this.scale + this.tileY * 83 + 83;
+
     this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
     this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;
     //    window.alert(this.collectables[0]);
@@ -81,6 +82,10 @@ Player.prototype.update = function() {
     for ( var collectable in allCollectables){
         this.collisionCheck(allCollectables[collectable], this.pickup);
     }
+
+//    for (var transport in transporters){
+//        this.collisionCheck(transporters, transport.transport);
+//    }
 
     for ( var i = 1; i < allPlayers.length; i++){
         this.collisionCheck(allPlayers[i], this.tag)
