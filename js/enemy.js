@@ -39,10 +39,25 @@ Enemy.prototype.update = function(dt) {
     this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
     this.collisionCircles[0].y = this.y  + this.collisionCircles[0].yOffset;
 
+    for ( var collectable in allCollectables){
+        this.collisionCheck(allCollectables[collectable], this.death);
+    }
+
     if (this.x > -101/2  * this.scale + 10 * 101 + 101/2 * this.scale){
         this.tileX = -1;
         this.tileY = Math.floor(1+Math.random()*5);
     }else if (this.x < -101/2 * this.scale) {
     }
 
+};
+
+Enemy.prototype.death = function(){
+    allEnemies.shift();
+    console.log("Bug Bye");
+    if (allEnemies.length === 0){
+        Engine.init();
+    }
+//    this.character = Math.floor(Math.random()*5);
+//    this.tileX = 4;
+//    this.tileY = 7;
 };
