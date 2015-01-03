@@ -8,6 +8,7 @@ var Enemy = function(posX, posY, speed, scale) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.spriteFore = 'images/enemy-bug-front.png';
     this.collisionCircles = [
         {
             'name': 'primary',
