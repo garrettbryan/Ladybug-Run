@@ -17,7 +17,7 @@ var allPlayers = [];
 for (var i = 0, p = 1; i < 2; i++){
     for (var j = 0; j < 2; j++, p++){
             allPlayers.push(function(){
-                return new Player( 4+i, 7+j, 300, 1, p);
+                return new Player( 4+i, 7+j, 300, 2, p);
         }());
     }
     //console.log(allCollectables[i]);

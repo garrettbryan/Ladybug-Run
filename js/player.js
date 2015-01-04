@@ -84,8 +84,16 @@ Player.prototype.update = function() {
     var collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
         this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].position.y = this.position.y;
-        collectablesSpacing += this.collectables[i].spriteDimensions;
+        this.collectables[i].position.y = this.position.y - this.collectables[i].center.y + 50 * this.scale;
+        collectablesSpacing += this.collectables[i].spriteDimensions.x;
+    }
+
+        var collectablesSpacing = 0;
+    for (var i = 0; i < this.collectables.length; i++){
+        this.collectables[i].x = 0 + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
+        this.collectables[i].y = -30 +0 + 83 - 120 * this.collectables[i].scale;
+        collectablesSpacing += this.collectables[i].width;
+
     }
 
 //    this.sprite = this.characters[this.character].sprite;
