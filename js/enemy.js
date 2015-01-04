@@ -15,7 +15,7 @@ var Enemy = function(posX, posY, speed, scale) {
     this.collisionBoundary.primary.collidesWith.people = true;
     this.collisionBoundary.primary.collidesWith.teleporter = true;
     this.collisionBoundary.primary.r = 20 * this.scale;
-    this.collisionBoundary.primary.xOffset = 50 + this.center.x;
+    this.collisionBoundary.primary.xOffset = 25 * this.scale + this.center.x;
     this.collisionBoundary.primary.yOffset = this.center.y;
 
 };
