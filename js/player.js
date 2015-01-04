@@ -55,7 +55,7 @@ Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
-    if (this.tile.y < 1){
+    if (this.tile.y < 2){
         this.death();
     }
 
@@ -83,9 +83,9 @@ Player.prototype.update = function() {
 
     var collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].position.x = 0 + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].position.y = -30 +0 + 83 - 120 * this.collectables[i].scale;
-        collectablesSpacing += this.collectables[i].width;
+        this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
+        this.collectables[i].position.y = this.position.y + this.center.y * this.collectables[i].scale;
+        collectablesSpacing += this.collectables[i].spriteDimensions;
     }
 
 //    this.sprite = this.characters[this.character].sprite;
@@ -95,7 +95,7 @@ Player.prototype.update = function() {
 Player.prototype.handleInput = function(key) {
     switch(key){
         case 'left':
-            if (this.tile.x >= 0){
+            if (this.tile.x > 0){
                 this.tile.x = this.tile.x - 1;
             }
             this.direction = {
@@ -104,7 +104,7 @@ Player.prototype.handleInput = function(key) {
             }
             break;
         case 'right':
-            if (this.tile.x < 8){
+            if (this.tile.x < 9){
                 this.tile.x = this.tile.x + 1;
             }
             this.direction = {
@@ -122,7 +122,7 @@ Player.prototype.handleInput = function(key) {
             }
             break;
         case 'down':
-            if (this.tile.y < 7){
+            if (this.tile.y < 8){
                 this.tile.y = this.tile.y + 1;
             }
             this.direction = {
@@ -135,6 +135,7 @@ Player.prototype.handleInput = function(key) {
             this.throw();
             break;
     }
+    //console.log(this.tile);
 };
 
 Player.prototype.tag = function(p){
@@ -163,6 +164,7 @@ Player.prototype.pickup = function(collectable){
     }
     console.log(collectable.position.x);
 }
+
 
 Player.prototype.death = function(){
     allPlayers.shift();

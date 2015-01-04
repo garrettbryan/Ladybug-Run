@@ -48,18 +48,38 @@ var GamePiece = function(posX, posY, speed, scale) {
             'yOffset': this.center.y
         }
     };
+}
 
+GamePiece.prototype.transport = function(p){
+  for (var i = 0; i < transporters.length; i++){
+      if (transporters[i] === this){
+          p.tile.x = transporters[0].tile.x;
+          p.tile.y = transporters[0].tile.y;
+          console.log(transporters.length);
+          transporters.splice(i,1);
+          transporters.push(this);
+          p.tile = transporters[0].tile;
+          transporters[0].collisionBoundary.primary.collidesWith.people = false;
+          transporters[0].collisionBoundary.primary.collidesWith.collectables = false;
+          transporters[0].collisionBoundary.primary.collidesWith.enemies = false;
 
-//    this.tile.x = posX;
-//    this.tile.y = posY;
+          transporters[1].collisionBoundary.primary.collidesWith.people = false;
+          transporters[1].collisionBoundary.primary.collidesWith.collectables = false;
+          transporters[1].collisionBoundary.primary.collidesWith.enemies = false;
 
-
- //   this.x = -this.width/2 + this.tile.x * 101 + 101/2;
- //   this.y = -123 * this.scale + this.tile.y * 83 + 83;
+      }
+  }
+  transporters = [];
+  for (var i = 0; i < 2; i++){
+      transporters.push(function(){
+          return new Transporter(Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+2));
+      }());
+  }
 }
 
 GamePiece.prototype.collisionCheck = function(gamePiece, result){
-    var distanceBetweenGamePieces = (gamePiece.collisionBoundary.primary.x - this.collisionBoundary.primary.x) *
+    var distanceBetweenGamePieces =
+        (gamePiece.collisionBoundary.primary.x - this.collisionBoundary.primary.x) *
         (gamePiece.collisionBoundary.primary.x - this.collisionBoundary.primary.x) +
         (gamePiece.collisionBoundary.primary.y - this.collisionBoundary.primary.y) *
         (gamePiece.collisionBoundary.primary.y - this.collisionBoundary.primary.y);
