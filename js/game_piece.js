@@ -95,17 +95,21 @@ GamePiece.prototype.update = function(dt) {
         this.x = this.attachedTo.x + 20 ;
         this.y = this.attachedTo.y + 30;
     }
-    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
-    this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
+    for (boundary in this.collisionBoundary){
+      this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
+      this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
+    }
 //    console.log(this.y);
 //    this.sprite = this.types[this.type].sprite;
 //    this.name = this.types[this.type].name;
 }
 
 GamePiece.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.position.x, this.position.y, this.spriteDimensions.x, this.spriteDimensions.y);
+  ctx.drawImage(Resources.get(this.sprite), this.position.x, this.position.y, this.spriteDimensions.x, this.spriteDimensions.y);
+  for (boundary in this.collisionBoundary){
     ctx.beginPath();
-    ctx.arc(this.collisionBoundary.primary.x, this.collisionBoundary.primary.y, this.collisionBoundary.primary.r, 0, 2 * Math.PI, false);
+    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
     ctx.stroke();
+  }
 };
 

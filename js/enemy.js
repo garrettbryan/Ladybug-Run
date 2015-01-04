@@ -17,6 +17,19 @@ var Enemy = function(posX, posY, speed, scale) {
     this.collisionBoundary.primary.r = 20 * this.scale;
     this.collisionBoundary.primary.xOffset = 25 * this.scale + this.center.x;
     this.collisionBoundary.primary.yOffset = this.center.y;
+    this.collisionBoundary.secondary = {
+        'collidesWith' : {
+            'people': false,
+            'enemies': false,
+            'collectables': false,
+            'teleporter': false
+        },
+        'r': 20 * this.scale,
+        'x': 0,
+        'y': 0,
+        'xOffset': -25 * this.scale + this.center.x,
+        'yOffset': this.center.y
+    };
 
 };
 
@@ -26,11 +39,13 @@ Enemy.prototype.constructor = Enemy;
 Enemy.prototype.update = function(dt) {
     this.tile.x = this.tile.x + this.speed * this.direction.x * dt / this.scale;
 
-    this.position.x = -this.center.x + this.tile.x * 101 + 101/2;
-    this.position.y = - this.center.y + this.tile.y * 83 + 83;
+    this.position.x = - this.center.x + this.tile.x * 101 + 101/2;
+    this.position.y = - this.center.y + this.tile.y * 83;
 
-    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
-    this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
+    for (boundary in this.collisionBoundary){
+      this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
+      this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
+    }
 
 //    for ( var collectable in allCollectables){
 //        this.collisionCheck(allCollectables[collectable], this.death);
@@ -38,7 +53,7 @@ Enemy.prototype.update = function(dt) {
 
     if (this.position.x > 10 * 101){
         this.tile.x = -1;
-        this.tile.y = Math.floor(1+Math.random()*5);
+        this.tile.y = Math.floor(2+Math.random()*5);
     }else if (this.position.x < -this.center.x) {
     }
 

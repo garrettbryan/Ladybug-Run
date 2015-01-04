@@ -88,14 +88,6 @@ Player.prototype.update = function() {
         collectablesSpacing += this.collectables[i].spriteDimensions.x;
     }
 
-        var collectablesSpacing = 0;
-    for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].x = 0 + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].y = -30 +0 + 83 - 120 * this.collectables[i].scale;
-        collectablesSpacing += this.collectables[i].width;
-
-    }
-
 //    this.sprite = this.characters[this.character].sprite;
 //    this.name = this.characters[this.character].name;
 };
@@ -161,16 +153,30 @@ Player.prototype.tag = function(p){
 }
 
 Player.prototype.pickup = function(collectable){
-    collectable.attach(this);
-    collectable.position.x = this.position.x;
-    collectable.position.y = this.position.y;
-    this.collectables.push(collectable);
-    this.collectablesWidth += collectable.spriteDimensions.x;
-    collectable.direction = {
-        x: 0,
-        y: 0
+    if (collectable.collisionBoundary.primary.collidesWith.people){
+        collectable.attach(this);
+        collectable.collisionBoundary.primary.collidesWith = {
+            'people': false,
+            'enemies': false,
+            'collectables': false,
+            'teleporter': false
+        };
+        collectable.position.x = this.position.x;
+        collectable.position.y = this.position.y;
+        this.collectables.push(collectable);
+        this.collectablesWidth += collectable.spriteDimensions.x;
+        collectable.direction = {
+            x: 0,
+            y: 0
+        }
+        var collectablesSpacing = 0;
+        for (var i = 0; i < this.collectables.length; i++){
+            this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
+            this.collectables[i].position.y = this.position.y - this.collectables[i].center.y + 50 * this.scale;
+            collectablesSpacing += this.collectables[i].spriteDimensions.x;
+        }
+        console.log(collectable.position.x);
     }
-    console.log(collectable.position.x);
 }
 
 
@@ -188,6 +194,12 @@ Player.prototype.death = function(){
 Player.prototype.throw = function(){
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
+        projectile.collisionBoundary.primary.collidesWith = {
+            'people': true,
+            'enemies': true,
+            'collectables': false,
+            'teleporter': true
+        };
         projectile.direction = this.direction;
         this.collectablesWidth -= projectile.spriteDimensions.x;
         projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;

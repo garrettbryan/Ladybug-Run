@@ -28,5 +28,8 @@ Transporter.prototype.update = function(){
     for (var player in allPlayers){
       this.collisionCheck(allPlayers[player],this.transport);
     }
+    for (var enemy in allEnemies){
+      this.collisionCheck(allEnemies[enemy],this.transport);
+    }
 }
 
