@@ -41,10 +41,6 @@ var Collectable = function(posX, posY, speed, scale, type) {
 Collectable.prototype = Object.create(GamePiece.prototype);
 Collectable.prototype.constructor = Collectable;
 
-Collectable.prototype.follow = function(player){ //TODO
-
-}
-
 Collectable.prototype.attach = function(player){
   this.collisionBoundary.primary.x = 0;
   this.collisionBoundary.primary.y = 0;

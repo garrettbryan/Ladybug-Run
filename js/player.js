@@ -84,7 +84,7 @@ Player.prototype.update = function() {
     var collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
         this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].position.y = this.position.y + this.center.y * this.collectables[i].scale;
+        this.collectables[i].position.y = this.position.y;
         collectablesSpacing += this.collectables[i].spriteDimensions;
     }
 
@@ -184,9 +184,9 @@ Player.prototype.throw = function(){
         this.collectablesWidth -= projectile.spriteDimensions.x;
         projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;
         projectile.position.x = this.position.x + this.center.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
-        projectile.y = this.position.y + this.center.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
+        projectile.position.y = this.position.y + this.center.y - projectile.center.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
         projectile.attachedTo = "";
-        console.log(projectile.x + " " + projectile.y);
+        console.log(projectile.position);
 
     }
 }
