@@ -1,23 +1,17 @@
 var Transporter = function(posX, posY) {
-  console.log(this);
   GamePiece.call(this, posX, posY, 1, 1);
 
-  this.height = 125 * this.scale;
+  this.center.y = 125 * this.scale;
+
   this.sprite = 'images/Selector.png';
-  this.name = 'Selector';
-  this.collisionCircles = [
-    {
-      'name': 'primary',
-      'affects': [
-        Player
-        ],
-      'r': 30 * this.scale,
-      'x': 0,
-      'y': 0,
-      'xOffset': this.width / 2,
-      'yOffset': this.height
-    }
-  ]
+  this.name = 'Transporter';
+
+  this.collisionBoundary.primary.collidesWith.people = true;
+  this.collisionBoundary.primary.collidesWith.collectables = true;
+  this.collisionBoundary.primary.collidesWith.enemies = true;
+  this.collisionBoundary.primary.r = 30 * this.scale;
+  this.collisionBoundary.primary.xOffset = this.center.x;
+  this.collisionBoundary.primary.yOffset = this.center.y;
 
 };
 
@@ -25,30 +19,35 @@ Transporter.prototype = Object.create(GamePiece.prototype);
 Transporter.prototype.constructor = Transporter;
 
 Transporter.prototype.update = function(){
-    this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
-    this.y = - 120 * this.scale + this.tileY * 83 + 83;
+    this.x = - this.boardTileDimensions.x + this.tile.x * this.boardTileDimensions.x + 101/2;
+    this.y = - this.boardTileDimensions.y + this.tile.y * this.boardTileDimensions.y;
 
-    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
-    this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;
+    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
+    this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
 
-    for (var player in allPlayers){
-      this.collisionCheck(allPlayers[player],this.transport);
-    }
+//    for (var player in allPlayers){
+//      this.collisionCheck(allPlayers[player],this.transport);
+//    }
 }
 
 Transporter.prototype.transport = function(p){
-  console.log("transport");
   for (var i = 0; i < transporters.length; i++){
       if (transporters[i] === this){
           console.log(transporters.length);
           transporters.splice(i,1);
           transporters.push(this);
-          transporters[0].collisions = false;
-          transporters[1].collisions = false;
+          transporters[0].collisionBoundary.primary.collidesWith.people = false;
+          transporters[0].collisionBoundary.primary.collidesWith.collectables = false;
+          transporters[0].collisionBoundary.primary.collidesWith.enemies = false;
+
+          transporters[1].collisionBoundary.primary.collidesWith.people = false;
+          transporters[1].collisionBoundary.primary.collidesWith.collectables = false;
+          transporters[1].collisionBoundary.primary.collidesWith.enemies = false;
+
       }
   }
-  p.tileX = transporters[0].tileX;
-  p.tileY = transporters[0].tileY;
+  p.tile.x = transporters[0].tile.x;
+  p.tile.y = transporters[0].tile.y;
   transporters = [];
   for (var i = 0; i < 2; i++){
       transporters.push(function(){

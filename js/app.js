@@ -17,7 +17,7 @@ var allPlayers = [];
 for (var i = 0, p = 1; i < 2; i++){
     for (var j = 0; j < 2; j++, p++){
             allPlayers.push(function(){
-                return new Player( 4+i, 6+j, 300, 1, p);
+                return new Player( 4+i, 7+j, 300, 2, p);
         }());
     }
     //console.log(allCollectables[i]);
@@ -26,15 +26,15 @@ for (var i = 0, p = 1; i < 2; i++){
 var allCollectables = [];
 for (var i = 0; i < 7; i++){
     allCollectables.push(function(){
-        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*4+1), 300, 0.3, i);
+        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 300, 0.3, i);
     }());
-    //console.log(allCollectables[i]);
+    console.log(allCollectables[i]);
 }
 
 var transporters = [];
 for (var i = 0; i < 2; i++){
     transporters.push(function(){
-        return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+1));
+        return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+2));
     }());
 }
 

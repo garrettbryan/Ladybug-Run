@@ -1,56 +1,52 @@
-// Enemies our player must avoid
 var Enemy = function(posX, posY, speed, scale) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     GamePiece.call(this, posX, posY, speed, scale);
-    this.height = 110 * this.scale;
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    this.center.y = 110 * this.scale;
+
+    this.direction = {
+        'x': 1,
+        'y': 0
+    };
+
+    this.name = 'Lady Bug';
     this.sprite = 'images/enemy-bug.png';
     this.spriteFore = 'images/enemy-bug-front.png';
-    this.collisionCircles = [
-        {
-            'name': 'primary',
-            'affects': [
-              Player,
-              ],
-            'r': 20 * this.scale,
-            'x': 0,
-            'y': 0,
-            'xOffset': (25 + 101/2 + 1) * this.scale,
-            'yOffset': ( this.height)
-        }
-    ];
+
+    this.collisionBoundary.primary.collidesWith.people = true;
+    this.collisionBoundary.primary.collidesWith.teleporter = true;
+    this.collisionBoundary.primary.r = 20 * this.scale;
+    this.collisionBoundary.primary.xOffset = 50 + this.center.x;
+    this.collisionBoundary.primary.yOffset = this.center.y;
+
 };
 
 Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    this.tileX = this.tileX + this.speed * dt / this.scale;
-    this.x = -101/2  * this.scale + this.tileX * (101 + 101/2);
-    this.y = - this.height + this.tileY * 83 + 83;
+    this.tile.x = this.tile.x + this.speed * this.direction.x * dt / this.scale;
 
-    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
-    this.collisionCircles[0].y = this.y  + this.collisionCircles[0].yOffset;
+    this.position.x = -this.center.x + this.tile.x * 101 + 101/2;
+    this.position.y = - this.center.y + this.tile.y * 83 + 83;
 
-    for ( var collectable in allCollectables){
-        this.collisionCheck(allCollectables[collectable], this.death);
-    }
+    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
+    this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
 
-    if (this.x > -101/2  * this.scale + 10 * 101 + 101/2 * this.scale){
-        this.tileX = -1;
-        this.tileY = Math.floor(1+Math.random()*5);
-    }else if (this.x < -101/2 * this.scale) {
+//    for ( var collectable in allCollectables){
+//        this.collisionCheck(allCollectables[collectable], this.death);
+//    }
+
+    if (this.position.x > 10 * 101){
+        this.tile.x = -1;
+        this.tile.y = Math.floor(1+Math.random()*5);
+    }else if (this.position.x < -this.center.x) {
     }
 
 };
+
+Enemy.prototype.renderRider = function() {
+    ctx.drawImage(Resources.get(this.spriteFore), this.position.x, this.position.y, this.spriteDimensions.x, this.spriteDimensions.y);
+}
 
 Enemy.prototype.death = function(){
     allEnemies.shift();

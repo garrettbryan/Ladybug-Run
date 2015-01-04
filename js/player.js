@@ -3,13 +3,6 @@
 // a handleInput() method.
 var Player = function(posX, posY, speed, scale, character){
     GamePiece.call(this, posX, posY, speed, scale);
-    this.center.height = 125 * this.scale;
-    this.direction = {
-        'x': '0',
-        'y': '0'
-    }
-    this.collectables = [];
-    this.collectablesWidth = 0;
     this.characters = [
         {
             name: 'Bug Boy',
@@ -35,46 +28,43 @@ var Player = function(posX, posY, speed, scale, character){
     this.character = character;
     this.sprite = this.characters[character].sprite;
     this.name = this.characters[character].name;
-    this.collisionCircles = [
-        {
-            'name': 'primary',
-            'affects': [
-              Collectable,
-              Enemy
-              ],
+
+    this.center.y = 125 * this.scale;
+
+    this.collectables = [];
+    this.collectablesWidth = 0;
+
+    this.collisionBoundary = {
+        'primary': {
+            'collidesWith' : {
+                'people': true,
+                'enemies': true,
+                'collectables': true,
+                'teleporter': true
+            },
             'r': 15 * this.scale,
-            'x': 0,
-            'y': 0,
-            'xOffset': (101/2 + 1) * this.scale,
-            'yOffset': 125 * this.scale
+            'x': this.tile.x * 101 + 101/2,
+            'y': this.tile.y * 83,
+            'xOffset': this.center.x,
+            'yOffset': this.center.y
         }
-    ];
-    this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
-    this.y = - 120 * this.scale + this.tileY * 83 + 83;
-    if (this.tileY < 1){
-        this.death();
-    }
-    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
-    this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;
+    };
 };
 
 Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
-//var player = new Player( -101/2 + 101 * 4, 120 + 80 * 0, 5, 1);
-    if (this.tileY < 1){
+    if (this.tile.y < 1){
         this.death();
     }
-    this.x = -101/2  * this.scale + this.tileX * 101 + 101/2;
-    this.y = - 120 * this.scale + this.tileY * 83 + 83;
 
-    this.collisionCircles[0].x = this.x + this.collisionCircles[0].xOffset;
-    this.collisionCircles[0].y = this.y + this.collisionCircles[0].yOffset;
-    //    window.alert(this.collectables[0]);
+    this.position.x = this.tile.x * 101 + 101/2 - this.center.x;
+    this.position.y = this.tile.y * 83  - this.center.y;
 
-    //console.log(this.collisionCheck(allEnemies[0]));
-    //console.log(this.direction);
+    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
+    this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
+
     for ( var enemy in allEnemies){
         this.collisionCheck(allEnemies[enemy], this.death);
     }
@@ -93,21 +83,20 @@ Player.prototype.update = function() {
 
     var collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].x = 0 + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].y = -30 +0 + 83 - 120 * this.collectables[i].scale;
+        this.collectables[i].position.x = 0 + 101/2 - this.collectablesWidth/2 + collectablesSpacing;
+        this.collectables[i].position.y = -30 +0 + 83 - 120 * this.collectables[i].scale;
         collectablesSpacing += this.collectables[i].width;
     }
 
-
-    this.sprite = this.characters[this.character].sprite;
-    this.name = this.characters[this.character].name;
+//    this.sprite = this.characters[this.character].sprite;
+//    this.name = this.characters[this.character].name;
 };
 
 Player.prototype.handleInput = function(key) {
     switch(key){
         case 'left':
-            if (this.tileX > 0){
-                this.tileX = this.tileX - 1;
+            if (this.tile.x >= 0){
+                this.tile.x = this.tile.x - 1;
             }
             this.direction = {
                 'x': '-1',
@@ -115,8 +104,8 @@ Player.prototype.handleInput = function(key) {
             }
             break;
         case 'right':
-            if (this.tileX < 9){
-                this.tileX = this.tileX + 1;
+            if (this.tile.x < 8){
+                this.tile.x = this.tile.x + 1;
             }
             this.direction = {
                 'x': '1',
@@ -124,8 +113,8 @@ Player.prototype.handleInput = function(key) {
             }
             break;
         case 'up':
-            if (this.tileY > 0){
-                this.tileY = this.tileY - 1;
+            if (this.tile.y > 0){
+                this.tile.y = this.tile.y - 1;
             }
             this.direction = {
                 'x': '0',
@@ -133,8 +122,8 @@ Player.prototype.handleInput = function(key) {
             }
             break;
         case 'down':
-            if (this.tileY < 7){
-                this.tileY = this.tileY + 1;
+            if (this.tile.y < 7){
+                this.tile.y = this.tile.y + 1;
             }
             this.direction = {
                 'x': '0',
@@ -149,8 +138,8 @@ Player.prototype.handleInput = function(key) {
 };
 
 Player.prototype.tag = function(p){
-    p.tileX = this.tileX + 1 * this.direction.x;
-    p.tileY = this.tileY + 1 * this.direction.y;
+    p.tile.x = this.tile.x + 1 * this.direction.x;
+    p.tile.y = this.tile.y + 1 * this.direction.y;
     p.direction = this.direction;
     for (var i = 1; i < allPlayers.length; i++){
         if (allPlayers[i] === p){
@@ -164,15 +153,15 @@ Player.prototype.tag = function(p){
 
 Player.prototype.pickup = function(collectable){
     collectable.attach(this);
-//    collectable.x = this.x + 20 * this.scale;
-//    collectable.y = this.y + 50 * this.scale;
+    collectable.position.x = this.position.x;
+    collectable.position.y = this.position.y;
     this.collectables.push(collectable);
-    this.collectablesWidth += collectable.width;
+    this.collectablesWidth += collectable.spriteDimensions.x;
     collectable.direction = {
         x: 0,
         y: 0
     }
-    console.log(collectable.x);
+    console.log(collectable.position.x);
 }
 
 Player.prototype.death = function(){
@@ -182,18 +171,18 @@ Player.prototype.death = function(){
         Engine.init();
     }
 //    this.character = Math.floor(Math.random()*5);
-//    this.tileX = 4;
-//    this.tileY = 7;
+//    this.tile.x = 4;
+//    this.tile.y = 7;
 };
 
 Player.prototype.throw = function(){
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
         projectile.direction = this.direction;
-        this.collectablesWidth -= projectile.width;
-        projectile.collisionCircles[0].r = projectile.collisionCircles[0].r1;
-        projectile.x = this.x + this.center.width - projectile.center.width + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.x;
-        projectile.y = this.y + this.center.height - projectile.center.height + (this.collisionCircles[0].r + projectile.collisionCircles[0].r + 5) * projectile.direction.y;
+        this.collectablesWidth -= projectile.spriteDimensions.x;
+        projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;
+        projectile.position.x = this.position.x + this.center.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
+        projectile.y = this.position.y + this.center.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
         projectile.attachedTo = "";
         console.log(projectile.x + " " + projectile.y);
 
@@ -203,5 +192,11 @@ Player.prototype.throw = function(){
 Player.prototype.catchIt = function(collectable){
     for ( var collectable in allCollectables){
         this.collisionCheck(allCollectables[collectable], this.pickup);
+    }
+}
+
+Player.prototype.ride = function(steed){
+    for (var steed in allEnemies){
+
     }
 }
