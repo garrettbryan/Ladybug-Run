@@ -106,7 +106,9 @@ var Engine = (function(global) {
             transporter.update(dt);
         });
 
-        allPlayers[0].update(dt);
+        if (allPlayers.length > 0){
+            allPlayers[0].update(dt);
+        }
 
         allPlayers.forEach(function(player){
             player.catchIt();

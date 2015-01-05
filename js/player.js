@@ -211,9 +211,8 @@ Player.prototype.death = function(){
 
     }
     allPlayers.shift();
-    console.log("undude");
+    console.log("You're being very undude . . .");
     if (allPlayers.length === 0){
-        Engine.init();
     }
 };
 
