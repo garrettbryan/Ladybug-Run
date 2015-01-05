@@ -79,8 +79,10 @@ Player.prototype.update = function() {
     }
 
     for ( var enemy in allEnemies){
-        this.collisionCheck(allEnemies[enemy], "secondary", this.ride);
-        this.collisionCheck(allEnemies[enemy], "primary", this.death);
+        if (!this.steed){
+            this.collisionCheck(allEnemies[enemy], "primary", this.death);
+            this.collisionCheck(allEnemies[enemy], "secondary", this.ride);
+        }
     }
 
     for ( var collectable in allCollectables){
@@ -147,6 +149,10 @@ Player.prototype.handleInput = function(key) {
         case 'space':
             console.log('throw');
             this.throw();
+            break;
+        case 'dismount':
+            console.log('dismount');
+            this.dismount();
             break;
     }
     //console.log(this.tile);
@@ -246,6 +252,23 @@ Player.prototype.ride = function(steed){
 
     this.steed = steed;
     this.steedsWidth += steed.spriteDimensions.x;
+}
+
+Player.prototype.dismount = function(){
+    this.steed.direction.x = 1;
+
+    console.log(this.steed);
+
+    this.steed.collisionBoundary.primary.collidesWith = [
+        Transporter
+    ];
+    this.steed.collisionBoundary.secondary.collidesWith = [
+    ];
+
+    this.tile.y = this.tile.y + 1;
+    console.log(this);
+
+
 }
 
 Player.prototype.renderRider = function() {

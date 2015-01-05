@@ -36,5 +36,8 @@ Transporter.prototype.update = function(){
     for (var enemy in allEnemies){
       this.collisionCheck(allEnemies[enemy], "primary", this.transport);
     }
+//    for (var collectable in allCollectables){
+//      this.collisionCheck(allCollectables[collectable], "primary", //this.transport);
+//    }
 }
 

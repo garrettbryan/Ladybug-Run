@@ -50,7 +50,8 @@ document.addEventListener('keyup', function(e) {
         38: 'up',
         39: 'right',
         40: 'down',
-        32: 'space'
+        32: 'space',
+        68: 'dismount'
 
     };
 

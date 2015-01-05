@@ -36,6 +36,7 @@ var Collectable = function(posX, posY, speed, scale, type) {
 
   this.collisionBoundary.primary.collidesWith = [
     Player
+//    Transporter
   ];
 
 };
@@ -55,6 +56,7 @@ Collectable.prototype.update = function(dt) {
 
     this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
     this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
+
 
 //    console.log(this.y);
 //    this.sprite = this.types[this.type].sprite;
