@@ -101,9 +101,9 @@ GamePiece.prototype.render = function() {
     this.renderRider();
   }
   for (boundary in this.collisionBoundary){
-    ctx.beginPath();
-    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-    ctx.stroke();
+//    ctx.beginPath();
+//    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[//boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, //false);
+//    ctx.stroke();
   }
 };
 
