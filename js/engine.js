@@ -110,6 +110,7 @@ var Engine = (function(global) {
 
         allPlayers.forEach(function(player){
             player.catchIt();
+            player.wait();
         });
     }
 

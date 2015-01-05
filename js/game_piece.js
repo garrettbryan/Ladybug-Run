@@ -1,4 +1,6 @@
 var GamePiece = function(posX, posY, speed, scale) {
+    this.speed = speed;
+    this.scale = scale;
 
     this.tile = {
         x: posX,
@@ -11,13 +13,13 @@ var GamePiece = function(posX, posY, speed, scale) {
     }
 
     this.spriteDimensions = {
-        x: 101 * scale,
-        y: 171 * scale
+        x: 101 * this.scale,
+        y: 171 * this.scale
     };
 
     this.center = {
-        x: 101 / 2 * scale,
-        y: 120 * scale
+        x: 101 / 2 * this.scale,
+        y: 120 * this.scale
     };
 
     this.position = {
@@ -30,8 +32,6 @@ var GamePiece = function(posX, posY, speed, scale) {
       'y': 0
     };
 
-    this.speed = speed;
-    this.scale = scale;
 
     this.collisionBoundary = {
         'primary': {

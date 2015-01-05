@@ -26,7 +26,7 @@ for (var i = 0, p = 1; i < 2; i++){
 var allCollectables = [];
 for (var i = 0; i < 7; i++){
     allCollectables.push(function(){
-        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 300, 0.3, i);
+        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 500, 0.3, i);
     }());
     console.log(allCollectables[i]);
 }

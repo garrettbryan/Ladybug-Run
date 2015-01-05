@@ -66,16 +66,15 @@ Player.prototype.update = function() {
     this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
 
     if (this.steed){
-        this.steed.tile = this.tile;
-        this.steed.position.x = - this.steed.center.x + this.position.x;
+        this.steed.position.x = - this.steed.center.x + this.tile.x * 101 + 101/2;
         this.steed.position.y = - this.steed.center.y + this.tile.y * 83;
         this.steed.collisionBoundary.primary.x = this.steed.position.x + this.steed.collisionBoundary.primary.xOffset;
-        this.steed.collisionBoundary.secondary.x = this.steed.position.x + this.steed.collisionBoundary.secondary.xOffset;
         this.steed.collisionBoundary.primary.y = this.steed.position.y + this.steed.collisionBoundary.primary.yOffset;
+        this.steed.collisionBoundary.secondary.x = this.steed.position.x + this.steed.collisionBoundary.secondary.xOffset;
         this.steed.collisionBoundary.secondary.y = this.steed.position.y + this.steed.collisionBoundary.secondary.yOffset
 
-        this.position.x = this.position.x;
-        this.position.y = this.position.y;
+        this.position.x = this.position.x + 10 * this.steed.scale;
+        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
 
     }
 
@@ -229,8 +228,8 @@ Player.prototype.throw = function(){
         projectile.direction = this.direction;
         this.collectablesWidth -= projectile.spriteDimensions.x;
         projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;
-        projectile.position.x = this.position.x + this.center.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
-        projectile.position.y = this.position.y + this.center.y - projectile.center.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
+        projectile.position.x = this.collisionBoundary.primary.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
+        projectile.position.y = this.collisionBoundary.primary.y - projectile.center.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
         projectile.attachedTo = "";
         console.log(projectile.position);
 
@@ -245,7 +244,14 @@ Player.prototype.catchIt = function(collectable){
 
 Player.prototype.ride = function(steed){
     this.steed = steed;
-    this.steedsWidth = steed.spriteDimensions.x;
+
+    if (!this.steed){
+        for(var i = 0; i < allEnemies.length; i++){
+            if (this.steed === allEnemies[i]){
+                allEnemies.splice(i,1);
+            }
+        }
+    }
 
     steed.collisionBoundary.primary.collidesWith = [];
     steed.collisionBoundary.secondary.collidesWith = [];
@@ -270,14 +276,21 @@ Player.prototype.ride = function(steed){
 
 Player.prototype.dismount = function(){
     this.steed.direction.x = 1;
-
+    allEnemies.push(this.steed);
     console.log(this.steed);
 
     this.steed.collisionBoundary.primary.collidesWith = [
-        Transporter
+        Player,
+        Transporter,
+        Collectable
     ];
     this.steed.collisionBoundary.secondary.collidesWith = [
+        Player
     ];
+
+    this.steed.tile.y = this.tile.y;
+    this.steed.tile.x = this.tile.x;
+    this.steed = false;
 
     this.tile.y = this.tile.y + 1;
     console.log(this);
@@ -288,3 +301,25 @@ Player.prototype.dismount = function(){
 Player.prototype.renderRider = function() {
     ctx.drawImage(Resources.get(this.steed.spriteFore), this.steed.position.x, this.steed.position.y, this.steed.spriteDimensions.x, this.steed.spriteDimensions.y);
 }
+
+Player.prototype.wait = function() {
+
+    this.position.x = this.tile.x * 101 + 101/2 - this.center.x;
+    this.position.y = this.tile.y * 83  - this.center.y;
+
+    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
+    this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
+
+    if (this.steed){
+        this.steed.position.x = - this.steed.center.x + this.tile.x * 101 + 101/2;
+        this.steed.position.y = - this.steed.center.y + this.tile.y * 83;
+        this.steed.collisionBoundary.primary.x = this.steed.position.x + this.steed.collisionBoundary.primary.xOffset;
+        this.steed.collisionBoundary.primary.y = this.steed.position.y + this.steed.collisionBoundary.primary.yOffset;
+        this.steed.collisionBoundary.secondary.x = this.steed.position.x + this.steed.collisionBoundary.secondary.xOffset;
+        this.steed.collisionBoundary.secondary.y = this.steed.position.y + this.steed.collisionBoundary.secondary.yOffset
+
+        this.position.x = this.position.x + 10 * this.steed.scale;
+        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
+
+    }
+};

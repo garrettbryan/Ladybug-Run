@@ -48,9 +48,9 @@ Enemy.prototype.update = function(dt) {
       this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
     }
 
-//    for ( var collectable in allCollectables){
-//        this.collisionCheck(allCollectables[collectable], this.death);
-//    }
+    for ( var collectable in allCollectables){
+        this.collisionCheck(allCollectables[collectable], "primary", this.death);
+    }
 
     if (this.position.x > 10 * 101){
         this.tile.x = -1;
@@ -61,11 +61,12 @@ Enemy.prototype.update = function(dt) {
 };
 
 Enemy.prototype.death = function(){
-    allEnemies.shift();
-    console.log("Bug Bye");
-    if (allEnemies.length === 0){
-        Engine.init();
+    for(var i = 0; i < allEnemies.length; i++){
+        if (this === allEnemies[i]){
+            allEnemies.splice(i,1);
+        }
     }
+    console.log("Bug Bye");
 //    this.character = Math.floor(Math.random()*5);
 //    this.tileX = 4;
 //    this.tileY = 7;
