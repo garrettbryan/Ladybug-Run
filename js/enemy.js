@@ -12,18 +12,19 @@ var Enemy = function(posX, posY, speed, scale) {
     this.sprite = 'images/enemy-bug.png';
     this.spriteFore = 'images/enemy-bug-front.png';
 
-    this.collisionBoundary.primary.collidesWith.people = true;
-    this.collisionBoundary.primary.collidesWith.teleporter = true;
+    this.collisionBoundary.primary.collidesWith = [
+        Player,
+        Transporter
+    ]
     this.collisionBoundary.primary.r = 20 * this.scale;
     this.collisionBoundary.primary.xOffset = 25 * this.scale + this.center.x;
     this.collisionBoundary.primary.yOffset = this.center.y;
-    this.collisionBoundary.secondary = {
-        'collidesWith' : {
-            'people': true,
-            'enemies': false,
-            'collectables': false,
-            'teleporter': false
-        },
+    this.collisionBoundary.secondary  = {
+        'collidesWith' : [
+            Player,
+            Enemy,
+            Collectable
+        ],
         'r': 20 * this.scale,
         'x': 0,
         'y': 0,
@@ -58,10 +59,6 @@ Enemy.prototype.update = function(dt) {
     }
 
 };
-
-Enemy.prototype.renderRider = function() {
-    ctx.drawImage(Resources.get(this.spriteFore), this.position.x, this.position.y, this.spriteDimensions.x, this.spriteDimensions.y);
-}
 
 Enemy.prototype.death = function(){
     allEnemies.shift();

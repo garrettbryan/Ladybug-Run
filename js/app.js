@@ -6,7 +6,7 @@
 
 var allEnemies = [];
 
-for (var i = 1; i < 4; i++){
+for (var i = 1; i < 6; i++){
     allEnemies.push(function(){
         return new Enemy( -1, i+1, 3, 1);
     }());

@@ -36,12 +36,12 @@ var Player = function(posX, posY, speed, scale, character){
 
     this.collisionBoundary = {
         'primary': {
-            'collidesWith' : {
-                'people': true,
-                'enemies': true,
-                'collectables': true,
-                'teleporter': true
-            },
+            'collidesWith' : [
+                Player,
+                Enemy,
+                Collectable,
+                Transporter
+            ],
             'r': 15 * this.scale,
             'x': this.tile.x * 101 + 101/2,
             'y': this.tile.y * 83,
@@ -64,6 +64,19 @@ Player.prototype.update = function() {
 
     this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
     this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
+
+    if (this.steed){
+        this.steed.tile = this.tile;
+        this.steed.position.x = this.position.x + 15 * this.steed.scale;
+        this.steed.position.y = - this.steed.center.y + this.tile.y * 83;
+        this.steed.collisionBoundary.primary.x = this.steed.position.x + this.steed.collisionBoundary.primary.xOffset;
+        this.steed.collisionBoundary.secondary.x = this.steed.position.x + this.steed.collisionBoundary.secondary.xOffset;
+        this.steed.collisionBoundary.primary.y = this.steed.position.y + this.steed.collisionBoundary.primary.yOffset;
+        this.steed.collisionBoundary.secondary.y = this.steed.position.y + this.steed.collisionBoundary.secondary.yOffset
+
+        this.position.y = this.position.y + this.ridingOffset.y * this.steed.scale;
+
+    }
 
     for ( var enemy in allEnemies){
         this.collisionCheck(allEnemies[enemy], "secondary", this.ride);
@@ -154,30 +167,23 @@ Player.prototype.tag = function(p){
 }
 
 Player.prototype.pickup = function(collectable){
-    if (collectable.collisionBoundary.primary.collidesWith.people){
-        collectable.attach(this);
-        collectable.collisionBoundary.primary.collidesWith = {
-            'people': false,
-            'enemies': false,
-            'collectables': false,
-            'teleporter': false
-        };
-        collectable.position.x = this.position.x;
-        collectable.position.y = this.position.y;
-        this.collectables.push(collectable);
-        this.collectablesWidth += collectable.spriteDimensions.x;
-        collectable.direction = {
-            x: 0,
-            y: 0
-        }
-        var collectablesSpacing = 0;
-        for (var i = 0; i < this.collectables.length; i++){
-            this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
-            this.collectables[i].position.y = this.position.y - this.collectables[i].center.y + 50 * this.scale;
-            collectablesSpacing += this.collectables[i].spriteDimensions.x;
-        }
-        console.log(collectable.position.x);
+    collectable.attach(this);
+    collectable.collisionBoundary.primary.collidesWith = [];
+    collectable.position.x = this.position.x;
+    collectable.position.y = this.position.y;
+    this.collectables.push(collectable);
+    this.collectablesWidth += collectable.spriteDimensions.x;
+    collectable.direction = {
+        x: 0,
+        y: 0
     }
+    var collectablesSpacing = 0;
+    for (var i = 0; i < this.collectables.length; i++){
+        this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
+        this.collectables[i].position.y = this.position.y - this.collectables[i].center.y + 50 * this.scale;
+        collectablesSpacing += this.collectables[i].spriteDimensions.x;
+    }
+    console.log(collectable.position.x);
 }
 
 
@@ -195,12 +201,11 @@ Player.prototype.death = function(){
 Player.prototype.throw = function(){
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
-        projectile.collisionBoundary.primary.collidesWith = {
-            'people': true,
-            'enemies': true,
-            'collectables': false,
-            'teleporter': true
-        };
+        projectile.collisionBoundary.primary.collidesWith = [
+            Player,
+            Enemy,
+            Transporter
+        ];
         projectile.direction = this.direction;
         this.collectablesWidth -= projectile.spriteDimensions.x;
         projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;
@@ -219,16 +224,30 @@ Player.prototype.catchIt = function(collectable){
 }
 
 Player.prototype.ride = function(steed){
-    console.log("ride");
-    if (steed.collisionBoundary.secondary.collidesWith.people){
-   // steed.attach(this);
-        steed.collisionBoundary.primary.collidesWith = {
-            'people': false,
-            'enemies': false,
-            'collectables': false,
-            'teleporter': false
-        };
-    }
-    console.log(Object.getPrototypeOf(steed));
+    steed.collisionBoundary.primary.collidesWith = [];
+    steed.collisionBoundary.secondary.collidesWith = [];
 
+    steed.position.x = this.position.x + 15;
+    steed.collisionBoundary.primary.x = steed.position.x + steed.collisionBoundary.primary.xOffset;
+    steed.collisionBoundary.secondary.x = steed.position.x + steed.collisionBoundary.secondary.xOffset;
+
+ //   steed.position.y = this.position.y;
+    steed.direction = {
+        'x': 0,
+        'y': 0
+    };
+
+    this.ridingOffset = {
+        x : 0,
+        y : -15 * steed.scale,
+    },
+
+    this.position.y = this.position.y + this.ridingOffset.y
+
+    this.steed = steed;
+    this.steedsWidth += steed.spriteDimensions.x;
+}
+
+Player.prototype.renderRider = function() {
+    ctx.drawImage(Resources.get(this.steed.spriteFore), this.steed.position.x, this.steed.position.y, this.steed.spriteDimensions.x, this.steed.spriteDimensions.y);
 }

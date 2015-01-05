@@ -35,12 +35,7 @@ var GamePiece = function(posX, posY, speed, scale) {
 
     this.collisionBoundary = {
         'primary': {
-            'collidesWith' : {
-                'people': false,
-                'enemies': false,
-                'collectables': false,
-                'teleporter': false
-            },
+            'collidesWith' : [],
             'r': 30 * this.scale,
             'x': 0,
             'y': 0,
@@ -59,14 +54,8 @@ GamePiece.prototype.transport = function(p){
           transporters.splice(i,1);
           transporters.push(this);
           p.tile = transporters[0].tile;
-          transporters[0].collisionBoundary.primary.collidesWith.people = false;
-          transporters[0].collisionBoundary.primary.collidesWith.collectables = false;
-          transporters[0].collisionBoundary.primary.collidesWith.enemies = false;
-
-          transporters[1].collisionBoundary.primary.collidesWith.people = false;
-          transporters[1].collisionBoundary.primary.collidesWith.collectables = false;
-          transporters[1].collisionBoundary.primary.collidesWith.enemies = false;
-
+          transporters[0].collisionBoundary.primary.collidesWith = [];
+          transporters[1].collisionBoundary.primary.collidesWith = [];
       }
   }
   transporters = [];
@@ -78,6 +67,7 @@ GamePiece.prototype.transport = function(p){
 }
 
 GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
+  if (gamePiece.collisionBoundary[boundary].collidesWith.indexOf(this.constructor) >= 0){
     var distanceBetweenGamePieces =
         (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
         (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
@@ -88,6 +78,7 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
     if (distanceBetweenGamePieces < radiiSum) {
         result.call(this, gamePiece);
     }
+  }
 }
 
 GamePiece.prototype.update = function(dt) {
@@ -106,6 +97,9 @@ GamePiece.prototype.update = function(dt) {
 
 GamePiece.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.position.x, this.position.y, this.spriteDimensions.x, this.spriteDimensions.y);
+  if (this.steed){
+    this.renderRider();
+  }
   for (boundary in this.collisionBoundary){
     ctx.beginPath();
     ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);

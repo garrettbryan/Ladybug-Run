@@ -34,7 +34,9 @@ var Collectable = function(posX, posY, speed, scale, type) {
   this.sprite = types[this.type].sprite;
   this.name = types[this.type].name;
 
-  this.collisionBoundary.primary.collidesWith.people = true;
+  this.collisionBoundary.primary.collidesWith = [
+    Player
+  ];
 
 };
 

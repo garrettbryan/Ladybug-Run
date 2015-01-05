@@ -9,6 +9,11 @@ var Transporter = function(posX, posY) {
   this.collisionBoundary.primary.collidesWith.people = true;
   this.collisionBoundary.primary.collidesWith.collectables = true;
   this.collisionBoundary.primary.collidesWith.enemies = true;
+  this.collisionBoundary.primary.collidesWith = [
+    Player,
+    Enemy,
+    Collectable
+  ];
   this.collisionBoundary.primary.r = 30 * this.scale;
   this.collisionBoundary.primary.xOffset = this.center.x;
   this.collisionBoundary.primary.yOffset = this.center.y;
