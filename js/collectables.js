@@ -42,8 +42,6 @@ Collectable.prototype = Object.create(GamePiece.prototype);
 Collectable.prototype.constructor = Collectable;
 
 Collectable.prototype.attach = function(player){
-  this.collisionBoundary.primary.x = 0;
-  this.collisionBoundary.primary.y = 0;
   this.collisionBoundary.primary.r1 = this.collisionBoundary.primary.r;
   this.collisionBoundary.primary.r = 0;
   this.attachedTo = player;

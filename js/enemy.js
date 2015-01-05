@@ -19,7 +19,7 @@ var Enemy = function(posX, posY, speed, scale) {
     this.collisionBoundary.primary.yOffset = this.center.y;
     this.collisionBoundary.secondary = {
         'collidesWith' : {
-            'people': false,
+            'people': true,
             'enemies': false,
             'collectables': false,
             'teleporter': false

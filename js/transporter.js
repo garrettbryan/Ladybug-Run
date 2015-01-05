@@ -26,10 +26,10 @@ Transporter.prototype.update = function(){
     this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
 
     for (var player in allPlayers){
-      this.collisionCheck(allPlayers[player],this.transport);
+      this.collisionCheck(allPlayers[player], "primary", this.transport);
     }
     for (var enemy in allEnemies){
-      this.collisionCheck(allEnemies[enemy],this.transport);
+      this.collisionCheck(allEnemies[enemy], "primary", this.transport);
     }
 }
 

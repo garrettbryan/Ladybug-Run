@@ -66,11 +66,12 @@ Player.prototype.update = function() {
     this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
 
     for ( var enemy in allEnemies){
-        this.collisionCheck(allEnemies[enemy], this.death);
+        this.collisionCheck(allEnemies[enemy], "secondary", this.ride);
+        this.collisionCheck(allEnemies[enemy], "primary", this.death);
     }
 
     for ( var collectable in allCollectables){
-        this.collisionCheck(allCollectables[collectable], this.pickup);
+        this.collisionCheck(allCollectables[collectable], "primary", this.pickup);
     }
 
 //    for (var transport in transporters){
@@ -78,7 +79,7 @@ Player.prototype.update = function() {
 //    }
 
     for ( var i = 1; i < allPlayers.length; i++){
-        this.collisionCheck(allPlayers[i], this.tag)
+        this.collisionCheck(allPlayers[i], "primary", this.tag)
     }
 
     var collectablesSpacing = 0;
@@ -213,12 +214,21 @@ Player.prototype.throw = function(){
 
 Player.prototype.catchIt = function(collectable){
     for ( var collectable in allCollectables){
-        this.collisionCheck(allCollectables[collectable], this.pickup);
+        this.collisionCheck(allCollectables[collectable], "primary", this.pickup);
     }
 }
 
 Player.prototype.ride = function(steed){
-    for (var steed in allEnemies){
-
+    console.log("ride");
+    if (steed.collisionBoundary.secondary.collidesWith.people){
+   // steed.attach(this);
+        steed.collisionBoundary.primary.collidesWith = {
+            'people': false,
+            'enemies': false,
+            'collectables': false,
+            'teleporter': false
+        };
     }
+    console.log(Object.getPrototypeOf(steed));
+
 }

@@ -77,14 +77,14 @@ GamePiece.prototype.transport = function(p){
   }
 }
 
-GamePiece.prototype.collisionCheck = function(gamePiece, result){
+GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
     var distanceBetweenGamePieces =
-        (gamePiece.collisionBoundary.primary.x - this.collisionBoundary.primary.x) *
-        (gamePiece.collisionBoundary.primary.x - this.collisionBoundary.primary.x) +
-        (gamePiece.collisionBoundary.primary.y - this.collisionBoundary.primary.y) *
-        (gamePiece.collisionBoundary.primary.y - this.collisionBoundary.primary.y);
-    var radiiSum = (gamePiece.collisionBoundary.primary.r + this.collisionBoundary.primary.r) *
-         (gamePiece.collisionBoundary.primary.r + this.collisionBoundary.primary.r);
+        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
+        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
+        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
+        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
+    var radiiSum = (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
+         (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
     if (distanceBetweenGamePieces < radiiSum) {
         result.call(this, gamePiece);
     }
