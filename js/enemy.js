@@ -104,6 +104,19 @@ Enemy.prototype.death = function(){
         }
     }
     console.log("Bug Bye");
+    if (allEnemies.length === 0){
+        for (var i = 1; i < 6; i++){
+            allEnemies.push(function(){
+                return new Enemy( -1, i+1, 3, 0.5*i, 1);
+            }());
+            console.log(allEnemies[0]);
+        }
+        for (var i = 0; i < 2; i++){
+            transporters.push(function(){
+                return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+2));
+            }());
+        }
+    }
 //    this.character = Math.floor(Math.random()*5);
 //    this.tileX = 4;
 //    this.tileY = 7;
