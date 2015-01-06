@@ -293,8 +293,11 @@ Player.prototype.dismount = function(){
     this.steed.tile.x = this.tile.x;
     this.steed = false;
 
-    this.tile.y = this.tile.y + 1;
-    console.log(this);
+    if (this.tile.y < 8){
+        this.tile.y = this.tile.y + 1;
+    } else {
+        this.tile.y = this.tile.y - 1;
+    }
 
 
 }

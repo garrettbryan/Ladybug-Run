@@ -78,7 +78,7 @@ Enemy.prototype.update = function(dt) {
     if (this.position.x > 10 * 101){
         this.tile.x = -1;
         this.tile.y = Math.floor(2+Math.random()*5);
-    }else if (this.position.x < - this.spriteDimensions.x - 5) {
+    }else if (this.position.x < - this.spriteDimensions.x * 2) {
         this.death();
     }
 
