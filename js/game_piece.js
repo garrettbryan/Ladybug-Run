@@ -32,6 +32,11 @@ var GamePiece = function(posX, posY, speed, scale) {
       'y': 0
     };
 
+    this.sx = 0;
+    this.sy = 0;
+    this.sWidth = 101;
+    this.sHeight = 171;
+
 
     this.collisionBoundary = {
         'primary': {
@@ -96,9 +101,12 @@ GamePiece.prototype.update = function(dt) {
 }
 
 GamePiece.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.position.x, this.position.y, this.spriteDimensions.x, this.spriteDimensions.y);
+  ctx.drawImage(Resources.get(this.sprite),
+    this.sx, this.sy, this.sWidth, this.sHeight,
+    this.position.x, this.position.y,
+    this.spriteDimensions.x, this.spriteDimensions.y);
   if (this.steed){
-    this.renderRider();
+    this.steed.renderRider();
   }
   for (boundary in this.collisionBoundary){
 //    ctx.beginPath();

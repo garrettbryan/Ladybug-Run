@@ -66,6 +66,8 @@ Player.prototype.update = function() {
     this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
 
     if (this.steed){
+        this.steed.direction.x = this.direction.x;
+        //console.log(this.direction.x);
         this.steed.position.x = - this.steed.center.x + this.tile.x * 101 + 101/2;
         this.steed.position.y = - this.steed.center.y + this.tile.y * 83;
         this.steed.collisionBoundary.primary.x = this.steed.position.x + this.steed.collisionBoundary.primary.xOffset;
@@ -295,10 +297,6 @@ Player.prototype.dismount = function(){
     console.log(this);
 
 
-}
-
-Player.prototype.renderRider = function() {
-    ctx.drawImage(Resources.get(this.steed.spriteFore), this.steed.position.x, this.steed.position.y, this.steed.spriteDimensions.x, this.steed.spriteDimensions.y);
 }
 
 Player.prototype.wait = function() {

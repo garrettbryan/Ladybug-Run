@@ -1,14 +1,15 @@
 var sendbugMessage = function(dt, bugMessage){
     for (i = 0; i < bugMessage.length; i++){
-        console.log(bugMessage[i][4]);
-        console.log(dt);
+        //console.log(bugMessage[i][4]);
+        //console.log(dt);
         if (bugMessage[i][4] < 0){
             var bug = bugMessage.shift();
             allEnemies.push(function(){
                 return new Enemy( bug[0],
                     bug[1],
-                    bug[2],
-                    bug[3]
+                    bug[2]*2,
+                    bug[3],
+                    -1
                 );
             }());
         }else{
@@ -25,8 +26,8 @@ var createBugMessage = function(message){
         for (var j = 0; j < 5; j++){ // Array index is ordered as such to send out columns at a time
             for (var i = 0; i < 5; i++){
                 if (character[i][j] >= 1){
-                    console.log(character[i][j]);
-                    bugMessageFormation.push( [6.5, i+1, -1*character[i][j]*2, character[i][j], (characterIndex*5.5 + j)]);
+                    //console.log(character[i][j]);
+                    bugMessageFormation.push( [10, i+2, -1*character[i][j]*2, character[i][j], (characterIndex*5.5 + j)]);
                 }
             }
         }
@@ -44,6 +45,15 @@ var bugCharacterFormation = function(character){
                 [0,0,0,0,0],
                 [0,0,0,0,0],
                 [0,0,0,0,0]
+                ];
+            break;
+        case "!":
+            bugArray = [
+                [0,1],
+                [0,1],
+                [0,1],
+                [0,0],
+                [0,1]
                 ];
             break;
         case "A":
@@ -66,11 +76,11 @@ var bugCharacterFormation = function(character){
             break;
         case "B":
             bugArray = [
-                [1,1,1,0,0],
-                [1,0,0,1,0],
-                [1,1,1,0,0],
-                [1,0,0,1,0],
-                [1,1,1,0,0]
+                [1,1,1,0],
+                [1,0,0,1],
+                [1,1,1,0],
+                [1,0,0,1],
+                [1,1,1,0]
                 ];
             break;
         case "b":
@@ -84,29 +94,29 @@ var bugCharacterFormation = function(character){
             break;
         case "C":
             bugArray = [
-                [0,1,1,1,0],
-                [1,0,0,0,0],
-                [1,0,0,0,0],
-                [1,0,0,0,0],
-                [0,1,1,1,0]
+                [0,1,1,1],
+                [1,0,0,0],
+                [1,0,0,0],
+                [1,0,0,0],
+                [0,1,1,1]
                 ];
             break;
         case "c":
             bugArray = [
-                [0,0,0,0,0],
-                [0,0,0,0,0],
-                [0,1,1,1,0],
-                [0,1,0,0,0],
-                [0,1,1,1,0]
+                [0,0,0],
+                [0,0,0],
+                [0,1,1],
+                [1,0,0],
+                [0,1,1]
                 ];
             break;
         case "D":
             bugArray = [
-                [1,1,1,0,0],
-                [1,0,0,1,0],
-                [1,0,0,1,0],
-                [1,0,0,1,0],
-                [1,1,1,0,0]
+                [1,1,1,0],
+                [1,0,0,1],
+                [1,0,0,1],
+                [1,0,0,1],
+                [1,1,1,0]
                 ];
             break;
         case "d":
@@ -120,11 +130,11 @@ var bugCharacterFormation = function(character){
             break;
         case "E":
             bugArray = [
-                [1,1,1,1,0],
-                [1,0,0,0,0],
-                [1,1,1,0,0],
-                [1,0,0,0,0],
-                [1,1,1,1,0]
+                [1,1,1,1],
+                [1,0,0,0],
+                [1,1,1,0],
+                [1,0,0,0],
+                [1,1,1,1]
                 ];
             break;
         case "e":
@@ -138,20 +148,20 @@ var bugCharacterFormation = function(character){
             break;
         case "F":
             bugArray = [
-                [1,1,1,1,],
-                [1,0,0,0,0],
-                [1,1,1,0,0],
-                [1,0,0,0,0],
-                [1,0,0,0,0]
+                [1,1,1,1],
+                [1,0,0,0],
+                [1,1,1,0],
+                [1,0,0,0],
+                [1,0,0,0]
                 ];
             break;
         case "f":
             bugArray = [
-                [0,1,1,1,0],
-                [0,1,0,0,0],
-                [1,1,1,0,0],
-                [0,1,0,0,0],
-                [0,1,0,0,0]
+                [0,1,1,1],
+                [0,1,0,0],
+                [1,1,1,0],
+                [0,1,0,0],
+                [0,1,0,0]
                 ];
             break;
         case "G":
@@ -165,47 +175,47 @@ var bugCharacterFormation = function(character){
             break;
         case "g":
             bugArray = [
-                [0,0,1,1,0],
-                [0,1,0,0,1],
-                [0,0,1,1,1],
-                [0,0,0,0,1],
-                [0,1,1,1,0]
+                [0,1,1,0],
+                [1,0,0,1],
+                [0,1,1,1],
+                [0,0,0,1],
+                [1,1,1,0]
                 ];
             break;
         case "H":
             bugArray = [
-                [1,0,0,0,1],
-                [1,0,0,0,1],
-                [1,1,1,1,1],
-                [1,0,0,0,1],
-                [1,0,0,0,1]
+                [1,0,0,1],
+                [1,0,0,1],
+                [1,1,1,1],
+                [1,0,0,1],
+                [1,0,0,1]
                 ];
             break;
         case "h":
             bugArray = [
-                [1,0,0,0,0],
-                [1,0,0,0,0],
-                [1,0,1,1,0],
-                [1,1,0,0,1],
-                [1,0,0,0,1]
+                [1,0,0,0],
+                [1,0,0,0],
+                [1,0,1,0],
+                [1,1,0,1],
+                [1,0,0,1]
                 ];
             break;
         case "I":
             bugArray = [
-                [1,1,1,1,1],
-                [0,0,1,0,0],
-                [0,0,1,0,0],
-                [0,0,1,0,0],
-                [1,1,1,1,1]
+                [1,1,1],
+                [0,1,0],
+                [0,1,0],
+                [0,1,0],
+                [1,1,1]
                 ];
             break;
         case "i":
             bugArray = [
-                [0,0,1,0,0],
-                [0,0,0,0,0],
-                [0,0,1,0,0],
-                [0,0,1,0,0],
-                [0,0,0,1,0]
+                [0,1,0,0],
+                [0,0,0,0],
+                [0,1,0,0],
+                [0,1,0,0],
+                [0,0,1,0]
                 ];
             break;
         case "J":
@@ -219,38 +229,38 @@ var bugCharacterFormation = function(character){
             break;
         case "j":
             bugArray = [
-                [0,0,0,1,0],
-                [0,0,0,0,0],
-                [0,0,0,1,0],
-                [0,0,0,1,0],
-                [0,0,1,0,0]
+                [0,0,1,0],
+                [0,0,0,0],
+                [0,0,1,0],
+                [0,0,1,0],
+                [0,1,0,0]
                 ];
             break;
         case "K":
             bugArray = [
-                [1,0,0,1,0],
-                [1,0,1,0,0],
-                [1,1,0,0,0],
-                [1,0,1,0,0],
-                [1,0,0,1,0]
+                [1,0,0,1],
+                [1,0,1,0],
+                [1,1,0,0],
+                [1,0,1,0],
+                [1,0,0,1]
                 ];
             break;
         case "k":
             bugArray = [
-                [0,1,0,0,0],
-                [0,1,0,0,0],
-                [0,1,0,1,0],
-                [0,1,1,0,0],
-                [0,1,0,1,0]
+                [0,1,0,0],
+                [0,1,0,0],
+                [0,1,0,1],
+                [0,1,1,0],
+                [0,1,0,1]
                 ];
             break;
         case "L":
             bugArray = [
-                [1,0,0,0,0],
-                [1,0,0,0,0],
-                [1,0,0,0,0],
-                [1,0,0,0,0],
-                [1,1,1,1,0]
+                [1,0,0,0],
+                [1,0,0,0],
+                [1,0,0,0],
+                [1,0,0,0],
+                [1,1,1,1]
                 ];
             break;
         case "l":
@@ -363,11 +373,11 @@ var bugCharacterFormation = function(character){
             break;
         case "r":
             bugArray = [
-                [0,0,0,0,0],
-                [0,1,0,1,0],
-                [0,1,1,0,1],
-                [0,1,0,0,0],
-                [0,1,0,0,0]
+                [0,0,0,0],
+                [1,0,1,0],
+                [1,1,0,1],
+                [1,0,0,0],
+                [1,0,0,0]
                 ];
             break;
         case "S":
@@ -417,11 +427,11 @@ var bugCharacterFormation = function(character){
             break;
         case "u":
             bugArray = [
-                [0,0,0,0,0],
-                [0,0,0,0,0],
-                [0,1,0,0,1],
-                [0,1,0,0,1],
-                [0,0,1,1,1]
+                [0,0,0,0],
+                [0,0,0,0],
+                [1,0,0,1],
+                [1,0,0,1],
+                [0,1,1,1]
                 ];
             break;
         case "V":
@@ -437,7 +447,7 @@ var bugCharacterFormation = function(character){
             bugArray = [
                 [0,0,0,0,0],
                 [0,0,0,0,0],
-                [0,1,0,1,0],
+                [1,0,0,0,1],
                 [0,1,0,1,0],
                 [0,0,1,0,0]
                 ];
@@ -522,4 +532,3 @@ var bugCharacterFormation = function(character){
 
 
 
-var mess = createBugMessage("I s love Meredith");
