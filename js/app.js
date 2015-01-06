@@ -8,7 +8,7 @@ var allEnemies = [];
 
 for (var i = 1; i < 6; i++){
     allEnemies.push(function(){
-        return new Enemy( -1, i+1, 3, 1);
+        return new Enemy( -1, i+1, 3, 0.5 * i);
     }());
     console.log(allEnemies[0]);
 }
@@ -17,7 +17,7 @@ var allPlayers = [];
 for (var i = 0, p = 1; i < 2; i++){
     for (var j = 0; j < 2; j++, p++){
             allPlayers.push(function(){
-                return new Player( 4+i, 7+j, 300, 1, p);
+                return new Player( 4+i, 7+j, 300, 0.6+0.2* i, p);
         }());
     }
     //console.log(allCollectables[i]);
