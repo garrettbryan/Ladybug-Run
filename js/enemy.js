@@ -128,11 +128,11 @@ Enemy.prototype.render = function() {
         this.sx, this.sy, this.sWidth, this.sHeight,
         this.position.x, this.position.y,
         this.spriteDimensions.x, this.spriteDimensions.y);
-  for (boundary in this.collisionBoundary){
-    ctx.beginPath();
-    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-    ctx.stroke();
-  }
+//  for (boundary in this.collisionBoundary){
+//    ctx.beginPath();
+//    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+//    ctx.stroke();
+//  }
 };
 
 Enemy.prototype.renderRider = function() {

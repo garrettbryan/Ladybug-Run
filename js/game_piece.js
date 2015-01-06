@@ -108,10 +108,10 @@ GamePiece.prototype.render = function() {
   if (this.steed){
     this.steed.renderRider();
   }
-  for (boundary in this.collisionBoundary){
+//for (boundary in this.collisionBoundary){
 //    ctx.beginPath();
 //    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[//boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, //false);
 //    ctx.stroke();
-  }
+//}
 };
 
