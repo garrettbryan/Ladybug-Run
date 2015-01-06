@@ -47,7 +47,7 @@ var Engine = (function(global) {
          */
         update(dt);
         //console.log(mess);
-        //sendbugMessage(dt,mess);
+        sendbugMessage(dt,mess);
         //console.log("main");
         render();
 
@@ -207,6 +207,7 @@ var Engine = (function(global) {
 	'images/char-princess-girl.png',
 	'images/enemy-bug.png',
     'images/enemy-bug-front.png',
+    'images/enemy-bug_sprite_sheet.png',
 	'images/Gem Blue.png',
 	'images/Gem Green.png',
 	'images/Gem Orange.png',

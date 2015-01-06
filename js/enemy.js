@@ -9,8 +9,9 @@ var Enemy = function(posX, posY, speed, scale) {
     };
 
     this.name = 'Lady Bug';
-    this.sprite = 'images/enemy-bug.png';
-    this.spriteFore = 'images/enemy-bug-front.png';
+    this.sprite = 'images/enemy-bug_sprite_sheet.png';
+//    this.sprite = 'images/enemy-bug.png';
+    this.spriteFore = 'images/enemy-bug_sprite_sheet.png';
 
     this.collisionBoundary.primary.collidesWith = [
         Player,
@@ -55,7 +56,8 @@ Enemy.prototype.update = function(dt) {
     if (this.position.x > 10 * 101){
         this.tile.x = -1;
         this.tile.y = Math.floor(2+Math.random()*5);
-    }else if (this.position.x < -this.center.x) {
+    }else if (this.position.x < - this.spriteDimensions - 5) {
+        this.death();
     }
 
 };
@@ -70,4 +72,18 @@ Enemy.prototype.death = function(){
 //    this.character = Math.floor(Math.random()*5);
 //    this.tileX = 4;
 //    this.tileY = 7;
+};
+
+Enemy.prototype.render = function() {
+    //ctx.scale(-1,1);
+    ctx.drawImage(Resources.get(this.sprite),
+        0, 171,
+        101, 171*2,
+        this.position.x, this.position.y,
+        this.spriteDimensions.x, this.spriteDimensions.y*2);
+//  for (boundary in this.collisionBoundary){
+//    ctx.beginPath();
+//    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[//boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, //false);
+//    ctx.stroke();
+//  }
 };

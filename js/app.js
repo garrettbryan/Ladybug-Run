@@ -6,12 +6,12 @@
 
 var allEnemies = [];
 
-for (var i = 1; i < 6; i++){
-    allEnemies.push(function(){
-        return new Enemy( -1, i+1, 3, 1);
-    }());
-    console.log(allEnemies[0]);
-}
+//for (var i = 1; i < 6; i++){
+//    allEnemies.push(function(){
+//        return new Enemy( -1, i+1, 3, 0.5*i);
+//    }());
+//    console.log(allEnemies[0]);
+//}
 
 var allPlayers = [];
 for (var i = 0, p = 1; i < 2; i++){
@@ -32,15 +32,15 @@ for (var i = 0; i < 7; i++){
 }
 
 var transporters = [];
-for (var i = 0; i < 2; i++){
-    transporters.push(function(){
-        return new Transporter( Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+2));
-    }());
-}
+//for (var i = 0; i < 2; i++){
+//    transporters.push(function(){
+//        return new Transporter( Math.floor(Math.random()*4+5*i), Math.f//loor(Math.random()*5+2));//
+//    }());
+//}
 
 
 
-//var mess = createBugMessage("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz");
+var mess = createBugMessage("LADY BUG RUN");
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
