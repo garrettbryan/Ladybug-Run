@@ -175,11 +175,12 @@ var Engine = (function(global) {
             transporter.render();
         });
 
+        allCollectables.forEach(function(collectable) {
+            collectable.render();
+        });
+
         allEnemies.forEach(function(enemy) {
             enemy.render();
-        });
-         allCollectables.forEach(function(collectable) {
-            collectable.render();
         });
 
         allPlayers.forEach(function(player){
