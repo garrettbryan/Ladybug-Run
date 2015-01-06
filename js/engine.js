@@ -45,10 +45,8 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-        update(dt);
-        //console.log(mess);
         sendbugMessage(dt,mess);
-        //console.log("main");
+        update(dt);
         render();
 
         /* Set our lastTime variable which is used to determine the time delta
@@ -94,12 +92,14 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
+
 
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);
+        });
+
+        allEnemies.forEach(function(enemy) {
+            enemy.update(dt);
         });
 
         transporters.forEach(function(transporter) {
@@ -114,6 +114,7 @@ var Engine = (function(global) {
             player.catchIt();
             player.wait();
         });
+
     }
 
     /* This function initially draws the "game level", it will then call
@@ -175,11 +176,12 @@ var Engine = (function(global) {
             transporter.render();
         });
 
+        allCollectables.forEach(function(collectable) {
+            collectable.render();
+        });
+
         allEnemies.forEach(function(enemy) {
             enemy.render();
-        });
-         allCollectables.forEach(function(collectable) {
-            collectable.render();
         });
 
         allPlayers.forEach(function(player){
@@ -205,8 +207,7 @@ var Engine = (function(global) {
 	'images/char-horn-girl.png',
 	'images/char-pink-girl.png',
 	'images/char-princess-girl.png',
-	'images/enemy-bug.png',
-    'images/enemy-bug-front.png',
+    'images/enemy-bug-front_sprite_sheet.png',
     'images/enemy-bug_sprite_sheet.png',
 	'images/Gem Blue.png',
 	'images/Gem Green.png',

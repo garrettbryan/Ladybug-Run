@@ -8,7 +8,7 @@ var allEnemies = [];
 
 //for (var i = 1; i < 6; i++){
 //    allEnemies.push(function(){
-//        return new Enemy( -1, i+1, 3, 0.5*i);
+//        return new Enemy( -1, i+1, 3, 0.5*i, 1);
 //    }());
 //    console.log(allEnemies[0]);
 //}
@@ -40,7 +40,7 @@ var transporters = [];
 
 
 
-var mess = createBugMessage("LADY BUG RUN");
+var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

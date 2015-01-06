@@ -1,14 +1,15 @@
 var sendbugMessage = function(dt, bugMessage){
     for (i = 0; i < bugMessage.length; i++){
-        console.log(bugMessage[i][4]);
-        console.log(dt);
+        //console.log(bugMessage[i][4]);
+        //console.log(dt);
         if (bugMessage[i][4] < 0){
             var bug = bugMessage.shift();
             allEnemies.push(function(){
                 return new Enemy( bug[0],
                     bug[1],
                     bug[2]*2,
-                    bug[3]
+                    bug[3],
+                    -1
                 );
             }());
         }else{
@@ -25,7 +26,7 @@ var createBugMessage = function(message){
         for (var j = 0; j < 5; j++){ // Array index is ordered as such to send out columns at a time
             for (var i = 0; i < 5; i++){
                 if (character[i][j] >= 1){
-                    console.log(character[i][j]);
+                    //console.log(character[i][j]);
                     bugMessageFormation.push( [10, i+2, -1*character[i][j]*2, character[i][j], (characterIndex*5.5 + j)]);
                 }
             }
@@ -44,6 +45,15 @@ var bugCharacterFormation = function(character){
                 [0,0,0,0,0],
                 [0,0,0,0,0],
                 [0,0,0,0,0]
+                ];
+            break;
+        case "!":
+            bugArray = [
+                [0,1],
+                [0,1],
+                [0,1],
+                [0,0],
+                [0,1]
                 ];
             break;
         case "A":
