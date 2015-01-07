@@ -6,6 +6,12 @@
 
 var world = new World();
 
+var allCollectables = [];
+for (var i = 0; i < 7; i++){
+    allCollectables.push(new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 500, 0.3, i));
+    console.log(allCollectables[i]);
+}
+
 var allEnemies = [];
 
 //for (var i = 1; i < 6; i++){
@@ -26,13 +32,8 @@ for (var i = 0, p = 1; i < 2; i++){
     //console.log(allCollectables[i]);
 }
 
-var allCollectables = [];
-for (var i = 0; i < 7; i++){
-    allCollectables.push(function(){
-        return new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 500, 0.3, i);
-    }());
-    console.log(allCollectables[i]);
-}
+allPlayers.push(new Boss( 4,4,500, 0.75));
+
 
 var transporters = [];
 //for (var i = 0; i < 2; i++){
