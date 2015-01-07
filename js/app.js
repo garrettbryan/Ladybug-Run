@@ -4,6 +4,8 @@
 
 // 5 * colSize = 101, 6 * rowSize = 83
 
+var world = new World();
+
 var allEnemies = [];
 
 //for (var i = 1; i < 6; i++){
@@ -12,7 +14,7 @@ var allEnemies = [];
 //    }());
 //    console.log(allEnemies[0]);
 //}
-
+allEnemies.push(new Enemy(-1, 4, 3, 1, 1));
 
 var allPlayers = [];
 for (var i = 0, p = 1; i < 2; i++){
@@ -40,8 +42,8 @@ var transporters = [];
 //}
 
 
-
-var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
+var mess = "";
+//var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

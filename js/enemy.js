@@ -122,6 +122,13 @@ Enemy.prototype.death = function(){
 //    this.tileY = 7;
 };
 
+Enemy.prototype.becomeSteed = function(player){
+  this.collisionBoundary.primary.r1 = this.collisionBoundary.primary.r;
+  this.collisionBoundary.primary.r = 0;
+  this.speed = 0;
+  this.steedOf = player;
+}
+
 Enemy.prototype.render = function() {
     //ctx.scale(-1,1);
     ctx.drawImage(Resources.get(this.sprite),

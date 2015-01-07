@@ -161,9 +161,22 @@ Player.prototype.handleInput = function(key) {
 };
 
 Player.prototype.tag = function(p){
-    p.tile.x = this.tile.x + 1 * this.direction.x;
-    p.tile.y = this.tile.y + 1 * this.direction.y;
+    p.tile = {
+        x : this.tile.x + 1 * this.direction.x,
+        y : this.tile.y + 1 * this.direction.y
+    }
+
+    if (p.tile.x < 0 || p.tile.x > world.tileSize.x){
+        p.tile.x = this.tile.x;
+        p.tile.y = this.tile.y + 1;
+    }
+    if (p.tile.y < 0 || p.tile.y > world.tileSize.y){
+        p.tile.y = this.tile.y;
+        p.tile.x = this.tile.x + 1;
+    }
+
     p.direction = this.direction;
+
     for (var i = 1; i < allPlayers.length; i++){
         if (allPlayers[i] === p){
             console.log(allPlayers.length);
@@ -171,6 +184,8 @@ Player.prototype.tag = function(p){
             allPlayers[0] = p;
         }
     }
+
+
 };
 
 Player.prototype.pickup = function(collectable){
@@ -245,6 +260,7 @@ Player.prototype.catchIt = function(collectable){
 
 Player.prototype.ride = function(steed){
     this.steed = steed;
+    steed.becomeSteed(this);
 
     if (!this.steed){
         for(var i = 0; i < allEnemies.length; i++){
@@ -276,7 +292,7 @@ Player.prototype.ride = function(steed){
 }
 
 Player.prototype.dismount = function(){
-    this.steed.direction.x = 1;
+    //this.steed.direction.x = 1;
     allEnemies.push(this.steed);
     console.log(this.steed);
 

@@ -138,8 +138,8 @@ var Engine = (function(global) {
                 'images/grass-block.png',   // Row 1 of 2 of grass
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ],
-            numRows = 8,
-            numCols = 10,
+            numRows = world.tileSize.y,
+            numCols = world.tileSize.x,
             row, col;
 
         /* Loop through the number of rows and columns we've defined above
