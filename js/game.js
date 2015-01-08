@@ -12,10 +12,32 @@ var Game = function () {
 };
 
 
-Game.prototype.init = function() {
-    conxsole.log("initialize game");
-    var world = new World();
-    var player = new Player();
+Game.prototype.init = function(level, score) {
+    console.log("initialize game");
+    this. world = new World();
+    this.player = new Player(4,7, 300, 1, 1);
+
+    this.level = level;
+    this.numberOfEnemies = 1;
+
+    //Enemies are spawned when the game is started.
+    this.allEnemies = [];
+
+
+//    this.allPlayers = [];
+//    for (var i = 0, p = 1; i < 2; i++){
+//        for (var j = 0; j < 2; j++, p++){
+//            allPlayers.push( new Player( 4+i, 7+j, 300, 0.6+0.2* i, p));
+//        }
+//        //console.log(allCollectables[i]);
+//    }
+
+//    this.allCollectables = [];
+//    for (var i = 0; i < 7; i++){
+//        this.allCollectables.push(new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 500, 0.3, i));
+//        console.log(allCollectables[i]);
+//    }
+
 }
 
 Game.prototype.startLevel = function() {

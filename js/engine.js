@@ -23,6 +23,7 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+
         lastTime;
 
     canvas.width = 1010;
@@ -45,7 +46,6 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-        sendbugMessage(dt,mess);
         update(dt);
         render();
 
@@ -93,7 +93,7 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
 
-
+/*
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);
         });
@@ -116,7 +116,7 @@ var Engine = (function(global) {
             player.catchIt();
             player.wait();
         });
-
+*/
     }
 
     /* This function initially draws the "game level", it will then call
@@ -126,55 +126,8 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
-        /* This array holds the relative URL to the image used
-         * for that particular row of the game level.
-         */
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 2 of 5 of stone
-                'images/stone-block.png',   // Row 3 of 5 of stone
-                'images/stone-block.png',   // Row 3 of 5 of stone
-                'images/stone-block.png',   // Row 4 of 5 of stone
-                'images/stone-block.png',   // Row 5 of 5 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
-            numRows = world.tiles.y,
-            numCols = world.tiles.x,
-            row, col;
-
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
-
-        for (row = 0; row < numRows; row++) {
-            for (col = 0; col < numCols; col++) {
-                /* The drawImage function of the canvas' context element
-                 * requires 3 parameters: the image to draw, the x coordinate
-                 * to start drawing and the y coordinate to start drawing.
-                 * We're using our Resources helpers to refer to our images
-                 * so that we get the benefits of caching these images, since
-                 * we're using them over and over.
-                 */
-/*
-                if (row < 2 || row > 5 ) {
-                    ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83 - 40);
-                } else if (col < 1 || col > 8 ) {
-                    ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83 - 40);
-                }else{
-                    ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
-                }
-*/
-            ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
-
-            }
-        }
-
-
-        renderEntities();
-    }
+        game.world.render();
+        renderEntities();    }
 
     /* This function is called by the render function and is called on each game
      * tick. It's purpose is to then call the render functions you have defined
@@ -184,6 +137,8 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+
+/*
         transporters.forEach(function(transporter) {
             transporter.render();
         });
@@ -199,6 +154,8 @@ var Engine = (function(global) {
         allPlayers.forEach(function(player){
             player.render();
         });
+*/
+
     }
 
     /* This function does nothing but it could have been a good place to

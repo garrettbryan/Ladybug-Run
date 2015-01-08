@@ -1,4 +1,5 @@
 var GamePiece = function(posX, posY, speed, scale) {
+  console.log("GamePiece");
     this.speed = speed;
     this.scale = scale;
 

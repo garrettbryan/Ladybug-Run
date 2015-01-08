@@ -2,7 +2,7 @@
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-// 5 * colSize = 101, 6 * rowSize = 83
+/*
 
 var world = new World();
 
@@ -46,6 +46,12 @@ var transporters = [];
 var mess = "";
 //var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
 
+*/
+
+var game = new Game();
+game.init(1,0);
+game.startLevel();
+
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
@@ -59,5 +65,5 @@ document.addEventListener('keyup', function(e) {
 
     };
 
-    allPlayers[0].handleInput(allowedKeys[e.keyCode]);
+    //allPlayers[0].handleInput(allowedKeys[e.keyCode]);
 });

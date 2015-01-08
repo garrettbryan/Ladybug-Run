@@ -1,7 +1,15 @@
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+
+/*
+var Player = function(){
+    console.log("new player");
+}
+*/
+
 var Player = function(posX, posY, speed, scale, character){
+    console.log("Player");
     GamePiece.call(this, posX, posY, speed, scale);
     this.characters = [
         {
