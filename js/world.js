@@ -1,16 +1,32 @@
 var World = function(){
-  this.tileSize = {
-    x: 0,
-    y: 0
+  this.tiles = {
+    //these values will be reset per level
+    x: 10,
+    y: 8
   };
 
-  this.pixelSize = {
-    x: this.tileSize.x * 101;
-    y: this.tileSize.y * 83 + 171 - 83;
+  this.pixelsPerTileUnit = {
+    x: 101,
+    y: 83
   }
 
+  this.pixelsPerElevationUnit = {
+    x: 0,
+    y: 40
+  }
+
+  this.pixelsPerBlockImg = {
+    x: 101,
+    y: 171
+  }
+
+  this.pixelSize = {
+    x: this.tiles.x * this.pixelsPerTileUnit.x,
+    y: this.tiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y
+  },
+
   this.failureMap = {
-    totalTiles = {
+    totalTiles: {
       x: 5,
       y: 3
     },
@@ -29,7 +45,8 @@ var World = function(){
     '0','0','0','0','0',
     '1','1','1','1','1',
     '1','1','1','1','1',
-    ]
+    ],
+
     playerStartTile: {
       x: 2,
       y: 3
@@ -37,7 +54,7 @@ var World = function(){
   },
 
   this.victoryMap = {
-        totalTiles = {
+        totalTiles: {
       x: 5,
       y: 20
     },
@@ -116,7 +133,7 @@ var World = function(){
 
   this.maps = [
     {
-      totalTiles = {
+      totalTiles: {
         x: 11,
         y: 5
       },
@@ -145,7 +162,7 @@ var World = function(){
       ],
     },
     {
-      totalTiles = {
+      totalTiles: {
         x: 11,
         y: 11
       },
@@ -193,7 +210,7 @@ var World = function(){
       ],
     },
     {
-      totalTiles = {
+      totalTiles: {
         x: 12,
         y: 12
       },
@@ -241,11 +258,11 @@ var World = function(){
         '1','1','1','1','1','1','1','1','1','1','1','1',
         '1','1','1','1','1','1','1','1','1','1','1','1',
         '1','1','1','1','1','1','1','1','1','1','1','1'
-      ]
+      ],
 
     },
     {
-      totalTiles = {
+      totalTiles: {
         x: 11,
         y: 11
       },
