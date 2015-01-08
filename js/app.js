@@ -49,7 +49,7 @@ var mess = "";
 */
 
 var game = new Game();
-game.init(1,0);
+game.init(3,0);
 game.startLevel();
 
 // This listens for key presses and sends the keys to your
@@ -65,5 +65,5 @@ document.addEventListener('keyup', function(e) {
 
     };
 
-    //allPlayers[0].handleInput(allowedKeys[e.keyCode]);
+    game.player.handleInput(allowedKeys[e.keyCode]);
 });

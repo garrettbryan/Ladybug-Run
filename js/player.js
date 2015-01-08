@@ -8,9 +8,9 @@ var Player = function(){
 }
 */
 
-var Player = function(posX, posY, speed, scale, character){
+var Player = function(speed, scale, character){
     console.log("Player");
-    GamePiece.call(this, posX, posY, speed, scale);
+    GamePiece.call(this, speed, scale);
     this.characters = [
         {
             name: 'Bug Boy',
@@ -62,6 +62,20 @@ var Player = function(posX, posY, speed, scale, character){
 Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
+Player.prototype.init = function(tile){
+    console.log("player initialize");
+    this.tile = tile;
+}
+
+Player.prototype.walkToTile = function() {
+    var result = 0;
+    if (this.tile.x >= 0 && this.tile.x < game.world.currentMap.totalTiles.x &&
+        this.tile.y >= 0 && this.tile.y < game.world.currentMap.totalTiles.y) {
+      result = game.world.currentMap.walkMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x];
+    }
+    return result;
+}
+
 Player.prototype.update = function() {
     if (this.tile.y < 2){
         this.death();
@@ -88,23 +102,23 @@ Player.prototype.update = function() {
 
     }
 
-    for ( var enemy in allEnemies){
+    for ( var enemy in game.allEnemies){
         if (!this.steed){
-            this.collisionCheck(allEnemies[enemy], "primary", this.death);
-            this.collisionCheck(allEnemies[enemy], "secondary", this.ride);
+            this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
+            this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
         }
     }
 
-    for ( var collectable in allCollectables){
-        this.collisionCheck(allCollectables[collectable], "primary", this.pickup);
+    for ( var collectable in game.allCollectables){
+        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
     }
 
 //    for (var transport in transporters){
 //        this.collisionCheck(transporters, transport.transport);
 //    }
 
-    for ( var i = 1; i < allPlayers.length; i++){
-        this.collisionCheck(allPlayers[i], "primary", this.tag)
+    for ( var i = 1; i < game.allPlayers.length; i++){
+        this.collisionCheck(game.allPlayers[i], "primary", this.tag)
     }
 
     var collectablesSpacing = 0;
@@ -119,42 +133,28 @@ Player.prototype.update = function() {
 };
 
 Player.prototype.handleInput = function(key) {
+    var tile0 = {
+        x: this.tile.x,
+        y: this.tile.y
+    },
+    direction0 = this.direction;
+
     switch(key){
         case 'left':
-            if (this.tile.x > 0){
-                this.tile.x = this.tile.x - 1;
-            }
-            this.direction = {
-                'x': '-1',
-                'y': '0'
-            }
+            this.tile.x = this.tile.x - 1;
+            this.direction = { x: -1, y: 0};
             break;
         case 'right':
-            if (this.tile.x < 9){
-                this.tile.x = this.tile.x + 1;
-            }
-            this.direction = {
-                'x': '1',
-                'y': '0'
-            }
+            this.tile.x = this.tile.x + 1;
+            this.direction = { x: 1, y: 0};
             break;
         case 'up':
-            if (this.tile.y > 0){
-                this.tile.y = this.tile.y - 1;
-            }
-            this.direction = {
-                'x': '0',
-                'y': '-1'
-            }
+            this.tile.y = this.tile.y - 1;
+            this.direction = {x: 0, y: -1}
             break;
         case 'down':
-            if (this.tile.y < 8){
-                this.tile.y = this.tile.y + 1;
-            }
-            this.direction = {
-                'x': '0',
-                'y': '1'
-            }
+            this.tile.y = this.tile.y + 1;
+            this.direction = {x: 0, y: 1}
             break;
         case 'space':
             console.log('throw');
@@ -164,6 +164,10 @@ Player.prototype.handleInput = function(key) {
             console.log('dismount');
             this.dismount();
             break;
+    }
+    console.log(this.walkToTile());
+    if (this.walkToTile() === 0){
+        this.tile = tile0;
     }
     //console.log(this.tile);
 };
@@ -185,11 +189,11 @@ Player.prototype.tag = function(p){
 
     p.direction = this.direction;
 
-    for (var i = 1; i < allPlayers.length; i++){
-        if (allPlayers[i] === p){
-            console.log(allPlayers.length);
-            allPlayers.splice(i,1,allPlayers[0]);
-            allPlayers[0] = p;
+    for (var i = 1; i < game.allPlayers.length; i++){
+        if (game.allPlayers[i] === p){
+            console.log(game.allPlayers.length);
+            game.allPlayers.splice(i,1,game.allPlayers[0]);
+            game.allPlayers[0] = p;
         }
     }
 
@@ -218,26 +222,26 @@ Player.prototype.pickup = function(collectable){
 
 Player.prototype.death = function(){
     if (this.steed){
-        for(var i = 0; i < allEnemies.length; i++){
-            if (this.steed === allEnemies[i]){
-                allEnemies.splice(i,1);
+        for(var i = 0; i < game.allEnemies.length; i++){
+            if (this.steed === game.allEnemies[i]){
+                game.allEnemies.splice(i,1);
             }
         }
     }
     if (this.collectables){
         for (var j = 0; j < this.collectables.length; j++){
-            for (var i = 0; i < allCollectables.length; i++){
-                if (this.collectables[j] === allCollectables[i]){
-                    allCollectables.splice(i,1);
+            for (var i = 0; i < game.allCollectables.length; i++){
+                if (this.collectables[j] === game.allCollectables[i]){
+                    game.allCollectables.splice(i,1);
                 }
             }
         }
         this.collectables = [];
 
     }
-    allPlayers.shift();
+    game.allPlayers.shift();
     console.log("You're being very undude . . .");
-    if (allPlayers.length === 0){
+    if (game.allPlayers.length === 0){
     }
 };
 
@@ -261,8 +265,8 @@ Player.prototype.throw = function(){
 };
 
 Player.prototype.catchIt = function(collectable){
-    for ( var collectable in allCollectables){
-        this.collisionCheck(allCollectables[collectable], "primary", this.pickup);
+    for ( var collectable in game.allCollectables){
+        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
     }
 };
 
@@ -271,9 +275,9 @@ Player.prototype.ride = function(steed){
     steed.becomeSteed(this);
 
     if (!this.steed){
-        for(var i = 0; i < allEnemies.length; i++){
-            if (this.steed === allEnemies[i]){
-                allEnemies.splice(i,1);
+        for(var i = 0; i < game.allEnemies.length; i++){
+            if (this.steed === game.allEnemies[i]){
+                game.allEnemies.splice(i,1);
             }
         }
     }
@@ -301,7 +305,7 @@ Player.prototype.ride = function(steed){
 
 Player.prototype.dismount = function(){
     //this.steed.direction.x = 1;
-    allEnemies.push(this.steed);
+    game.allEnemies.push(this.steed);
     console.log(this.steed);
 
     this.steed.collisionBoundary.primary.collidesWith = [

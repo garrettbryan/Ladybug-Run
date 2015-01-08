@@ -92,7 +92,7 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-
+        game.player.update();
 /*
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);
@@ -134,6 +134,7 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
+        game.player.render();
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
@@ -163,7 +164,13 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
+        game.level++;
+        game.world.init(canvas);
 
+        canvas.width = game.world.canvasSize.x;
+        canvas.height = game.world.canvasSize.y;
+
+        game.player.init(game.world.currentMap.playerStartTile);
     }
 
     /* Go ahead and load all of the images we know we're going to need to

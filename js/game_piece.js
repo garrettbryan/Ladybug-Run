@@ -1,12 +1,11 @@
-var GamePiece = function(posX, posY, speed, scale) {
+var GamePiece = function(speed, scale) {
   console.log("GamePiece");
     this.speed = speed;
     this.scale = scale;
 
-    this.tile = {
-        x: posX,
-        y: posY
-    };
+    this.tile = {};
+
+    this.draw = false;
 
     this.boardTileDimensions = {
         x: 101,

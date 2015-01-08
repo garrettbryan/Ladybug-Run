@@ -7,15 +7,16 @@ var Game = function () {
     this.active = false;
     this.world = {};
     this.player = {};
-    this.allCharacters = {}
+    this.allCharacters = {};
     this.allEnemies = {};
+    this.allCollectables = {};
 };
 
 
 Game.prototype.init = function(level, score) {
     console.log("initialize game");
-    this. world = new World();
-    this.player = new Player(4,7, 300, 1, 1);
+    this.world = new World();
+    this.player = new Player(300, 1, 1);
 
     this.level = level;
     this.numberOfEnemies = 1;
@@ -23,25 +24,18 @@ Game.prototype.init = function(level, score) {
     //Enemies are spawned when the game is started.
     this.allEnemies = [];
 
-
-//    this.allPlayers = [];
-//    for (var i = 0, p = 1; i < 2; i++){
-//        for (var j = 0; j < 2; j++, p++){
-//            allPlayers.push( new Player( 4+i, 7+j, 300, 0.6+0.2* i, p));
-//        }
-//        //console.log(allCollectables[i]);
-//    }
-
-//    this.allCollectables = [];
-//    for (var i = 0; i < 7; i++){
-//        this.allCollectables.push(new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 500, 0.3, i));
-//        console.log(allCollectables[i]);
-//    }
-
+    this.allCollectables = [];
+    //TODO create players.
+    this.allPlayers = [];
 }
 
 Game.prototype.startLevel = function() {
     console.log("startLevel");
+    this.world.currentMap = this.world.maps[this.level-1];
+    this.active = true;
+    // TODO create enemies;
+
+
 }
 
 Game.prototype.victory = function() {
