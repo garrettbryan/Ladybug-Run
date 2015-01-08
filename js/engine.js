@@ -101,6 +101,8 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+        //console.log(dt);
+        allPlayers[4].move(dt);
 
         transporters.forEach(function(transporter) {
             transporter.update(dt);
@@ -156,7 +158,17 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+/*
+                if (row < 2 || row > 5 ) {
+                    ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83 - 40);
+                } else if (col < 1 || col > 8 ) {
+                    ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83 - 40);
+                }else{
+                    ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                }
+*/
+            ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+
             }
         }
 

@@ -2,6 +2,7 @@ var Game = function () {
     this.lives = 0;
     this.level = 0;
     this.topScore = 0;
+    this.Score = 0;
     this.numberOfEnemies = 0;
     this.active = false;
     this.world = {};
@@ -10,7 +11,63 @@ var Game = function () {
     this.allEnemies = {};
 };
 
-Game.prototype.startLevel = function(reset) {
+
+Game.prototype.init = function() {
+    conxsole.log("initialize game");
+    var world = new World();
+    var player = new Player();
+}
+
+Game.prototype.startLevel = function() {
+    console.log("startLevel");
+}
+
+Game.prototype.victory = function() {
+    console.log("victory");
+}
+
+Game.prototype.failure = function() {
+    console.log("failure");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Game.prototype.startLevel = function(reset) {
     if (reset) {
         this.level = 1;
         this.lives = 3;
@@ -87,3 +144,4 @@ Game.prototype.victorySequence = function() {
         enemy.draw = false;
     } );
 };
+*/
