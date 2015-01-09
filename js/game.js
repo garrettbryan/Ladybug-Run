@@ -14,11 +14,15 @@ var Game = function () {
 
 
 Game.prototype.init = function(level, score) {
-    console.log("initialize game");
+    cl("game init");
+
     this.world = new World();
+
     this.player = new Player(300, 1, characters[1]);
 
     this.level = level;
+    this.score = score;
+
     this.numberOfEnemies = 1;
 
     //Enemies are spawned when the game is started.
@@ -30,12 +34,11 @@ Game.prototype.init = function(level, score) {
 }
 
 Game.prototype.startLevel = function(restart) {
-    console.log("startLevel");
+    cl("startLevel" + this.level);
     if (restart) {
         this.level = 1;
         this.score = 0;
     }
-
     this.world.currentMap = this.world.maps[this.level-1];
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
@@ -45,11 +48,11 @@ Game.prototype.startLevel = function(restart) {
 }
 
 Game.prototype.victory = function() {
-    console.log("victory");
+    cl("victory");
 }
 
 Game.prototype.failure = function() {
-    console.log("failure");
+    cl("failure");
 }
 
 Game.prototype.renderStatusBar = function(ctx){
@@ -112,7 +115,7 @@ Game.prototype.renderStatusBar = function(ctx){
 //    }
     for (var i = 1; i < 6; i++){
         allEnemies.push(new Enemy( -1, i+1, 3, 0.5*i, 1));
-        console.log(allEnemies[0]);
+        cl(allEnemies[0]);
     }
 };
 

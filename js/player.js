@@ -9,7 +9,7 @@ var Player = function(){
 */
 
 var Player = function(speed, scale, character){
-    console.log("Player");
+    console.log("  new Player");
     GamePiece.call(this, speed, scale);
 
     this.character = character;

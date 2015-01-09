@@ -1,5 +1,5 @@
 var GamePiece = function(speed, scale) {
-  console.log("GamePiece");
+  console.log("    GamePiece");
     this.speed = speed;
     this.scale = scale;
 

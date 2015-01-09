@@ -1,4 +1,5 @@
 var World = function(){
+  cl('  new world');
   this.tiles = {
     //these values will be reset per level
     x: 10,
@@ -287,12 +288,12 @@ var World = function(){
 };
 
 World.prototype.randomizeTileHeights = function(map){  //TODO add some texture to the landscape
-  console.log(map);
+  cl(map);
   var newMap = [];
   map.forEach(function(tile){
     newMap.push(tile + Math.random());
   });
-  console.log(newMap);
+  cl(newMap);
   return newMap;
 }
 
@@ -309,7 +310,7 @@ World.prototype.maximumBlockElevation = function(){
 }
 
 World.prototype.init = function(){
-  console.log("world initialize");
+  cl("world initialize");
   this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
   this.canvasSize = {
     x: this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x,
@@ -320,10 +321,9 @@ World.prototype.init = function(){
 World.prototype.checkVictory = function() {
 
     if (game.active) {
-      //console.log(this.worldTime);
+      //cl(this.worldTime);
         if (this.worldTime > 10) {
-                    console.log(game.level);
-                    if (game.level <= game.world.maps.length) {
+                    if (game.level < game.world.maps.length) {
                         game.level++;
                         game.score += 1000;
                         this.worldTime = 0;
@@ -331,7 +331,8 @@ World.prototype.checkVictory = function() {
                         return true;
                     } else {
                         //game.victorySequence();
-                        //console.log("victory sequence");
+                        cl("victory sequence");
+                        stiop();
                     }
                 }
 
@@ -340,13 +341,13 @@ World.prototype.checkVictory = function() {
 }
 
 World.prototype.addBoulders = function(currentMap){
-  console.log("boulder added");
+  cl("boulder added");
 
 
 }
 
 World.prototype.enemySource = function() {
-  console.log("enemy source");
+  cl("enemy source");
 }
 
 
@@ -507,7 +508,7 @@ World.prototype.checkVictory = function()  {
         var collisionZone = 50;
         if ((Math.abs(game.princess.x - game.player.x) < collisionZone) &&
                 (Math.abs(game.princess.y - game.player.y) < collisionZone)) {
-                    console.log(game.level);
+                    cl(game.level);
                     game.level++;
                     if (game.level <= game.world.maps.length) {
                         game.princess.draw = false;
@@ -525,10 +526,10 @@ World.prototype.checkVictory = function()  {
 
 
 World.prototype.init = function(sizeInPixels, tileSize) {
-    console.log(this);
+    cl(this);
     this.sizeInPixels = sizeInPixels;
     this.tileSize = tileSize;
-    console.log(this);
+    cl(this);
 }
 
 //Check if player can walk on tile, in which case the tile type is listed

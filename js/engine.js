@@ -14,7 +14,17 @@
  * a little simpler to work with.
  */
 
+cl = function(log){
+    if (clg === 1){
+        console.log(log)
+    }
+}
+
+clg = 1;
+
+
 var Engine = (function(global) {
+    cl('engine');
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
@@ -34,6 +44,7 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
     function main() {
+        cl('main');
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
@@ -65,6 +76,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+        cl('Engine Initilize');
         reset();
         lastTime = Date.now();
         main();
@@ -80,6 +92,7 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
+        cl('update')
         game.world.updateTime(dt);
 
         if (game.world.checkVictory()){
@@ -98,6 +111,7 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
+        cl('updateEntities');
         game.player.update();
 /*
         allCollectables.forEach(function(collectable) {
@@ -107,7 +121,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        //console.log(dt);
+        //cl(dt);
         allPlayers[4].move(dt);
 
         transporters.forEach(function(transporter) {
@@ -132,6 +146,7 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
+        cl('render');
         ctx.clearRect(0,0,canvas.width, canvas.height);
 
         game.renderStatusBar(ctx);
@@ -164,6 +179,7 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities(row) {
+        cl('renderEntities');
         game.player.render(row);
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
@@ -194,6 +210,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
+        cl("reset");
         game.world.init();
 
         canvas.width = game.world.canvasSize.x;
@@ -227,6 +244,7 @@ var Engine = (function(global) {
 	'images/water-block.png',
     'images/white-block.png'
     ]);
+    cl('resources');
     Resources.onReady(init);
 
     /* Assign the canvas' context object to the global variable (the window

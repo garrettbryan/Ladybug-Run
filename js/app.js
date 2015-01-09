@@ -102,7 +102,7 @@ var gameEntities = [
   ];
 
 var game = new Game();
-game.init(2,0);
+game.init(1,0);
 game.startLevel();
 
 // This listens for key presses and sends the keys to your
