@@ -80,6 +80,12 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
+        game.world.updateTime(dt);
+
+        if (game.world.checkVictory()){
+            //reset();
+        }
+
         updateEntities(dt);
         // checkCollisions();
     }
@@ -126,17 +132,39 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
+        ctx.clearRect(0,0,canvas.width, canvas.height);
 
+        game.renderStatusBar(ctx);
 
-        game.world.render();
-        renderEntities();    }
+      var numRows = game.world.currentMap.totalTiles.y,
+        numCols = game.world.currentMap.totalTiles.x,
+        row, col;
+
+            /* Loop through the number of rows and columns we've defined above
+             * and, using the rowImages array, draw the correct image for that
+             * portion of the "grid"
+             */
+        for (row = 0; row < numRows; row++) {
+        /* The drawImage function of the canvas' context element
+        * requires 3 parameters: the image to draw, the x coordinate
+        * to start drawing and the y coordinate to start drawing.
+        * We're using our Resources helpers to refer to our images
+        * so that we get the benefits of caching these images, since
+        * we're using them over and over.
+        */
+        // Modified so that it reads the tileMap array in world.
+
+            game.world.render(row, numCols);
+            renderEntities(row);
+        }
+    }
 
     /* This function is called by the render function and is called on each game
      * tick. It's purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
      */
-    function renderEntities() {
-        game.player.render();
+    function renderEntities(row) {
+        game.player.render(row);
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
@@ -166,8 +194,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        game.level++;
-        game.world.init(canvas);
+        game.world.init();
 
         canvas.width = game.world.canvasSize.x;
         canvas.height = game.world.canvasSize.y;

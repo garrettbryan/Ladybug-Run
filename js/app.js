@@ -47,9 +47,62 @@ var mess = "";
 //var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
 
 */
+var characters = [
+    {
+        name: 'Bug Boy',
+        sprite :'images/char-boy.png',
+    },
+    {
+        name: 'Cat Girl',
+        sprite: 'images/char-cat-girl.png',
+    },
+    {
+        name: 'Goth Girl with Issues',
+        sprite: 'images/char-horn-girl.png',
+    },
+    {
+        name: 'Pinky',
+        sprite: 'images/char-pink-girl.png',
+    },
+    {
+        name: 'Princess Lily',
+        sprite: 'images/char-princess-girl.png',
+    }
+];
+
+var gameEntities = [
+    {
+      name: 'Blue Gem',
+      sprite: 'images/Gem Blue.png',
+    },
+    {
+      name: 'Green Gem',
+      sprite: 'images/Gem Green.png',
+    },
+    {
+      name: 'Orange Gem',
+      sprite: 'images/Gem Orange.png',
+    },
+    {
+      name: 'Heart',
+      sprite: 'images/Heart.png',
+    },
+    {
+      name: 'Key',
+      sprite: 'images/Key.png',
+    },
+    {
+      name: 'Star',
+      sprite: 'images/Star.png',
+    },
+    {
+      name: 'Rock',
+      sprite: 'images/Rock.png',
+    },
+  ];
 
 var game = new Game();
-game.init(3,0);
+game.init(2,0);
 game.startLevel();
 
 // This listens for key presses and sends the keys to your

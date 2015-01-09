@@ -1,5 +1,5 @@
 var Collectable = function(posX, posY, speed, scale, type) {
-  GamePiece.call(this, posX, posY, speed, scale);
+  GamePiece.call(this, speed, scale);
   var types = [
     {
       name: 'Blue Gem',
@@ -48,6 +48,19 @@ Collectable.prototype.attach = function(player){
   this.collisionBoundary.primary.r1 = this.collisionBoundary.primary.r;
   this.collisionBoundary.primary.r = 0;
   this.attachedTo = player;
+}
+
+Collectable.prototype.init = function() {
+    this.position = {
+        x : this.tile.x * game.world.pixelsPerTileUnit.x +
+            game.world.pixelsPerTileUnit.x / 2 -
+            this.center.x,
+        y : this.tile.y * game.world.pixelsPerTileUnit.y -
+            game.world.pixelsPerElevationUnit.y *
+            game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
+            game.world.elevationOffset -
+            game.world.pixelsPerTileUnit.y / 2
+    };
 }
 
 Collectable.prototype.update = function(dt) {

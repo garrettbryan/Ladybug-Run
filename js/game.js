@@ -2,7 +2,7 @@ var Game = function () {
     this.lives = 0;
     this.level = 0;
     this.topScore = 0;
-    this.Score = 0;
+    this.score = 0;
     this.numberOfEnemies = 0;
     this.active = false;
     this.world = {};
@@ -16,7 +16,7 @@ var Game = function () {
 Game.prototype.init = function(level, score) {
     console.log("initialize game");
     this.world = new World();
-    this.player = new Player(300, 1, 1);
+    this.player = new Player(300, 1, characters[1]);
 
     this.level = level;
     this.numberOfEnemies = 1;
@@ -29,8 +29,13 @@ Game.prototype.init = function(level, score) {
     this.allPlayers = [];
 }
 
-Game.prototype.startLevel = function() {
+Game.prototype.startLevel = function(restart) {
     console.log("startLevel");
+    if (restart) {
+        this.level = 1;
+        this.score = 0;
+    }
+
     this.world.currentMap = this.world.maps[this.level-1];
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
@@ -47,7 +52,15 @@ Game.prototype.failure = function() {
     console.log("failure");
 }
 
-
+Game.prototype.renderStatusBar = function(ctx){
+    ctx.save();
+    ctx.fillStyle    = '#000';
+    ctx.font         = 'Italic 30px Sans-Serif';
+    ctx.textBaseline = 'Top';
+    ctx.fillText  ('Score: ' + this.score , game.world.canvasSize.x/2, 30);
+    ctx.fillText  ('Time: ' + this.world.worldTime.toFixed(2) , game.world.canvasSize.x/4, 30);
+    ctx.restore();
+}
 
 
 

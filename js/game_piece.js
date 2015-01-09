@@ -27,6 +27,9 @@ var GamePiece = function(speed, scale) {
         y: this.tile.y * 83 - this.center.y
     };
 
+    this.rotation = 0;
+
+
     this.direction = {
       'x': 0,
       'y': 0
@@ -100,29 +103,24 @@ GamePiece.prototype.update = function(dt) {
 //    this.name = this.types[this.type].name;
 }
 
-GamePiece.prototype.render = function() {
-console.log(this.tile.y * game.world.pixelsPerTileUnit.y - game.world.pixelsPerElevationUnit.y *
-  game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] + game.world.elevationOffset);
-  ctx.drawImage(Resources.get(this.sprite),
-  this.sx, this.sy, this.sWidth, this.sHeight,
-  this.position.x,
-  this.tile.y * game.world.pixelsPerTileUnit.y -
-  game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y *
-  game.world.currentMap.totalTiles.x + this.tile.x] + game.world.elevationOffset -
-  game.world.pixelsPerTileUnit.y / 2,
-  this.spriteDimensions.x, this.spriteDimensions.y);
-
-//  ctx.drawImage(Resources.get(this.sprite),
-//    this.sx, this.sy, this.sWidth, this.sHeight,
-//    this.position.x, this.position.y,
-//    this.spriteDimensions.x, this.spriteDimensions.y);
-  if (this.steed){
-    this.steed.renderRider();
+GamePiece.prototype.render = function(row) {
+  if (this.tile.y === row){
+    ctx.drawImage(Resources.get(this.sprite),
+    this.sx, this.sy, this.sWidth, this.sHeight,
+    this.position.x, this.position.y,
+    this.spriteDimensions.x, this.spriteDimensions.y);
+    for (boundary in this.collisionBoundary){
+      ctx.beginPath();
+      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+      ctx.stroke();
+    }
+  //  ctx.drawImage(Resources.get(this.sprite),
+  //    this.sx, this.sy, this.sWidth, this.sHeight,
+  //    this.position.x, this.position.y,
+  //    this.spriteDimensions.x, this.spriteDimensions.y);
+    if (this.steed){
+      this.steed.renderRider();
+    }
   }
-//for (boundary in this.collisionBoundary){
-//    ctx.beginPath();
-//    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[//boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, //false);
-//    ctx.stroke();
-//}
 };
 

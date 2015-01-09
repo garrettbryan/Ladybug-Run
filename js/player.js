@@ -11,31 +11,10 @@ var Player = function(){
 var Player = function(speed, scale, character){
     console.log("Player");
     GamePiece.call(this, speed, scale);
-    this.characters = [
-        {
-            name: 'Bug Boy',
-            sprite :'images/char-boy.png',
-        },
-        {
-            name: 'Cat Girl',
-            sprite: 'images/char-cat-girl.png',
-        },
-        {
-            name: 'Goth Girl with Issues',
-            sprite: 'images/char-horn-girl.png',
-        },
-        {
-            name: 'Pinky',
-            sprite: 'images/char-pink-girl.png',
-        },
-        {
-            name: 'Princess Lily',
-            sprite: 'images/char-princess-girl.png',
-        }
-    ];
+
     this.character = character;
-    this.sprite = this.characters[character].sprite;
-    this.name = this.characters[character].name;
+    this.sprite = this.character.sprite;
+    this.name = this.character.name;
 
     this.center.y = 125 * this.scale;
 
@@ -77,15 +56,23 @@ Player.prototype.walkToTile = function() {
 }
 
 Player.prototype.update = function() {
-    if (this.tile.y < 2){
-        this.death();
-    }
 
-    this.position.x = this.tile.x * 101 + 101/2 - this.center.x;
-    this.position.y = this.tile.y * 83  - this.center.y;
+    this.position = {
+        x : this.tile.x * game.world.pixelsPerTileUnit.x +
+            game.world.pixelsPerTileUnit.x / 2 -
+            this.center.x,
+        y : this.tile.y * game.world.pixelsPerTileUnit.y -
+            game.world.pixelsPerElevationUnit.y *
+            game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
+            game.world.elevationOffset -
+            game.world.pixelsPerTileUnit.y / 2
+    };
 
-    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
-    this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
+    this.collisionBoundary.primary.x = this.position.x +
+        this.collisionBoundary.primary.xOffset;
+
+    this.collisionBoundary.primary.y = this.position.y +
+        this.collisionBoundary.primary.yOffset;
 
     if (this.steed){
         this.steed.direction.x = this.direction.x;

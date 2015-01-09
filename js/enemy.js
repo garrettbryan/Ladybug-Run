@@ -97,6 +97,10 @@ Enemy.prototype.update = function(dt) {
 
 };
 
+Enemy.prototype.createPath = function (currentMap){
+
+}
+
 Enemy.prototype.death = function(){
     for(var i = 0; i < allEnemies.length; i++){
         if (this === allEnemies[i]){

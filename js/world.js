@@ -7,6 +7,8 @@ var World = function(){
 
   this.elevationOffset = 0;
 
+  this.worldTime = 0;
+
   this.pixelsPerTileUnit = {
     x: 101,
     y: 83
@@ -25,103 +27,61 @@ var World = function(){
 
     totalTiles: {
       x: 5,
-      y: 3
+      y: 4
     },
     playerStartTile: {
       x: 2,
       y: 3
     },
     textureMap:[
+      't','t','t','t','t',
       's','s','s','s','s',
       's','s','s','s','s',
       's','s','s','s','s'
     ],
     topoMap:[
+      45,45,45,45,45,
       40,40,40,40,40,
       1,1,1,1,1,
       1,1,1,1,1
     ],
     walkMap: [
-    0,0,0,0,0,
-    1,1,1,1,1,
-    1,1,1,1,1,
+      0,0,0,0,0,
+      0,0,0,0,0,
+      1,1,1,1,1,
+      1,1,1,1,1,
     ]
   },
 
   this.victoryMap = {
     totalTiles: {
-      x: 5,
-      y: 20
+      x: 9,
+      y: 5
     },
     playerStartTile: {
       x: 2,
-      y: 18
+      y: 3
     },
     textureMap:[
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      'b','b','b','b','b',
-      's','s','s','s','s',
-      's','s','s','s','s',
-      's','s','s','s','s'
+      't','t','t','t','t','t','t','t','t',
+      't','t','t','t','t','t','t','t','t',
+      's','s','s','s','s','s','s','s','s',
+      's','s','s','s','s','s','s','s','s',
+      's','s','s','s','s','s','s','s','s'
     ],
     topoMap:[
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      26,35,35,32,29,
-      24,30,31,29,28,
-      22,20,22,19,18
+      0,0,0,0,40,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,
+      32,29,26,35,35,32,29,32,29,
+      29,28,24,30,31,29,28,29,28,
+      19,18,22,20,22,19,18,19,18,
     ],
     walkMap: [
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      0,0,0,0,0,
-      1,1,1,1,1,
-      1,1,1,1,1,
-      1,1,1,1,1
+      0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,
+      1,1,1,1,1,1,1,1,1,
+      1,1,1,1,1,1,1,1,1,
+      1,1,1,1,1,1,1,1,1
       ]
   };
 
@@ -133,7 +93,7 @@ var World = function(){
       },
       playerStartTile: {
         x: 3,
-        y: 5
+        y: 4
       },
       textureMap: [
         's','s','g','s','w','w','s','s','s','s','s',
@@ -166,7 +126,7 @@ var World = function(){
 
       playerStartTile: {
         x: 5,
-        y: 9
+        y: 7
       },
 
       textureMap: [
@@ -218,8 +178,8 @@ var World = function(){
       },
 
       playerStartTile: {
-        x: 10,
-        y: 10
+        x: 9,
+        y: 9
       },
 
       textureMap: [
@@ -275,15 +235,15 @@ var World = function(){
 
       playerStartTile: {
         x: 6,
-        y: 9
+        y: 8
       },
 
       textureMap: [
-        's','s','s','s','s','s','s','s','g','g','s',
-        's','s','s','s','s','s','s','s','s','g','s',
-        'g','s','s','s','s','s','s','s','s','s','s',
+        's','s','s','s','s','s','s','s','g','gb','s',
+        's','s','s','s','s','s','sb','s','s','g','s',
+        'g','sb','s','s','s','s','s','s','s','s','s',
         's','s','s','g','s','s','g','g','s','s','s',
-        'w','s','s','g','g','g','g','s','s','w','w',
+        'w','sb','s','g','g','g','g','s','s','w','w',
         'w','s','s','s','g','g','g','g','s','w','w',
         'w','w','s','s','g','g','g','g','s','w','w',
         'w','w','s','g','g','g','s','g','s','w','w',
@@ -336,6 +296,10 @@ World.prototype.randomizeTileHeights = function(map){  //TODO add some texture t
   return newMap;
 }
 
+World.prototype.updateTime = function(dt){
+  this.worldTime += dt;
+}
+
 World.prototype.maximumBlockElevation = function(){
   var max = this.currentMap.topoMap[0];
   for( var i = 1; i < this.currentMap.totalTiles.x; i++){
@@ -344,23 +308,41 @@ World.prototype.maximumBlockElevation = function(){
   return max;
 }
 
-World.prototype.init = function(canvas){
+World.prototype.init = function(){
   console.log("world initialize");
   this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
   this.canvasSize = {
     x: this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x,
     y: this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset
   };
-  canvas.width = this.canvasSize.x;
-  canvas.height = this.canvasSize.y;
 };
 
 World.prototype.checkVictory = function() {
-  console.log("victory");
+
+    if (game.active) {
+      //console.log(this.worldTime);
+        if (this.worldTime > 10) {
+                    console.log(game.level);
+                    if (game.level <= game.world.maps.length) {
+                        game.level++;
+                        game.score += 1000;
+                        this.worldTime = 0;
+                        game.startLevel(false);
+                        return true;
+                    } else {
+                        //game.victorySequence();
+                        //console.log("victory sequence");
+                    }
+                }
+
+    }
+    return false;
 }
 
-World.prototype.addBoulders = function(){
+World.prototype.addBoulders = function(currentMap){
   console.log("boulder added");
+
+
 }
 
 World.prototype.enemySource = function() {
@@ -368,45 +350,29 @@ World.prototype.enemySource = function() {
 }
 
 
-World.prototype.render = function() {
-  var numRows = this.currentMap.totalTiles.y,
-    numCols = this.currentMap.totalTiles.x,
-    row, col;
+World.prototype.render = function(row, numCols) {
+  for (col = 0; col < numCols; col++) {
+    var resource,
+      tileHeight = (this.currentMap.topoMap[col + numCols*row]);
 
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
-  for (row = 0; row < numRows; row++) {
-    for (col = 0; col < numCols; col++) {
-    /* The drawImage function of the canvas' context element
-    * requires 3 parameters: the image to draw, the x coordinate
-    * to start drawing and the y coordinate to start drawing.
-    * We're using our Resources helpers to refer to our images
-    * so that we get the benefits of caching these images, since
-    * we're using them over and over.
-    */
-    // Modified so that it reads the tileMap array in world.
-      var resource,
-        tileHeight = (this.currentMap.topoMap[col + numCols*row]);
-
-      switch (this.currentMap.textureMap[col + numCols*row])   {
-        case 'w':
-            resource = 'images/water-block.png';
-            break;
-        case 'g':
-            resource = 'images/grass-block.png';
-            break;
-        case 's':
-            resource = 'images/stone-block.png';
-            break;
-        case 'b':
-            resource = 'images/white-block.png';
-            break;
-      }
-      for (var z = 0; z <= tileHeight; z++){
-        ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
-      }
+    switch (this.currentMap.textureMap[col + numCols*row])   {
+      case 'w':
+          resource = 'images/water-block.png';
+          break;
+      case 'g':
+      case 'gb':
+          resource = 'images/grass-block.png';
+          break;
+      case 's':
+      case 'sb':
+          resource = 'images/stone-block.png';
+          break;
+      case 't':
+          resource = 'images/white-block.png';
+          break;
+    }
+    for (var z = 0; z <= tileHeight; z++){
+      ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
     }
   }
 }
