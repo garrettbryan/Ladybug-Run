@@ -32,6 +32,7 @@ Game.prototype.init = function(level, score) {
 Game.prototype.startLevel = function() {
     console.log("startLevel");
     this.world.currentMap = this.world.maps[this.level-1];
+    //this.world.currentMap = this.world.failureMap;
     this.active = true;
     // TODO create enemies;
 

@@ -5,6 +5,8 @@ var World = function(){
     y: 8
   };
 
+  this.elevationOffset = 0;
+
   this.pixelsPerTileUnit = {
     x: 101,
     y: 83
@@ -334,12 +336,20 @@ World.prototype.randomizeTileHeights = function(map){  //TODO add some texture t
   return newMap;
 }
 
+World.prototype.maximumBlockElevation = function(){
+  var max = this.currentMap.topoMap[0];
+  for( var i = 1; i < this.currentMap.totalTiles.x; i++){
+    max = Math.max(max, this.currentMap.topoMap[i]);
+  }
+  return max;
+}
 
 World.prototype.init = function(canvas){
   console.log("world initialize");
+  this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
   this.canvasSize = {
     x: this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x,
-    y: this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y
+    y: this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset
   };
   canvas.width = this.canvasSize.x;
   canvas.height = this.canvasSize.y;
@@ -357,9 +367,6 @@ World.prototype.enemySource = function() {
   console.log("enemy source");
 }
 
-World.prototype.isTileWalkable = function() {
-  console.log("walkable");
-}
 
 World.prototype.render = function() {
   var numRows = this.currentMap.totalTiles.y,
@@ -398,7 +405,7 @@ World.prototype.render = function() {
             break;
       }
       for (var z = 0; z <= tileHeight; z++){
-        ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z);
+        ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
       }
     }
   }

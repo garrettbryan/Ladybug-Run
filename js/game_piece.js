@@ -101,10 +101,21 @@ GamePiece.prototype.update = function(dt) {
 }
 
 GamePiece.prototype.render = function() {
+console.log(this.tile.y * game.world.pixelsPerTileUnit.y - game.world.pixelsPerElevationUnit.y *
+  game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] + game.world.elevationOffset);
   ctx.drawImage(Resources.get(this.sprite),
-    this.sx, this.sy, this.sWidth, this.sHeight,
-    this.position.x, this.position.y,
-    this.spriteDimensions.x, this.spriteDimensions.y);
+  this.sx, this.sy, this.sWidth, this.sHeight,
+  this.position.x,
+  this.tile.y * game.world.pixelsPerTileUnit.y -
+  game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y *
+  game.world.currentMap.totalTiles.x + this.tile.x] + game.world.elevationOffset -
+  game.world.pixelsPerTileUnit.y / 2,
+  this.spriteDimensions.x, this.spriteDimensions.y);
+
+//  ctx.drawImage(Resources.get(this.sprite),
+//    this.sx, this.sy, this.sWidth, this.sHeight,
+//    this.position.x, this.position.y,
+//    this.spriteDimensions.x, this.spriteDimensions.y);
   if (this.steed){
     this.steed.renderRider();
   }

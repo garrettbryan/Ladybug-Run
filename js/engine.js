@@ -126,6 +126,8 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
+
+
         game.world.render();
         renderEntities();    }
 
