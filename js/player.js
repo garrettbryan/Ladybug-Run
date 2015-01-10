@@ -20,6 +20,7 @@ var Player = function(speed, scale, character){
 
     this.collectables = [];
     this.collectablesWidth = 0;
+    this.collectablesSpacing = 0;
 
     this.collisionBoundary = {
         'primary': {
@@ -42,7 +43,7 @@ Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.init = function(tile){
-    console.log("player initialize");
+    cl("player initialize");
     this.tile = tile;
 }
 
@@ -57,63 +58,18 @@ Player.prototype.walkToTile = function() {
 
 Player.prototype.update = function() {
 
-    this.position = {
-        x : this.tile.x * game.world.pixelsPerTileUnit.x +
-            game.world.pixelsPerTileUnit.x / 2 -
-            this.center.x,
-        y : this.tile.y * game.world.pixelsPerTileUnit.y -
-            game.world.pixelsPerElevationUnit.y *
-            game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
-            game.world.elevationOffset -
-            game.world.pixelsPerTileUnit.y / 2
-    };
-
-    this.collisionBoundary.primary.x = this.position.x +
-        this.collisionBoundary.primary.xOffset;
-
-    this.collisionBoundary.primary.y = this.position.y +
-        this.collisionBoundary.primary.yOffset;
+    this.calculatePosition();
+    this.calculateCollisionCircles();
 
     if (this.steed){
-        this.steed.direction.x = this.direction.x;
-        //console.log(this.direction.x);
-        this.steed.position.x = - this.steed.center.x + this.tile.x * 101 + 101/2;
-        this.steed.position.y = - this.steed.center.y + this.tile.y * 83;
-        this.steed.collisionBoundary.primary.x = this.steed.position.x + this.steed.collisionBoundary.primary.xOffset;
-        this.steed.collisionBoundary.primary.y = this.steed.position.y + this.steed.collisionBoundary.primary.yOffset;
-        this.steed.collisionBoundary.secondary.x = this.steed.position.x + this.steed.collisionBoundary.secondary.xOffset;
-        this.steed.collisionBoundary.secondary.y = this.steed.position.y + this.steed.collisionBoundary.secondary.yOffset
-
-        this.position.x = this.position.x + 10 * this.steed.scale;
-        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
-
+        this.calculateSteedPosition();
     }
 
-    for ( var enemy in game.allEnemies){
-        if (!this.steed){
-            this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
-            this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
-        }
-    }
+    this.calculateCollectableSpacing();
 
-    for ( var collectable in game.allCollectables){
-        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
-    }
+    this.anyCollisions();
 
-//    for (var transport in transporters){
-//        this.collisionCheck(transporters, transport.transport);
-//    }
 
-    for ( var i = 1; i < game.allPlayers.length; i++){
-        this.collisionCheck(game.allPlayers[i], "primary", this.tag)
-    }
-
-    var collectablesSpacing = 0;
-    for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].position.y = this.position.y - this.collectables[i].center.y + 50 * this.scale;
-        collectablesSpacing += this.collectables[i].spriteDimensions.x;
-    }
 
 //    this.sprite = this.characters[this.character].sprite;
 //    this.name = this.characters[this.character].name;
@@ -198,12 +154,8 @@ Player.prototype.pickup = function(collectable){
         x: 0,
         y: 0
     }
-    var collectablesSpacing = 0;
-    for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + collectablesSpacing;
-        this.collectables[i].position.y = this.position.y - this.collectables[i].center.y + 50 * this.scale;
-        collectablesSpacing += this.collectables[i].spriteDimensions.x;
-    }
+    this.calculateCollectableSpacing();
+
     console.log(collectable.position.x);
 };
 
@@ -338,3 +290,41 @@ Player.prototype.wait = function() {
 
     }
 };
+
+Player.prototype.calculateSteedPosition = function(){
+        this.steed.direction = this.direction;
+        //console.log(this.direction.x);
+        this.steed.position.x = - this.steed.center.x + this.tile.x * 101 + 101/2;
+        this.steed.position.y = - this.steed.center.y + this.tile.y * 83;
+        this.steed.collisionBoundary.primary.x = this.steed.position.x + this.steed.collisionBoundary.primary.xOffset;
+        this.steed.collisionBoundary.primary.y = this.steed.position.y + this.steed.collisionBoundary.primary.yOffset;
+        this.steed.collisionBoundary.secondary.x = this.steed.position.x + this.steed.collisionBoundary.secondary.xOffset;
+        this.steed.collisionBoundary.secondary.y = this.steed.position.y + this.steed.collisionBoundary.secondary.yOffset
+
+        this.position.x = this.position.x + 10 * this.steed.scale;
+        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
+}
+
+Player.prototype.calculateCollectableSpacing = function() {
+    this.collectablesSpacing = 0;
+    for (var i = 0; i < this.collectables.length; i++){
+        this.collectables[i].position.x = this.position.x + this.center.x - this.collectablesWidth/2 + this.collectablesSpacing;
+        this.collectables[i].position.y = this.position.y - this.collectables[i].center.y + 50 * this.scale;
+        this.collectablesSpacing += this.collectables[i].spriteDimensions.x;
+    }
+}
+
+Player.prototype.anyCollisions = function() {
+    for ( var enemy in game.allEnemies){
+        if (!this.steed){
+            this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
+            this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
+        }
+    }
+    for ( var collectable in game.allCollectables){
+        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
+    }
+    for ( var i = 1; i < game.allPlayers.length; i++){
+        this.collisionCheck(game.allPlayers[i], "primary", this.tag)
+    }
+}

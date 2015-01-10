@@ -1,5 +1,5 @@
 var GamePiece = function(speed, scale) {
-  console.log("    GamePiece");
+  cl("    GamePiece");
     this.speed = speed;
     this.scale = scale;
 
@@ -124,3 +124,23 @@ GamePiece.prototype.render = function(row) {
   }
 };
 
+GamePiece.prototype.calculatePosition = function(){
+      this.position = {
+        x : this.tile.x * game.world.pixelsPerTileUnit.x +
+            game.world.pixelsPerTileUnit.x / 2 -
+            this.center.x,
+        y : (this.tile.y +1) * game.world.pixelsPerTileUnit.y -
+            game.world.pixelsPerElevationUnit.y *
+            game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
+            game.world.elevationOffset  -
+            this.center.y
+    };
+}
+
+GamePiece.prototype.calculateCollisionCircles = function(){
+      this.collisionBoundary.primary.x = this.position.x +
+        this.collisionBoundary.primary.xOffset;
+
+    this.collisionBoundary.primary.y = this.position.y +
+        this.collisionBoundary.primary.yOffset;
+}

@@ -1,33 +1,42 @@
-var Enemy = function(posX, posY, speed, scale, direction) {
-    GamePiece.call(this, posX, posY, speed, scale);
+var Enemy = function(speed, scale) {
+    GamePiece.call(this, speed, scale);
+
+//Path information comes from the world maps
+    this.pathNodes = [];
+    this.currentNodeIndex = 0;
+    this.currentNode = {
+        x: 0,
+        y: 0
+    };
+    this.targetNode = {
+        x: 0,
+        y: 0
+    };
+    this.directions = [];
+//
+    this.tile = {
+        x: 4,
+        y: 4
+    };
+
+    this.position.x = this.tile.x * 101 + 101/2 - this.center.x;
+    this.position.y = this.tile.y * 83 - this.center.y;
 
     this.center.y = 110 * this.scale;
 
     this.direction = {
-        'x': direction,
+        'x': 0,
         'y': 0
     };
+
+    this.rotation = 0;
 
     this.spriteDimensions = {
         x: 101 * this.scale,
         y: 171 * this.scale
     };
 
-
-
-    if (this.direction.x >= 0){
-        this.sx = 0;
-        this.sy = 0;
-        this.sWidth = 101 * this.scale;
-        this.sHeight = 171 * this.scale;
-    } else {
-        this.sx = 0;
-        this.sy = 171 * this.scale;
-        this.sWidth = 101 * this.scale;
-        this.sHeight = 171 * 2 * this.scale;
-    }
-
-    this.speed = this.speed * direction;
+    this.speed = speed;
 
     this.name = 'Lady Bug';
     this.sprite = 'images/enemy-bug_sprite_sheet.png';
@@ -59,6 +68,8 @@ var Enemy = function(posX, posY, speed, scale, direction) {
 Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
+
+
 Enemy.prototype.update = function(dt) {
 
     this.tile.x = this.tile.x + this.speed * this.direction.x * dt / this.scale;
@@ -70,11 +81,11 @@ Enemy.prototype.update = function(dt) {
       this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
       this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
     }
-
-    for ( var collectable in allCollectables){
-        this.collisionCheck(allCollectables[collectable], "primary", this.death);
-    }
-
+//
+//    for ( var collectable in allCollectables){
+//        this.collisionCheck(allCollectables[collectable], "primary", this.death);
+//    }
+//
     if (this.position.x > 10 * 101){
         this.tile.x = -1;
         this.tile.y = Math.floor(2+Math.random()*5);
@@ -82,23 +93,60 @@ Enemy.prototype.update = function(dt) {
         this.death();
     }
 
-
-    if (this.direction.x >= 0){
-        this.sx = 0;
-        this.sy = 0;
-        this.sWidth = 101;
-        this.sHeight = 171;
-    } else {
-        this.sx = 0;
-        this.sy = 171;
-        this.sWidth = 101;
-        this.sHeight = 171;
-    }
+    this.chooseSprite();
 
 };
 
-Enemy.prototype.createPath = function (currentMap){
+Enemy.prototype.chooseSprite = function(){
+    if (this.direction.x >= 0){
+        this.sx = 0;
+        this.sy = 0;
+        this.sWidth = 101 * this.scale;
+        this.sHeight = 171 * this.scale;
+    } else {
+        this.sx = 0;
+        this.sy = 171 * this.scale;
+        this.sWidth = 101 * this.scale;
+        this.sHeight = 171 * 2 * this.scale;
+    }
+}
 
+Enemy.prototype.assignPath = function (enemyPaths){
+    console.log(enemyPaths);
+    //randomly pick a possible enemy path in the current map
+    this.pathNodes = enemyPaths[Math.floor(Math.random()* enemyPaths.length)];
+
+    console.log(this.pathNodes);
+
+    this.currentNodeIndex = 0;
+    this.currentNode = this.pathNodes[0];
+    this.targetNode = this.pathNodes[1];
+    for (var i = 1; i < this.pathNodes.length; i++){
+        this.directions[i-1] = {
+            x: this.pathNodes[i][0] - this.pathNodes[i-1][0],
+            y: this.pathNodes[i][1] - this.pathNodes[i-1][1]
+        };
+    }
+    this.direction = {
+        x: this.directions[0].x,
+        y: this.directions[0].y
+    }
+    this.position = this.currentNode;
+}
+
+Enemy.prototype.reachTarget = function(){
+    if (this.currentNodeIndex < this.directions.length){
+        this.currentNodeNumber++;
+        this.currentNode = this.targetNode;
+        this.targetNode = this.pathNodes[this.currentNodeIndex];
+        this.direction = this.directions[this.currentNodeIndex];
+    } else {
+        this.currentNodeIndex = 0;
+        this.currentNode = this.pathNodes[0];
+        this.targetNode = this.pathNodes[1];
+        this.direction = this.directions[0];
+        this.position = this.currentNode;
+    }
 }
 
 Enemy.prototype.death = function(){

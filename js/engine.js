@@ -20,7 +20,7 @@ cl = function(log){
     }
 }
 
-clg = 1;
+clg = 0;
 
 
 var Engine = (function(global) {
@@ -92,11 +92,11 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
-        cl('update')
+        cl('  update')
         game.world.updateTime(dt);
 
         if (game.world.checkVictory()){
-            //reset();
+            reset();
         }
 
         updateEntities(dt);
@@ -111,8 +111,9 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        cl('updateEntities');
+        cl('    updateEntities');
         game.player.update();
+        game.enemy.update();
 /*
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);
@@ -181,6 +182,7 @@ var Engine = (function(global) {
     function renderEntities(row) {
         cl('renderEntities');
         game.player.render(row);
+        game.enemy.render(row);
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */

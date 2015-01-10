@@ -6,6 +6,8 @@ var World = function(){
     y: 8
   };
 
+  this.canvasSize = {};
+
   this.elevationOffset = 0;
 
   this.worldTime = 0;
@@ -96,6 +98,10 @@ var World = function(){
         x: 3,
         y: 4
       },
+      enemyPaths: [[[-1,-1],[3,0],[7,4]],
+          [[6,5],[3,2],[-1,2]],
+          [[6,-1],[11,5]]
+      ],
       textureMap: [
         's','s','g','s','w','w','s','s','s','s','s',
         's','s','s','g','g','w','w','s','g','s','s',
@@ -310,31 +316,33 @@ World.prototype.maximumBlockElevation = function(){
 }
 
 World.prototype.init = function(){
-  cl("world initialize");
+  //cl("world initialize");
+  //console.log(this);
   this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-  this.canvasSize = {
-    x: this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x,
-    y: this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset
-  };
+    this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
+    this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset;
+    //console.log(this);
 };
 
 World.prototype.checkVictory = function() {
 
     if (game.active) {
       //cl(this.worldTime);
-        if (this.worldTime > 10) {
-                    if (game.level < game.world.maps.length) {
-                        game.level++;
-                        game.score += 1000;
-                        this.worldTime = 0;
-                        game.startLevel(false);
-                        return true;
-                    } else {
-                        //game.victorySequence();
-                        cl("victory sequence");
-                        stiop();
-                    }
-                }
+        if (this.worldTime > 5) {
+          if (game.level < game.world.maps.length) {
+              game.level++;
+              game.score += 1000;
+              this.worldTime = 0;
+              this.init();
+              game.startLevel(false);
+              return true;
+          } else {
+              cl("victory sequence");
+              this.init();
+              game.failure();
+              return true;
+          }
+      }
 
     }
     return false;

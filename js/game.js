@@ -1,4 +1,5 @@
 var Game = function () {
+    cl('new game');
     this.lives = 0;
     this.level = 0;
     this.topScore = 0;
@@ -43,16 +44,19 @@ Game.prototype.startLevel = function(restart) {
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
     // TODO create enemies;
-
+    this.enemy = new Enemy( 2, 1);
+    console.log(this.enemy);
 
 }
 
 Game.prototype.victory = function() {
     cl("victory");
+    this.world.currentMap = this.world.victoryMap;
 }
 
 Game.prototype.failure = function() {
     cl("failure");
+    this.world.currentMap = this.world.failureMap;
 }
 
 Game.prototype.renderStatusBar = function(ctx){
