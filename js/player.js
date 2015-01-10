@@ -22,6 +22,11 @@ var Player = function(speed, scale, character){
     this.collectablesWidth = 0;
     this.collectablesSpacing = 0;
 
+    this.sx = 0;
+    this.sy = 0;
+    this.sWidth = 101;
+    this.sHeight = 171;
+
     this.collisionBoundary = {
         'primary': {
             'collidesWith' : [

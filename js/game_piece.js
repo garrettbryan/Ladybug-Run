@@ -105,15 +105,16 @@ GamePiece.prototype.update = function(dt) {
 
 GamePiece.prototype.render = function(row) {
   if (this.tile.y === row){
+    console.log(this.sHeight);
     ctx.drawImage(Resources.get(this.sprite),
     this.sx, this.sy, this.sWidth, this.sHeight,
     this.position.x, this.position.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
-    for (boundary in this.collisionBoundary){
-      ctx.beginPath();
-      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-      ctx.stroke();
-    }
+//    for (boundary in this.collisionBoundary){
+//      ctx.beginPath();
+//      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+//      ctx.stroke();
+//    }
   //  ctx.drawImage(Resources.get(this.sprite),
   //    this.sx, this.sy, this.sWidth, this.sHeight,
   //    this.position.x, this.position.y,
@@ -125,16 +126,26 @@ GamePiece.prototype.render = function(row) {
 };
 
 GamePiece.prototype.calculatePosition = function(){
-      this.position = {
-        x : this.tile.x * game.world.pixelsPerTileUnit.x +
-            game.world.pixelsPerTileUnit.x / 2 -
-            this.center.x,
-        y : (this.tile.y +1) * game.world.pixelsPerTileUnit.y -
-            game.world.pixelsPerElevationUnit.y *
-            game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
-            game.world.elevationOffset  -
-            this.center.y
-    };
+  this.position = {
+    x : this.tile.x * game.world.pixelsPerTileUnit.x +
+        game.world.pixelsPerTileUnit.x / 2 -
+        this.center.x,
+    y : (this.tile.y +1) * game.world.pixelsPerTileUnit.y -
+        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
+        game.world.elevationOffset  -
+        this.center.y
+  };
+}
+
+GamePiece.prototype.calculateTile = function(){
+  this.tile = {
+    x : (this.position.x + this.center.x - game.world.pixelsPerTileUnit.x/2) / game.world.pixelsPerTileUnit.x,
+    y : (this.position.y + this.center.y - game.world.elevationOffset +
+      game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x]) /
+      game.world.pixelsPerTileUnit.y - 1
+  };
+  console.log(this.tile);
+
 }
 
 GamePiece.prototype.calculateCollisionCircles = function(){

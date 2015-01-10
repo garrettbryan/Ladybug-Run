@@ -113,7 +113,7 @@ var Engine = (function(global) {
     function updateEntities(dt) {
         cl('    updateEntities');
         game.player.update();
-        game.enemy.update();
+        game.enemy.update(dt);
 /*
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);
@@ -219,6 +219,8 @@ var Engine = (function(global) {
         canvas.height = game.world.canvasSize.y;
 
         game.player.init(game.world.currentMap.playerStartTile);
+        game.enemy.init();
+
     }
 
     /* Go ahead and load all of the images we know we're going to need to
