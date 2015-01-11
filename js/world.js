@@ -102,11 +102,11 @@ var World = function(){
 //          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
 //          [{ x: 6, y: -1},{ x: 11, y: 5}]
 //      ],
-      enemyPaths: [[{ x: 0, y: 3},{ x: 3, y: 3},{ x: 5, y: 5}]
+      enemyPaths: [[{ x: 2, y: 1},{ x: 5, y: 0},{ x: 10, y: 4}]
       ],
       textureMap: [
         's','s','g','s','w','w','s','s','s','s','s',
-        's','s','s','g','g','w','w','s','g','s','s',
+        's','s','sb','g','g','w','w','s','g','s','s',
         's','s','s','s','g','g','w','w','s','s','s',
         's','s','s','s','g','g','g','w','w','s','s',
         'g','g','g','g','g','g','g','g','w','w','g'
@@ -141,16 +141,16 @@ var World = function(){
 //          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
 //          [{ x: 6, y: -1},{ x: 11, y: 5}]
 //      ],
-      enemyPaths: [[{ x: 3, y: 3},{ x: 4, y: 9},{ x: 9, y: 5}]
+      enemyPaths: [[{ x: 10, y: 5},{ x: 5, y: 5},{ x: 0, y: 6}]
       ],
       textureMap: [
-        'w','w','w','w','w','w','w','w','w','w','w',
+        'w','w','w','w','w','w','wb','w','w','w','w',
         'w','w','w','w','w','w','w','w','w','w','w',
         'w','w','s','s','s','s','s','s','s','w','w',
         'w','w','s','g','s','s','g','g','w','w','w',
-        'w','w','s','s','g','g','g','s','s','w','w',
+        'wb','w','s','s','g','g','g','s','s','w','w',
         'w','w','s','g','g','g','g','g','s','w','w',
-        'w','w','s','s','g','g','g','g','s','w','w',
+        'w','w','s','s','g','g','g','g','s','w','wb',
         'w','w','s','g','g','g','s','g','s','w','w',
         'w','w','w','s','s','s','s','s','s','w','w',
         'w','w','w','w','w','w','w','w','w','w','w',
@@ -199,19 +199,19 @@ var World = function(){
 //          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
 //          [{ x: 6, y: -1},{ x: 11, y: 5}]
 //      ],
-      enemyPaths: [[{ x: 1, y: 1},{ x: 3, y: 10},{ x: 4, y: 4}]
+      enemyPaths: [[{ x: 0, y: 0},{ x: 5, y: 5},{ x: 10, y: 5}]
       ],
       textureMap: [
         's','g','s','s','s','s','s','g','s','s','s','s',
         's','g','g','s','s','s','s','g','s','s','s','s',
-        's','s','g','g','s','s','g','g','s','s','s','s',
+        's','s','g','g','s','sb','g','g','s','s','s','s',
         's','s','g','g','s','s','g','g','g','s','s','s',
         's','g','g','g','g','g','g','s','s','s','s','s',
-        's','s','s','s','g','g','g','g','g','s','g','g',
-        's','s','s','s','g','g','g','g','s','g','g','g',
+        's','s','s','sb','g','g','g','g','g','s','g','g',
+        's','s','s','s','g','g','g','g','s','gb','g','g',
         's','s','g','g','g','g','s','g','g','g','s','s',
         's','s','s','g','g','s','s','s','s','s','s','s',
-        's','s','s','g','g','s','s','s','s','s','s','s',
+        's','s','s','g','g','s','s','sb','s','s','s','s',
         's','s','s','s','g','s','s','s','s','s','s','s',
         's','g','s','s','s','s','s','g','s','s','s','s'
       ],
@@ -265,7 +265,7 @@ var World = function(){
 //          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
 //          [{ x: 6, y: -1},{ x: 11, y: 5}]
 //      ],
-      enemyPaths: [[{ x: 1, y: 1},{ x: 3, y: 0},{ x: 4, y: 4}]
+      enemyPaths: [[{ x: 0, y: 2},{ x: 5, y: 5},{ x: 10, y: 1}]
       ],
       textureMap: [
         's','s','s','s','s','s','s','s','g','gb','s',
@@ -388,6 +388,7 @@ World.prototype.render = function(row, numCols) {
 
     switch (this.currentMap.textureMap[col + numCols*row])   {
       case 'w':
+      case 'wb':
           resource = 'images/water-block.png';
           break;
       case 'g':
@@ -405,6 +406,15 @@ World.prototype.render = function(row, numCols) {
     for (var z = 0; z <= tileHeight; z++){
       ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
     }
+          switch (this.currentMap.textureMap[col + numCols*row])   {
+        case 'wb':
+        case 'gb':
+        case 'sb':
+            resource = 'images/Rock.png';
+            ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
+            break;
+      }
+
   }
 }
 /*

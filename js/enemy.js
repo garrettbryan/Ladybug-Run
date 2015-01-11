@@ -13,6 +13,10 @@ var Enemy = function(speed, scale) {
         y: 0
     };
     this.directions = [];
+    this.direction = {
+        'x': 0,
+        'y': 0
+    };
 //
 
     this.tile = {
@@ -22,34 +26,20 @@ var Enemy = function(speed, scale) {
 
     this.center.y = 110 * this.scale;
 
-    //console.log(this.tile);
-    //console.log(this.center);
-
-    this.position.x = this.tile.x * 101 + 101/2 - this.center.x;
-    this.position.y = this.tile.y * 83 - this.center.y;
-
-    //console.log(this.position);
-
-    this.directions = [];
-    this.direction = {
-        'x': 0,
-        'y': 0
-    };
-
     this.spriteDimensions = {
         x: 101 * this.scale,
         y: 171 * this.scale
     };
 
+    // sprites
+    this.name = 'Lady Bug';
+    this.sprite = 'images/enemy-bug_sprite_sheet.png';
+    this.spriteFore = 'images/enemy-bug-front_sprite_sheet.png';
     this.sx = 0;
     this.sy = 0;
     this.sWidth = 101;
     this.sHeight = 171;
 
-    this.name = 'Lady Bug';
-    this.sprite = 'images/enemy-bug_sprite_sheet.png';
-//    this.sprite = 'images/enemy-bug.png';
-    this.spriteFore = 'images/enemy-bug-front_sprite_sheet.png';
 
     this.collisionBoundary.primary.collidesWith = [
         Player,
@@ -81,8 +71,8 @@ var Enemy = function(speed, scale) {
         'directions' : [],
         'r' : 20,
         'offset' : {
-            'x': this.center.x,
-            'y': this.center.y
+            'x': 0,
+            'y': 0
         }
     };
 
@@ -94,7 +84,7 @@ Enemy.prototype.constructor = Enemy;
 Enemy.prototype.init = function(){
     //console.log("init");
     this.assignPath(game.world.currentMap.enemyPaths);
-
+    this.navSystem.navPoints = this.calculateNavPoints(this.navSystem.navNodes);
 
 }
 
@@ -183,7 +173,6 @@ Enemy.prototype.assignPath = function (enemyPaths){
     };
     this.direction = this.navSystem.directions[0];
     this.tile = this.navSystem.currentNode;
-    this.navSystem.navPoints = this.calculateNavPoints(this.navSystem.navNodes);
     console.log(this.navSystem.navPoints);
 }
 

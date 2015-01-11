@@ -74,19 +74,17 @@ GamePiece.prototype.transport = function(p){
   }
 }
 
-GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
-  if (gamePiece.collisionBoundary[boundary].collidesWith.indexOf(this.constructor) >= 0){
+GamePiece.prototype.collisionCheck = function(collisionBoundary, boundary, result){
     var distanceBetweenGamePieces =
-        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
-        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
-        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
-        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
-    var radiiSum = (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
-         (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
+        (collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
+        (collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
+        (collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
+        (collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
+    var radiiSum = (collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
+         (collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
     if (distanceBetweenGamePieces < radiiSum) {
         result.call(this, gamePiece);
     }
-  }
 }
 
 GamePiece.prototype.update = function(dt) {
@@ -155,16 +153,16 @@ GamePiece.prototype.calculatePosition = function(){
 }
 
 GamePiece.prototype.calculateWorldPosition = function(tile){ //TODO finish impelmentation
-  return{
+  var result = {
     x : tile.x * game.world.pixelsPerTileUnit.x +
-        game.world.pixelsPerTileUnit.x / 2 -
-        this.center.x,
-    y : tile.y * game.world.pixelsPerTileUnit.y -
-        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap [ Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)] +
-        game.world.elevationOffset  -
-        this.center.y
+        game.world.pixelsPerTileUnit.x / 2,
+    y : game.world.pixelsPerTileUnit.y + game.world.maximumBlockElevation() * game.world.pixelsPerElevationUnit.y -
+        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)] +
+        tile.y * game.world.pixelsPerTileUnit.y
   };
-  //console.log(this.tile.y );
+  console.log(game.world.elevationOffset);
+  console.log(result);
+return result;
 }
 
 GamePiece.prototype.calculateTile = function(){
