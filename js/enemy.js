@@ -22,20 +22,19 @@ var Enemy = function(speed, scale) {
 
     this.center.y = 110 * this.scale;
 
-    console.log(this.tile);
-    console.log(this.center);
+    //console.log(this.tile);
+    //console.log(this.center);
 
     this.position.x = this.tile.x * 101 + 101/2 - this.center.x;
     this.position.y = this.tile.y * 83 - this.center.y;
 
-    console.log(this.position);
+    //console.log(this.position);
 
+    this.directions = [];
     this.direction = {
         'x': 0,
         'y': 0
     };
-
-    this.rotation = 0;
 
     this.spriteDimensions = {
         x: 101 * this.scale,
@@ -46,8 +45,6 @@ var Enemy = function(speed, scale) {
     this.sy = 0;
     this.sWidth = 101;
     this.sHeight = 171;
-
-    this.speed = speed;
 
     this.name = 'Lady Bug';
     this.sprite = 'images/enemy-bug_sprite_sheet.png';
@@ -73,15 +70,20 @@ var Enemy = function(speed, scale) {
         'xOffset': -25 * this.scale + this.center.x,
         'yOffset': this.center.y
     };
-    this.collisionBoundary.navPoint  = {
-        'collidesWith' : [
-            Enemy,
-        ],
-        'r': 20,
-        'x': 0,
-        'y': 0,
-        'xOffset': 0,
-        'yOffset': 0
+
+    this.navSystem = {
+        'currentNodeIndex' : 0,
+        'currentNode' : {},
+        'targetNode' : {},
+        'targetPoint': {},
+        'navNodes' : [],
+        'navPoints': [],
+        'directions' : [],
+        'r' : 20,
+        'offset' : {
+            'x': this.center.x,
+            'y': this.center.y
+        }
     };
 
 };
@@ -90,38 +92,41 @@ Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.init = function(){
+    //console.log("init");
     this.assignPath(game.world.currentMap.enemyPaths);
+
+
 }
 
 
 Enemy.prototype.update = function(dt) {
 
-    console.log(this.position);
     //this.tile.x = this.tile.x + this.speed * this.direction.x * dt / this.scale;
 
  //   this.position.x =  this.center.x + this.tile.x * 101 + 101/2;
  //   this.position.y = - this.center.y + this.tile.y * 83;
-    this.tile = {
-        x: 4,
-        y: 4
-    };
-    console.log(this.tile);
-    this.calculateTile();
-   // console.log('tile ' + this.tile);
-    this.collisionCheck(this, "navPoint", this.reachTarget);
+ //   this.tile = {
+ //       x: 4,
+ //       y: 4
+ //   };
+//    this.calculateTile();
+   // //console.log('tile ' + this.tile);
 
     for (boundary in this.collisionBoundary){
       this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
       this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
     }
+    this.move(dt);
+    //this.calculatePosition();
+
 //
 //    for ( var collectable in allCollectables){
 //        this.collisionCheck(allCollectables[collectable], "primary", this.death);
 //    }
 //
 //    if (this.position.x > 10 * 101){
-        this.tile.x = -1;
-        this.tile.y = Math.floor(2+Math.random()*5);
+//        this.tile.x = -1;
+//        this.tile.y = Math.floor(2+Math.random()*5);
 //    }else if (this.position.x < - this.spriteDimensions.x * 2) {
 //        this.death();
 //    }
@@ -144,48 +149,59 @@ Enemy.prototype.chooseSprite = function(){
     }
 }
 
-Enemy.prototype.assignPath = function (enemyPaths){
-    console.log(enemyPaths);
-    //randomly pick a possible enemy path in the current map
-    this.pathNodes = enemyPaths[Math.floor(Math.random() * enemyPaths.length)];
-
-    console.log(this.pathNodes);
-
-    this.currentNodeIndex = 0;
-    this.currentNode = this.pathNodes[0];
-    this.targetNode = this.pathNodes[1];
-    for (var i = 1; i < this.pathNodes.length; i++){
-        this.directions[i-1] = {
-            x: this.pathNodes[i][0] - this.pathNodes[i-1][0],
-            y: this.pathNodes[i][1] - this.pathNodes[i-1][1]
-        };
+Enemy.prototype.calculateNavPoints = function(navNodes){
+    var i = 0,
+        navPoints = [];
+    while (i < navNodes.length) {
+        navPoints[i] = this.calculateWorldPosition(navNodes[i]);
+        i++;
     }
-    this.direction = {
-        x: this.directions[0].x,
-        y: this.directions[0].y
-    }
-    this.tile = this.currentNode;
-    this.collisionBoundary.navPoint.x = this.targetNode.x;
-    this.collisionBoundary.navPoint.y = this.targetNode.y;
-    console.log(this.tile);
+    return navPoints;
 }
 
-Enemy.prototype.reachTarget = function(){
+Enemy.prototype.assignPath = function (enemyPaths){
+    var vector = {},
+        vectorMagnitude,
+        normal = {};
+    //randomly pick a possible enemy path in the current map
+    this.navSystem.navNodes = enemyPaths[Math.floor(Math.random() * enemyPaths.length)];
 
-    if (this.currentNodeIndex < this.directions.length){
-        this.currentNodeNumber++;
-        this.currentNode = this.targetNode;
-        this.targetNode = this.pathNodes[this.currentNodeIndex];
-        this.direction = this.directions[this.currentNodeIndex];
+    this.currentNodeIndex = 0;
+    this.navSystem.currentNode = this.navSystem.navNodes[0];
+    this.navSystem.targetNode = this.navSystem.navNodes[1];
+    for (var i = 1; i < this.navSystem.navNodes.length; i++){
+        vector = {
+            x: this.navSystem.navNodes[i].x - this.navSystem.navNodes[i-1].x,
+            y: this.navSystem.navNodes[i].y - this.navSystem.navNodes[i-1].y
+        };
+        vectorMagnitude = Math.sqrt(vector.x * vector.x + vector.y * vector.y)
+        this.navSystem.directions[i-1] = {
+            x: vector.x / vectorMagnitude,
+            y: vector.y/  vectorMagnitude
+        };
+        //console.log(this.directions[i-1]);
+    };
+    this.direction = this.navSystem.directions[0];
+    this.tile = this.navSystem.currentNode;
+    this.navSystem.navPoints = this.calculateNavPoints(this.navSystem.navNodes);
+    console.log(this.navSystem.navPoints);
+}
+
+Enemy.prototype.reachedTarget = function(){
+    console.log("target reached");
+    if (this.navSystem.currentNodeIndex < this.navSystem.directions.length){
+        this.navSystem.currentNodeIndex++;
+        this.navSystem.currentNode = this.navSystem.targetNode;
+        this.navSystem.targetNode = this.navSystem.navNodes[this.navSystem.currentNodeIndex];
+        this.navSystem.direction = this.navSystem.directions[this.navSystem.currentNodeIndex];
     } else {
-        this.currentNodeIndex = 0;
-        this.currentNode = this.pathNodes[0];
-        this.targetNode = this.pathNodes[1];
-        this.direction = this.directions[0];
+        this.navSystem.currentNodeIndex = 0;
+        this.navSystem.currentNode = this.navSystem.navNodes[0];
+        this.navSystem.targetNode = this.navSystem.navNodes[1];
+        this.navSystem.direction = this.navSystem.directions[0];
         this.tile = this.currentNode;
     }
-    this.collisionBoundary.navPoint.x = this.targetNode.x;
-    this.collisionBoundary.navPoint.y = this.targetNode.y;
+    console.log(this.collisionBoundary["navPoint"]);
 }
 
 Enemy.prototype.death = function(){
@@ -194,13 +210,13 @@ Enemy.prototype.death = function(){
             allEnemies.splice(i,1);
         }
     }
-    console.log("Bug Bye");
+    //console.log("Bug Bye");
     if (allEnemies.length === 0){
         for (var i = 1; i < 6; i++){
             allEnemies.push(function(){
                 return new Enemy( -1, i+1, 3, 0.5*i, 1);
             }());
-            console.log(allEnemies[0]);
+            //console.log(allEnemies[0]);
         }
         for (var i = 0; i < 2; i++){
             transporters.push(function(){
@@ -238,4 +254,13 @@ Enemy.prototype.renderRider = function() {
     this.sx, this.sy, this.sWidth, this.sHeight,
     this.position.x, this.position.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
+}
+
+Enemy.prototype.renderNavPoints = function(){
+    for (navPoint in this.navSystem.navNodes){
+    //console.log(this.navSystem.navNodes[navPoint]);
+      ctx.beginPath();
+      ctx.arc(this.navSystem.navPoints[navPoint].x, this.navSystem.navPoints[navPoint].y, this.navSystem.r, 0, 2 * Math.PI, false);
+      ctx.stroke();
+    }
 }

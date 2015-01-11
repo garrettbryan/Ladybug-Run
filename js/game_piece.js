@@ -58,7 +58,7 @@ GamePiece.prototype.transport = function(p){
       if (transporters[i] === this){
           p.tile.x = transporters[0].tile.x;
           p.tile.y = transporters[0].tile.y;
-          console.log(transporters.length);
+          //console.log(transporters.length);
           transporters.splice(i,1);
           transporters.push(this);
           p.tile = transporters[0].tile;
@@ -98,23 +98,25 @@ GamePiece.prototype.update = function(dt) {
       this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
       this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
     }
-//    console.log(this.y);
+//    //console.log(this.y);
 //    this.sprite = this.types[this.type].sprite;
 //    this.name = this.types[this.type].name;
 }
 
 GamePiece.prototype.render = function(row) {
-  if (this.tile.y === row){
-    console.log(this.sHeight);
+  if (Math.ceil(this.tile.y) === row){
+    //console.log("row " + this.tile.y);
+    //console.log(this.position);
+
     ctx.drawImage(Resources.get(this.sprite),
     this.sx, this.sy, this.sWidth, this.sHeight,
     this.position.x, this.position.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
-//    for (boundary in this.collisionBoundary){
-//      ctx.beginPath();
-//      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-//      ctx.stroke();
-//    }
+    for (boundary in this.collisionBoundary){
+      ctx.beginPath();
+      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+      ctx.stroke();
+    }
   //  ctx.drawImage(Resources.get(this.sprite),
   //    this.sx, this.sy, this.sWidth, this.sHeight,
   //    this.position.x, this.position.y,
@@ -125,16 +127,44 @@ GamePiece.prototype.render = function(row) {
   }
 };
 
+GamePiece.prototype.move = function(dt){
+  //console.log(this.direction);
+  //console.log(this.tile);
+
+  this.tile = {
+    x: this.tile.x + this.speed * dt * this.direction.x,
+    y: this.tile.y + this.speed * dt * this.direction.y
+  }
+  //console.log(this.direction);
+  //console.log(this.tile);
+
+  this.calculatePosition();
+}
+
 GamePiece.prototype.calculatePosition = function(){
   this.position = {
     x : this.tile.x * game.world.pixelsPerTileUnit.x +
         game.world.pixelsPerTileUnit.x / 2 -
         this.center.x,
     y : (this.tile.y +1) * game.world.pixelsPerTileUnit.y -
-        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
+        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] +
         game.world.elevationOffset  -
         this.center.y
   };
+  //console.log(this.tile.y );
+}
+
+GamePiece.prototype.calculateWorldPosition = function(tile){ //TODO finish impelmentation
+  return{
+    x : tile.x * game.world.pixelsPerTileUnit.x +
+        game.world.pixelsPerTileUnit.x / 2 -
+        this.center.x,
+    y : tile.y * game.world.pixelsPerTileUnit.y -
+        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap [ Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)] +
+        game.world.elevationOffset  -
+        this.center.y
+  };
+  //console.log(this.tile.y );
 }
 
 GamePiece.prototype.calculateTile = function(){
@@ -144,7 +174,7 @@ GamePiece.prototype.calculateTile = function(){
       game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x]) /
       game.world.pixelsPerTileUnit.y - 1
   };
-  console.log(this.tile);
+  //console.log(this.tile);
 
 }
 

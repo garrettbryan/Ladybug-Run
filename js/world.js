@@ -86,7 +86,7 @@ var World = function(){
       1,1,1,1,1,1,1,1,1,
       1,1,1,1,1,1,1,1,1
       ]
-  };
+  },
 
   this.maps = [
     {
@@ -102,7 +102,7 @@ var World = function(){
 //          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
 //          [{ x: 6, y: -1},{ x: 11, y: 5}]
 //      ],
-      enemyPaths: [[{ x: 1, y: 1},{ x: 3, y: 0},{ x: 4, y: 4}]
+      enemyPaths: [[{ x: 0, y: 3},{ x: 3, y: 3},{ x: 5, y: 5}]
       ],
       textureMap: [
         's','s','g','s','w','w','s','s','s','s','s',
@@ -137,9 +137,11 @@ var World = function(){
         x: 5,
         y: 7
       },
-      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
-          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
-          [{ x: 6, y: -1},{ x: 11, y: 5}]
+//      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
+//          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
+//          [{ x: 6, y: -1},{ x: 11, y: 5}]
+//      ],
+      enemyPaths: [[{ x: 3, y: 3},{ x: 4, y: 9},{ x: 9, y: 5}]
       ],
       textureMap: [
         'w','w','w','w','w','w','w','w','w','w','w',
@@ -193,9 +195,11 @@ var World = function(){
         x: 9,
         y: 9
       },
-      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
-          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
-          [{ x: 6, y: -1},{ x: 11, y: 5}]
+//      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
+//          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
+//          [{ x: 6, y: -1},{ x: 11, y: 5}]
+//      ],
+      enemyPaths: [[{ x: 1, y: 1},{ x: 3, y: 10},{ x: 4, y: 4}]
       ],
       textureMap: [
         's','g','s','s','s','s','s','g','s','s','s','s',
@@ -252,9 +256,16 @@ var World = function(){
         x: 6,
         y: 8
       },
-      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
-          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
-          [{ x: 6, y: -1},{ x: 11, y: 5}]
+
+      bossStartTile: {
+        x: 5,
+        y: 2
+      },
+//      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
+//          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
+//          [{ x: 6, y: -1},{ x: 11, y: 5}]
+//      ],
+      enemyPaths: [[{ x: 1, y: 1},{ x: 3, y: 0},{ x: 4, y: 4}]
       ],
       textureMap: [
         's','s','s','s','s','s','s','s','g','gb','s',
@@ -328,18 +339,18 @@ World.prototype.maximumBlockElevation = function(){
 
 World.prototype.init = function(){
   //cl("world initialize");
-  //console.log(this);
+  ////console.log(this);
   this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
     this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
     this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset;
-    //console.log(this);
+    ////console.log(this);
 };
 
 World.prototype.checkVictory = function() {
 
     if (game.active) {
       //cl(this.worldTime);
-        if (this.worldTime > 5) {
+        if (this.worldTime > 10) {
           if (game.level < game.world.maps.length) {
               game.level++;
               game.score += 1000;

@@ -114,6 +114,7 @@ var Engine = (function(global) {
         cl('    updateEntities');
         game.player.update();
         game.enemy.update(dt);
+        game.boss.update();
 /*
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);
@@ -173,6 +174,8 @@ var Engine = (function(global) {
             game.world.render(row, numCols);
             renderEntities(row);
         }
+        game.enemy.renderNavPoints();
+
     }
 
     /* This function is called by the render function and is called on each game
@@ -183,6 +186,7 @@ var Engine = (function(global) {
         cl('renderEntities');
         game.player.render(row);
         game.enemy.render(row);
+        game.boss.render(row);
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
@@ -219,7 +223,6 @@ var Engine = (function(global) {
         canvas.height = game.world.canvasSize.y;
 
         game.player.init(game.world.currentMap.playerStartTile);
-        game.enemy.init();
 
     }
 
