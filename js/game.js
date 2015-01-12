@@ -46,7 +46,7 @@ Game.prototype.startLevel = function(restart) {
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
     // TODO create enemies;
-    this.enemy = new Enemy( 1, 1);
+    this.enemy = new Enemy( 2, 1);
     this.enemy.init();
 
     if(this.world.currentMap.hasOwnProperty('bossStartTile')){

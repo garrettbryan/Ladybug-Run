@@ -126,9 +126,8 @@ GamePiece.prototype.render = function(row) {
 };
 
 GamePiece.prototype.move = function(dt){
-  //console.log(this.direction);
-  //console.log(this.tile);
-
+//  console.log(this.direction);
+//  console.log(this.tile);
   this.tile = {
     x: this.tile.x + this.speed * dt * this.direction.x,
     y: this.tile.y + this.speed * dt * this.direction.y
@@ -160,8 +159,8 @@ GamePiece.prototype.calculateWorldPosition = function(tile){ //TODO finish impel
         game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)] +
         tile.y * game.world.pixelsPerTileUnit.y
   };
-  console.log(game.world.elevationOffset);
-  console.log(result);
+//  console.log(game.world.elevationOffset);
+//  console.log(result);
 return result;
 }
 
