@@ -74,6 +74,9 @@ Player.prototype.update = function() {
 
     this.anyCollisions();
 
+//    this.collisionCheck(game.enemy.collisionBoundary, "primary", this.death);
+//    this.collisionCheck(game.enemy.collisionBoundary, "secondary", this.ride);
+
 
 
 //    this.sprite = this.characters[this.character].sprite;
