@@ -1,8 +1,6 @@
 var GamePiece = function() {
   cg('GamePiece new');
 
-    this.scale = 1;
-
     this.tile = {
       x: -1,
       y: -1
@@ -48,10 +46,10 @@ var GamePiece = function() {
         'primary': {
             'collidesWith' : [],
             'r': 30 * this.scale,
-            'x': 0,
-            'y': 0,
-            'xOffset': this.center.x,
-            'yOffset': this.center.y
+            x: 0,
+            y: 0,
+            xOffset: this.center.x,
+            yOffset: this.center.y
         }
     };
 }
@@ -62,7 +60,7 @@ GamePiece.prototype.transport = function(p){
       if (transporters[i] === this){
           p.tile.x = transporters[0].tile.x;
           p.tile.y = transporters[0].tile.y;
-          //console.log(transporters.length);
+
           transporters.splice(i,1);
           transporters.push(this);
           p.tile = transporters[0].tile;
@@ -103,7 +101,7 @@ GamePiece.prototype.update = function(dt) {
       this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
     }
 /*
-    console.log(this.y);
+
     this.sprite = this.types[this.type].sprite;
     this.name = this.types[this.type].name;
 */
@@ -145,7 +143,7 @@ GamePiece.prototype.render = function(row) {
       ctx.stroke();
     }
     if (this.steed){
-      this.steed.renderRider();
+      //this.steed.renderRider();
     }
   }
 };
@@ -170,11 +168,14 @@ GamePiece.prototype.calculatePosition = function(){
         game.world.elevationOffset  -
         this.center.y
   };
-  console.log( game.world.currentMap.topoMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)]);
+
 }
 
 GamePiece.prototype.calculateWorldPosition = function(tile){
   cg('GamePiece calculateWorldPosition');
+  console.log(tile.y + ' ' + tile.x + ' ' + game.world.currentMap.totalTiles.x);
+  console.log(Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x));
+  console.log(game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)]);
   var result = {
     x : tile.x * game.world.pixelsPerTileUnit.x +
         game.world.pixelsPerTileUnit.x / 2,
@@ -182,8 +183,8 @@ GamePiece.prototype.calculateWorldPosition = function(tile){
         game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)] +
         tile.y * game.world.pixelsPerTileUnit.y
   };
-//  console.log(game.world.elevationOffset);
-//  console.log(result);
+
+
 return result;
 }
 
@@ -195,15 +196,15 @@ GamePiece.prototype.calculateTile = function(){
       game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x]) /
       game.world.pixelsPerTileUnit.y - 1
   };
-  //console.log(this.tile);
+
 
 }
 
 GamePiece.prototype.calculateCollisionCircles = function(){
   cg('GamePiece calculateCollisionCircles');
-      this.collisionBoundary.primary.x = this.position.x +
-        this.collisionBoundary.primary.xOffset;
+  this.collisionBoundary.primary.x = this.position.x +
+    this.collisionBoundary.primary.xOffset;
 
-    this.collisionBoundary.primary.y = this.position.y +
-        this.collisionBoundary.primary.yOffset;
+  this.collisionBoundary.primary.y = this.position.y +
+    this.collisionBoundary.primary.yOffset;
 }

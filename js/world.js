@@ -150,8 +150,8 @@ var World = function(){
         y: 5
       },
       playerStartTile: {
-        x: 3,
-        y: 4
+        x: 10,
+        y: 3
       },
       enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 5, y: 3}, {x: -1, y: 2}],
 

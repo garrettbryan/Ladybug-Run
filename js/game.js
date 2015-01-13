@@ -20,6 +20,8 @@ Game.prototype.init = function(level, score) {
     this.world = new World();
 
     this.player = new Player(characters[1]);
+    this.enemy = new Enemy();
+
 
     this.boss = new Boss(2,1);
 
@@ -46,13 +48,12 @@ Game.prototype.startLevel = function(restart) {
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
     // TODO create enemies;
-    this.enemy = new Enemy();
     this.enemy.init();
 
     if(this.world.currentMap.hasOwnProperty('bossStartTile')){
         this.boss.init(this.world.currentMap.bossStartTile);
     }
-    //console.log(this.enemy);
+
 
 }
 

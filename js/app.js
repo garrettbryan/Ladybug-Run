@@ -9,7 +9,7 @@ var world = new World();
 var allCollectables = [];
 for (var i = 0; i < 7; i++){
     allCollectables.push(new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 500, 0.3, i));
-    console.log(allCollectables[i]);
+
 }
 
 var allEnemies = [];
@@ -18,7 +18,7 @@ var allEnemies = [];
 //    allEnemies.push(function(){
 //        return new Enemy( -1, i+1, 3, 0.5*i, 1);
 //    }());
-//    console.log(allEnemies[0]);
+
 //}
 allEnemies.push(new Enemy(-1, 4, 3, 1, 1));
 
@@ -29,7 +29,7 @@ for (var i = 0, p = 1; i < 2; i++){
                 return new Player( 4+i, 7+j, 300, 0.6+0.2* i, p);
         }());
     }
-    //console.log(allCollectables[i]);
+
 }
 
 allPlayers.push(new Boss( 4,4,500, 0.75));

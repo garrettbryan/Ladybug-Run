@@ -16,7 +16,7 @@
 
 var clg = 0,
     cgg = 0,
-    ceg = 1,
+    ceg = 0,
     cpg = 0,
     cycle = 0;
 
@@ -208,8 +208,9 @@ var Engine = (function(global) {
      */
     function renderEntities(row) {
         cl(' renderEntities row:' + row);
-        game.player.render(row);
         game.enemy.render(row);
+        game.player.render(row);
+
         game.boss.render(row);
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.

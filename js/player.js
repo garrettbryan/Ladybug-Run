@@ -4,16 +4,16 @@
 
 /*
 var Player = function(){
-    console.log("new player");
+
 }
 */
 
 var Player = function(character){
     cp("Player new");
-    GamePiece.call(this);
-
     this.scale = 1;
     this.speed = 1;
+
+    GamePiece.call(this);
 
     this.character = character;
     this.sprite = this.character.sprite;
@@ -75,14 +75,31 @@ Player.prototype.update = function() {
     this.calculatePosition();
     this.calculateCollisionCircles();
 
+
+
     if (this.steed){
-        this.calculateSteedPosition();
+        this.steed.direction = this.direction;
+
+
+        this.steed.tile = this.tile;
+        this.steed.calculatePosition();
+        this.steed.position = {
+            x: this.steed.position.x,
+            y: this.steed.position.y - 10 * this.steed.scale
+        };
+        this.position = {
+            x: this.position.x + 15 * this.steed.scale * this.steed.direction.x,
+            y: this.position.y - 40 * this.steed.scale
+        };
+        this.steed.tile = this.tile;
+
+
+
     }
 
     this.calculateCollectableSpacing();
 
     this.anyCollisions();
-
     this.collisionCheck(game.enemy, "primary", this.death);
     this.collisionCheck(game.enemy, "secondary", this.ride);
 
@@ -103,35 +120,35 @@ Player.prototype.handleInput = function(key) {
     switch(key){
         case 'left':
             this.tile.x = this.tile.x - 1;
-            this.direction = { x: -1, y: 0};
+            this.direction.x = -1;
             break;
         case 'right':
             this.tile.x = this.tile.x + 1;
-            this.direction = { x: 1, y: 0};
+            this.direction.x = 1;
             break;
         case 'up':
             this.tile.y = this.tile.y - 1;
-            this.direction = {x: 0, y: -1}
+            this.direction.y = -1;
             break;
         case 'down':
             this.tile.y = this.tile.y + 1;
-            this.direction = {x: 0, y: 1}
+            this.direction.y = 1;
             break;
         case 'space':
-            console.log('throw');
+
             this.throw();
             break;
         case 'dismount':
-            console.log('dismount');
+
             this.dismount();
             break;
     }
-    console.log(this.walkToTile());
+
     if (this.walkToTile() === 0){
         this.tile = tile0;
         this.direction = direction0;
     }
-    //console.log(this.tile);
+
 };
 
 Player.prototype.tag = function(p){
@@ -154,13 +171,11 @@ Player.prototype.tag = function(p){
 
     for (var i = 1; i < game.allPlayers.length; i++){
         if (game.allPlayers[i] === p){
-            console.log(game.allPlayers.length);
+
             game.allPlayers.splice(i,1,game.allPlayers[0]);
             game.allPlayers[0] = p;
         }
     }
-
-
 };
 
 Player.prototype.pickup = function(collectable){
@@ -177,7 +192,7 @@ Player.prototype.pickup = function(collectable){
     }
     this.calculateCollectableSpacing();
 
-    console.log(collectable.position.x);
+
 };
 
 Player.prototype.death = function(){
@@ -201,7 +216,7 @@ Player.prototype.death = function(){
 
     }
     game.allPlayers.shift();
-    console.log("You're being very undude . . .");
+
     if (game.allPlayers.length === 0){
     }
 };
@@ -221,7 +236,7 @@ Player.prototype.throw = function(){
         projectile.position.x = this.collisionBoundary.primary.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
         projectile.position.y = this.collisionBoundary.primary.y - projectile.center.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
         projectile.attachedTo = "";
-        console.log(projectile.position);
+
 
     }
 };
@@ -238,13 +253,6 @@ Player.prototype.ride = function(steed){
     this.steed = steed;
     steed.becomeSteed(this);
 
-    if (!this.steed){
-        for(var i = 0; i < game.allEnemies.length; i++){
-            if (this.steed === game.allEnemies[i]){
-                game.allEnemies.splice(i,1);
-            }
-        }
-    }
 
     steed.collisionBoundary.primary.collidesWith = [];
     steed.collisionBoundary.secondary.collidesWith = [];
@@ -270,8 +278,10 @@ Player.prototype.ride = function(steed){
 Player.prototype.dismount = function(){
     cp('Player dismount');
     //this.steed.direction.x = 1;
-    game.allEnemies.push(this.steed);
-    console.log(this.steed);
+    //game.allEnemies.push(this.steed);
+
+    this.steed.collisionBoundary.primary.r = this.steed.collisionBoundary.primary.r1;
+    this.steed.collisionBoundary.secondary.r = this.steed.collisionBoundary.secondary.r1;
 
     this.steed.collisionBoundary.primary.collidesWith = [
         Player,
@@ -281,9 +291,11 @@ Player.prototype.dismount = function(){
     this.steed.collisionBoundary.secondary.collidesWith = [
         Player
     ];
+    this.steed.speed = 3;
 
     this.steed.tile.y = this.tile.y;
     this.steed.tile.x = this.tile.x;
+    this.steed.steedOf = false;
     this.steed = false;
 
     if (this.tile.y < 8){
@@ -320,16 +332,12 @@ Player.prototype.wait = function() {
 
 Player.prototype.calculateSteedPosition = function(){
         this.steed.direction = this.direction;
-        //console.log(this.direction.x);
-        this.steed.position.x = - this.steed.center.x + this.tile.x * 101 + 101/2;
-        this.steed.position.y = - this.steed.center.y + this.tile.y * 83;
-        this.steed.collisionBoundary.primary.x = this.steed.position.x + this.steed.collisionBoundary.primary.xOffset;
-        this.steed.collisionBoundary.primary.y = this.steed.position.y + this.steed.collisionBoundary.primary.yOffset;
-        this.steed.collisionBoundary.secondary.x = this.steed.position.x + this.steed.collisionBoundary.secondary.xOffset;
-        this.steed.collisionBoundary.secondary.y = this.steed.position.y + this.steed.collisionBoundary.secondary.yOffset
 
-        this.position.x = this.position.x + 10 * this.steed.scale;
-        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
+        this.steed.positon = this.position;
+        this.steed.row = this.row;
+
+//        this.position.x = this.position.x + 10 * this.steed.scale;
+//        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
 }
 
 Player.prototype.calculateCollectableSpacing = function() {
