@@ -16,7 +16,7 @@
 
 var clg = 0,
     cgg = 0,
-    ceg = 0,
+    ceg = 1,
     cpg = 0,
     cycle = 0;
 

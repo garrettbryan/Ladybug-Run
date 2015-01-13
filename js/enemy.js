@@ -70,8 +70,10 @@ var Enemy = function() {
             'collidesWith' : [
             ],
             r: 2 * this.scale,
-            x: this.position.x + this.center.x,
-            y: this.position.y + this.center.y,
+            x: 0,
+            y: 0,
+            'xOffset': this.center.x,
+            'yOffset': this.center.y
         }
     };
 
@@ -217,12 +219,12 @@ Enemy.prototype.assignPath = function (enemyPaths){
 GamePiece.prototype.navigate = function(navData, result){
     ce('enemy navigate');
     var distanceToNextNavPoint =
-        (navData.targetPoint.x - this.collisionBoundary.primary.x) *
-        (navData.targetPoint.x - this.collisionBoundary.primary.x) +
-        (navData.targetPoint.y - this.collisionBoundary.primary.y) *
-        (navData.targetPoint.y - this.collisionBoundary.primary.y);
-    var radiiSum = (navData.r + this.collisionBoundary.primary.r) *
-         (navData.r + this.collisionBoundary.primary.r);
+        (navData.targetPoint.x - this.collisionBoundary.navigatory.x) *
+        (navData.targetPoint.x - this.collisionBoundary.navigatory.x) +
+        (navData.targetPoint.y - this.collisionBoundary.navigatory.y) *
+        (navData.targetPoint.y - this.collisionBoundary.navigatory.y);
+    var radiiSum = (navData.r + this.collisionBoundary.navigatory.r) *
+         (navData.r + this.collisionBoundary.navigatory.r);
     if (distanceToNextNavPoint < radiiSum) {
 //        console.log(this);
         result.call(this);
