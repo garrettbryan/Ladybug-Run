@@ -1,5 +1,5 @@
-var Boss = function( speed, scale){
-  Player.call(this, speed, scale, characters[0]);
+var Boss = function(){
+  Player.call(this, characters[0]);
 }
 
 Boss.prototype = Object.create(Player.prototype);

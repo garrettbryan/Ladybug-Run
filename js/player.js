@@ -8,9 +8,12 @@ var Player = function(){
 }
 */
 
-var Player = function(speed, scale, character){
-    console.log("  new Player");
-    GamePiece.call(this, speed, scale);
+var Player = function(character){
+    cp("Player new");
+    GamePiece.call(this);
+
+    this.scale = 1;
+    this.speed = 1;
 
     this.character = character;
     this.sprite = this.character.sprite;
@@ -26,6 +29,8 @@ var Player = function(speed, scale, character){
     this.sy = 0;
     this.sWidth = 101;
     this.sHeight = 171;
+
+    this.name = 'player';
 
     this.collisionBoundary = {
         'primary': {
@@ -48,21 +53,25 @@ Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.init = function(tile){
-    cl("player initialize");
+    cp("Player initialize");
     this.tile = tile;
+    this.calculatePosition();
+
 }
 
 Player.prototype.walkToTile = function() {
+    cp('Player walkToTile');
     var result = 0;
     if (this.tile.x >= 0 && this.tile.x < game.world.currentMap.totalTiles.x &&
         this.tile.y >= 0 && this.tile.y < game.world.currentMap.totalTiles.y) {
+    cp(game.world.currentMap.walkMap);
       result = game.world.currentMap.walkMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x];
     }
     return result;
 }
 
 Player.prototype.update = function() {
-
+    cp('Player update');
     this.calculatePosition();
     this.calculateCollisionCircles();
 
@@ -74,8 +83,8 @@ Player.prototype.update = function() {
 
     this.anyCollisions();
 
-//    this.collisionCheck(game.enemy.collisionBoundary, "primary", this.death);
-//    this.collisionCheck(game.enemy.collisionBoundary, "secondary", this.ride);
+    this.collisionCheck(game.enemy, "primary", this.death);
+    this.collisionCheck(game.enemy, "secondary", this.ride);
 
 
 
@@ -84,6 +93,7 @@ Player.prototype.update = function() {
 };
 
 Player.prototype.handleInput = function(key) {
+    cp('Player handleInput');
     var tile0 = {
         x: this.tile.x,
         y: this.tile.y
@@ -119,11 +129,13 @@ Player.prototype.handleInput = function(key) {
     console.log(this.walkToTile());
     if (this.walkToTile() === 0){
         this.tile = tile0;
+        this.direction = direction0;
     }
     //console.log(this.tile);
 };
 
 Player.prototype.tag = function(p){
+    cp('Player tag');
     p.tile = {
         x : this.tile.x + 1 * this.direction.x,
         y : this.tile.y + 1 * this.direction.y
@@ -152,6 +164,7 @@ Player.prototype.tag = function(p){
 };
 
 Player.prototype.pickup = function(collectable){
+    cp('Player pickup');
     collectable.attach(this);
     collectable.collisionBoundary.primary.collidesWith = [];
     collectable.position.x = this.position.x;
@@ -168,6 +181,7 @@ Player.prototype.pickup = function(collectable){
 };
 
 Player.prototype.death = function(){
+    cp('Player death');
     if (this.steed){
         for(var i = 0; i < game.allEnemies.length; i++){
             if (this.steed === game.allEnemies[i]){
@@ -193,6 +207,7 @@ Player.prototype.death = function(){
 };
 
 Player.prototype.throw = function(){
+    cp('Player throw');
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
         projectile.collisionBoundary.primary.collidesWith = [
@@ -212,12 +227,14 @@ Player.prototype.throw = function(){
 };
 
 Player.prototype.catchIt = function(collectable){
+    cp('Player catchIt');
     for ( var collectable in game.allCollectables){
         this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
     }
 };
 
 Player.prototype.ride = function(steed){
+    cp('Player ride');
     this.steed = steed;
     steed.becomeSteed(this);
 
@@ -251,6 +268,7 @@ Player.prototype.ride = function(steed){
 }
 
 Player.prototype.dismount = function(){
+    cp('Player dismount');
     //this.steed.direction.x = 1;
     game.allEnemies.push(this.steed);
     console.log(this.steed);
@@ -278,6 +296,7 @@ Player.prototype.dismount = function(){
 }
 
 Player.prototype.wait = function() {
+    cp('Player wait');
 
     this.position.x = this.tile.x * 101 + 101/2 - this.center.x;
     this.position.y = this.tile.y * 83  - this.center.y;

@@ -1,9 +1,12 @@
-var GamePiece = function(speed, scale) {
-  cl("    GamePiece");
-    this.speed = speed;
-    this.scale = scale;
+var GamePiece = function() {
+  cg('GamePiece new');
 
-    this.tile = {};
+    this.scale = 1;
+
+    this.tile = {
+      x: -1,
+      y: -1
+    };
 
     this.draw = false;
 
@@ -54,6 +57,7 @@ var GamePiece = function(speed, scale) {
 }
 
 GamePiece.prototype.transport = function(p){
+  cg('GamePiece transport');
   for (var i = 0; i < transporters.length; i++){
       if (transporters[i] === this){
           p.tile.x = transporters[0].tile.x;
@@ -74,20 +78,22 @@ GamePiece.prototype.transport = function(p){
   }
 }
 
-GamePiece.prototype.collisionCheck = function(collisionBoundary, boundary, result){
+GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
+  cg('GamePiece collisionCheck');
     var distanceBetweenGamePieces =
-        (collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
-        (collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
-        (collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
-        (collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
-    var radiiSum = (collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
-         (collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
+        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
+        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
+        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
+        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
+    var radiiSum = (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
+         (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
     if (distanceBetweenGamePieces < radiiSum) {
         result.call(this, gamePiece);
     }
 }
 
 GamePiece.prototype.update = function(dt) {
+  cg('GamePiece update');
     if (this.attachedTo){
         this.x = this.attachedTo.x + 20 ;
         this.y = this.attachedTo.y + 30;
@@ -96,16 +102,39 @@ GamePiece.prototype.update = function(dt) {
       this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
       this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
     }
-//    //console.log(this.y);
-//    this.sprite = this.types[this.type].sprite;
-//    this.name = this.types[this.type].name;
+/*
+    console.log(this.y);
+    this.sprite = this.types[this.type].sprite;
+    this.name = this.types[this.type].name;
+*/
 }
 
-GamePiece.prototype.render = function(row) {
-  if (Math.ceil(this.tile.y) === row){
-    //console.log("row " + this.tile.y);
-    //console.log(this.position);
+GamePiece.prototype.retarget = function(targetPt){
+  ce('retarget');
+  ce(this.position);
+  ce(targetPt);
+  var vector = {},
+    vectorMagnitude = 0,
+    normal = {};
 
+  vector = {
+      x: targetPt.x - (this.position.x + this.center.x),
+      y: targetPt.y - (this.position.y + this.center.y)
+  };
+  vectorMagnitude = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+
+  this.direction = {
+      x: vector.x / vectorMagnitude,
+      y: vector.y/  vectorMagnitude
+  };
+
+  ce(this.direction);
+
+};
+
+GamePiece.prototype.render = function(row) {
+  cg('GamePiece ' + this.name + ' render' + row);
+  if (Math.ceil(this.tile.y) === row){
     ctx.drawImage(Resources.get(this.sprite),
     this.sx, this.sy, this.sWidth, this.sHeight,
     this.position.x, this.position.y,
@@ -115,10 +144,6 @@ GamePiece.prototype.render = function(row) {
       ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
       ctx.stroke();
     }
-  //  ctx.drawImage(Resources.get(this.sprite),
-  //    this.sx, this.sy, this.sWidth, this.sHeight,
-  //    this.position.x, this.position.y,
-  //    this.spriteDimensions.x, this.spriteDimensions.y);
     if (this.steed){
       this.steed.renderRider();
     }
@@ -126,32 +151,30 @@ GamePiece.prototype.render = function(row) {
 };
 
 GamePiece.prototype.move = function(dt){
-//  console.log(this.direction);
-//  console.log(this.tile);
+  cg('GamePiece move ' + this.name);
   this.tile = {
     x: this.tile.x + this.speed * dt * this.direction.x,
     y: this.tile.y + this.speed * dt * this.direction.y
   }
-  //console.log(this.direction);
-  //console.log(this.tile);
-
   this.calculatePosition();
 }
 
 GamePiece.prototype.calculatePosition = function(){
+  cg('GamePiece calculatePosition ' + this.name);
   this.position = {
     x : this.tile.x * game.world.pixelsPerTileUnit.x +
         game.world.pixelsPerTileUnit.x / 2 -
         this.center.x,
-    y : (this.tile.y +1) * game.world.pixelsPerTileUnit.y -
+    y : (this.tile.y + 1) * game.world.pixelsPerTileUnit.y -
         game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] +
         game.world.elevationOffset  -
         this.center.y
   };
-  //console.log(this.tile.y );
+  console.log( game.world.currentMap.topoMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)]);
 }
 
-GamePiece.prototype.calculateWorldPosition = function(tile){ //TODO finish impelmentation
+GamePiece.prototype.calculateWorldPosition = function(tile){
+  cg('GamePiece calculateWorldPosition');
   var result = {
     x : tile.x * game.world.pixelsPerTileUnit.x +
         game.world.pixelsPerTileUnit.x / 2,
@@ -165,6 +188,7 @@ return result;
 }
 
 GamePiece.prototype.calculateTile = function(){
+  cg('GamePiece calculate tile');
   this.tile = {
     x : (this.position.x + this.center.x - game.world.pixelsPerTileUnit.x/2) / game.world.pixelsPerTileUnit.x,
     y : (this.position.y + this.center.y - game.world.elevationOffset +
@@ -176,6 +200,7 @@ GamePiece.prototype.calculateTile = function(){
 }
 
 GamePiece.prototype.calculateCollisionCircles = function(){
+  cg('GamePiece calculateCollisionCircles');
       this.collisionBoundary.primary.x = this.position.x +
         this.collisionBoundary.primary.xOffset;
 

@@ -1,6 +1,8 @@
-var Enemy = function(speed, scale) {
-    GamePiece.call(this, speed, scale);
+var Enemy = function() {
+    ce('enemy');
+    GamePiece.call(this);
 
+    this.speed = 1;
 //Path information comes from the world maps
     this.pathNodes = [];
     this.currentNodeIndex = 0;
@@ -17,7 +19,6 @@ var Enemy = function(speed, scale) {
         'x': 0,
         'y': 0
     };
-//
 
     this.tile = {
         x: 4,
@@ -47,7 +48,7 @@ var Enemy = function(speed, scale) {
                 Enemy,
                 Collectable
             ],
-            'r': 20 * this.scale,
+            'r': 25 * this.scale,
             'x': 0,
             'y': 0,
             'xOffset': 25 * this.scale + this.center.x,
@@ -64,6 +65,13 @@ var Enemy = function(speed, scale) {
             'y': 0,
             'xOffset': -25 * this.scale + this.center.x,
             'yOffset': this.center.y
+        },
+        navigatory : {
+            'collidesWith' : [
+            ],
+            r: 2 * this.scale,
+            x: this.position.x + this.center.x,
+            y: this.position.y + this.center.y,
         }
     };
 
@@ -88,14 +96,14 @@ Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.init = function(){
-    //console.log("init");
+    ce('enemy init');
     this.assignPath(game.world.currentMap.enemyPaths);
 
 }
 
 
 Enemy.prototype.update = function(dt) {
-
+    ce('enemy update');
     //this.tile.x = this.tile.x + this.speed * this.direction.x * dt / this.scale;
 
  //   this.position.x =  this.center.x + this.tile.x * 101 + 101/2;
@@ -112,7 +120,12 @@ Enemy.prototype.update = function(dt) {
       this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
     }
     this.navigate(this.navData, this.reachedTarget);
+    ce(this.navData.targetPoint);
+    ce(this.position);
+    this.retarget(this.navData.targetPoint);
     this.move(dt);
+    console.log(this.collisionBoundary.navigatory.x);
+    console.log(this.position.x);
     //this.calculatePosition();
 
 //
@@ -132,6 +145,7 @@ Enemy.prototype.update = function(dt) {
 };
 
 Enemy.prototype.reflectCollisionBoundaries = function(){
+    ce('enemy reflectCollisionBoundaries');
     if (this.direction.x >= 0) {
         this.collisionBoundary.primary.xOffset = 25 * this.scale + this.center.x;
         this.collisionBoundary.secondary.xOffset = -25 * this.scale + this.center.x;
@@ -142,6 +156,7 @@ Enemy.prototype.reflectCollisionBoundaries = function(){
 }
 
 Enemy.prototype.chooseSprite = function(){
+    ce('enemy chooseSprite');
     if (this.direction.x >= 0){
         this.sx = 0;
         this.sy = 0;
@@ -156,6 +171,7 @@ Enemy.prototype.chooseSprite = function(){
 }
 
 Enemy.prototype.calculateNavPoints = function(navNodes){
+    ce('enemy calculateNavPoints');
     var i = 0,
         navPoints = [];
     while (i < navNodes.length) {
@@ -166,6 +182,7 @@ Enemy.prototype.calculateNavPoints = function(navNodes){
 }
 
 Enemy.prototype.assignPath = function (enemyPaths){
+    ce('enemy assignPath');
 //    console.log("assignPath");
     var vector = {},
         vectorMagnitude,
@@ -190,12 +207,15 @@ Enemy.prototype.assignPath = function (enemyPaths){
     };
     this.direction = this.navData.directions[0];
     this.tile = this.navData.currentNode;
+    console.log(this.tile);
+    this.calculatePosition();
     this.navData.navPoints = this.calculateNavPoints(this.navData.navNodes);
     this.navData.targetPoint = this.navData.navPoints[1];
 //    console.log(this.navData.directions);
 }
 
 GamePiece.prototype.navigate = function(navData, result){
+    ce('enemy navigate');
     var distanceToNextNavPoint =
         (navData.targetPoint.x - this.collisionBoundary.primary.x) *
         (navData.targetPoint.x - this.collisionBoundary.primary.x) +
@@ -212,6 +232,7 @@ GamePiece.prototype.navigate = function(navData, result){
 }
 
 Enemy.prototype.reachedTarget = function(){
+    ce('enemy reachedTarget');
 //    console.log(this);
     if (this.navData.currentNodeIndex < this.navData.directions.length){
 //        console.log(this.navData.currentNodeIndex);
@@ -241,6 +262,7 @@ Enemy.prototype.reachedTarget = function(){
 }
 
 Enemy.prototype.death = function(){
+    ce('enemy death');
     for(var i = 0; i < allEnemies.length; i++){
         if (this === allEnemies[i]){
             allEnemies.splice(i,1);
@@ -266,6 +288,7 @@ Enemy.prototype.death = function(){
 };
 
 Enemy.prototype.becomeSteed = function(player){
+    ce('enemy becomeSteed');
   this.collisionBoundary.primary.r1 = this.collisionBoundary.primary.r;
   this.collisionBoundary.primary.r = 0;
   this.speed = 0;
@@ -286,6 +309,7 @@ Enemy.prototype.becomeSteed = function(player){
 //};
 
 Enemy.prototype.renderRider = function() {
+    ce('enemy renderRider');
     ctx.drawImage(Resources.get(this.spriteFore),
     this.sx, this.sy, this.sWidth, this.sHeight,
     this.position.x, this.position.y,
@@ -293,6 +317,7 @@ Enemy.prototype.renderRider = function() {
 }
 
 Enemy.prototype.renderNavPoints = function(){
+    ce('enemy renderNavPoints');
     for (navPoint in this.navData.navNodes){
     //console.log(this.navData.navNodes[navPoint]);
       ctx.beginPath();

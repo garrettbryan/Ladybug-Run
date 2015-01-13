@@ -1,5 +1,5 @@
 var Game = function () {
-    cl('new game');
+    cl('game new');
     this.lives = 0;
     this.level = 0;
     this.topScore = 0;
@@ -19,7 +19,7 @@ Game.prototype.init = function(level, score) {
 
     this.world = new World();
 
-    this.player = new Player(300, 1, characters[1]);
+    this.player = new Player(characters[1]);
 
     this.boss = new Boss(2,1);
 
@@ -37,7 +37,7 @@ Game.prototype.init = function(level, score) {
 }
 
 Game.prototype.startLevel = function(restart) {
-    cl("startLevel" + this.level);
+    cl("game startLevel" + this.level);
     if (restart) {
         this.level = 1;
         this.score = 0;
@@ -46,7 +46,7 @@ Game.prototype.startLevel = function(restart) {
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
     // TODO create enemies;
-    this.enemy = new Enemy( 3, 1.5);
+    this.enemy = new Enemy();
     this.enemy.init();
 
     if(this.world.currentMap.hasOwnProperty('bossStartTile')){
@@ -57,16 +57,17 @@ Game.prototype.startLevel = function(restart) {
 }
 
 Game.prototype.victory = function() {
-    cl("victory");
+    cl("game victory");
     this.world.currentMap = this.world.victoryMap;
 }
 
 Game.prototype.failure = function() {
-    cl("failure");
+    cl("game failure");
     this.world.currentMap = this.world.failureMap;
 }
 
 Game.prototype.renderStatusBar = function(ctx){
+    cl("game renderStatusBar");
     ctx.save();
     ctx.fillStyle    = '#000';
     ctx.font         = 'Italic 30px Sans-Serif';

@@ -1,9 +1,9 @@
 var World = function(){
-  cl('  new world');
+  cl('world new');
   this.tiles = {
     //these values will be reset per level
-    x: 10,
-    y: 8
+    x: 0,
+    y: 0
   };
 
   this.canvasSize = {};
@@ -106,8 +106,7 @@ var World = function(){
       [{ x: -1, y: 5},{ x: 9, y: 5}],
       [{ x: 9, y: 6},{ x: -1, y: 6}]
       ],
-//      enemyPaths: [[{ x: 0, y: 1},{ x: 5, y: 1},{ x: 10, y: 4}]
-//      ],
+
       textureMap: [
         'w','w','w','w','w','w','w','w','w',
         'w','w','g','g','w','g','g','w','w',
@@ -121,28 +120,28 @@ var World = function(){
         'g','g','g','g','g','g','g','g','g'
       ],
       topoMap: [
-        '0','0','0','0','0','0','0','0','0',
-        '0','0','1','1','0','1','1','0','0',
-        '0','0','0','0','0','0','0','0','0',
-        '0','0','0','0','0','0','0','0','0',
-        '0','0','0','0','0','0','0','0','0',
-        '0','0','0','0','0','0','0','0','0',
-        '0','0','0','0','0','0','0','0','0',
-        '0','0','0','0','0','0','0','0','0',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1'
+        0,0,0,0,0,0,0,0,0,
+        0,0,1,1,0,1,1,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1
       ],
       walkMap: [
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1',
-        '1','1','1','1','1','1','1','1','1'
+        0,0,0,0,0,0,0,0,0,
+        0,0,1,1,0,1,1,0,0,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1
       ]
     },
     {
@@ -157,8 +156,7 @@ var World = function(){
       enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 5, y: 3}, {x: -1, y: 2}],
 
       ],
-//      enemyPaths: [[{ x: 0, y: 1},{ x: 5, y: 1},{ x: 10, y: 4}]
-//      ],
+
       textureMap: [
         's','s','g','s','w','w','s','s','s','s','s',
         's','s','sb','g','g','w','w','s','g','s','s',
@@ -169,7 +167,7 @@ var World = function(){
 
       topoMap: [
         1,1,1,1,0,0,1,1,1,1,1,
-        1,1,3,1,1,0,0,1,1,1,1,
+        1,1,1,1,1,0,0,1,1,1,1,
         1,1,1,1,1,1,0,0,1,1,1,
         1,1,1,1,1,1,1,0,0,1,1,
         1,1,1,1,1,1,1,1,0,0,1
@@ -192,51 +190,48 @@ var World = function(){
         x: 5,
         y: 7
       },
-//      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
-//          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
-//          [{ x: 6, y: -1},{ x: 11, y: 5}]
-//      ],
+
       enemyPaths: [[{ x: 2, y: 2},{ x: 7, y: 2},{ x: 8, y: 8},{ x: 3, y: 8},{ x: 2, y: 2}]
       ],
       textureMap: [
         'w','w','w','w','w','w','wb','w','w','w','w',
-        'w','w','w','w','w','w','w','w','w','w','w',
-        'w','w','s','s','s','s','s','s','s','w','w',
-        'w','w','s','g','s','s','g','g','w','w','w',
-        'wb','w','s','s','g','g','g','s','s','w','w',
+        'w','w','w','w','w','w','w','w','s','w','w',
+        'w','w','s','s','s','s','s','s','s','s','w',
+        'w','s','s','g','s','s','g','g','w','s','w',
+        'wb','w','s','s','g','g','g','s','s','s','w',
         'w','w','s','g','g','g','g','g','s','w','w',
         'w','w','s','s','g','g','g','g','s','w','wb',
         'w','w','s','g','g','g','s','g','s','w','w',
-        'w','w','w','s','s','s','s','s','s','w','w',
-        'w','w','w','w','w','w','w','w','w','w','w',
+        'w','w','w','s','s','s','s','s','s','s','w',
+        'w','w','w','w','sb','s','s','s','s','w','w',
         'w','w','w','w','w','w','w','w','w','w','w'
       ],
 
       topoMap: [
         0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,
-        0,0,2,2,2,2,2,2,2,0,0,
-        0,0,2,2,2,2,2,2,0,0,0,
-        0,0,2,2,3,3,3,2,2,0,0,
+        0,0,0,0,0,0,0,0,1,0,0,
+        0,0,2,2,2,2,1,1,1,1,0,
+        0,1,2,2,2,2,2,1,0,1,0,
+        0,0,2,2,3,3,3,2,1,1,0,
         0,0,2,2,3,4,3,2,2,0,0,
         0,0,2,2,3,3,3,2,2,0,0,
         0,0,2,2,2,2,2,2,2,0,0,
-        0,0,0,2,2,2,2,2,2,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,2,2,2,2,2,2,1,0,
+        0,0,0,0,1,1,1,1,1,0,0,
         0,0,0,0,0,0,0,0,0,0,0
       ],
 
       walkMap: [
         0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,1,0,0,
+        0,0,1,1,1,1,1,1,1,1,0,
+        0,1,1,1,1,1,1,1,0,1,0,
+        0,0,1,1,1,1,1,1,1,1,0,
         0,0,1,1,1,1,1,1,1,0,0,
-        0,0,1,1,1,1,1,1,0,0,0,
         0,0,1,1,1,1,1,1,1,0,0,
         0,0,1,1,1,1,1,1,1,0,0,
-        0,0,1,1,1,1,1,1,1,0,0,
-        0,0,1,1,1,1,1,1,1,0,0,
-        0,0,0,1,1,1,1,1,1,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,1,1,1,1,1,1,1,0,
+        0,0,0,0,0,1,1,1,1,0,0,
         0,0,0,0,0,0,0,0,0,0,0
       ]
     },
@@ -250,10 +245,6 @@ var World = function(){
         x: 9,
         y: 9
       },
-//      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
-//          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
-//          [{ x: 6, y: -1},{ x: 11, y: 5}]
-//      ],
       enemyPaths: [[{ x: 0, y: 0},{ x: 5, y: 5},{ x: 10, y: 5}]
       ],
       textureMap: [
@@ -289,14 +280,14 @@ var World = function(){
       walkMap: [
         1,1,1,1,1,1,1,1,1,1,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,0,1,1,1,1,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1,
+        1,1,1,0,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,0,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,0,1,1,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1
       ]
@@ -316,10 +307,7 @@ var World = function(){
         x: 5,
         y: 2
       },
-//      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 7, y: 4}],
-//          [{ x: 6, y: 5},{ x: 3, y: 2},{ x: -1, y: 2}],
-//          [{ x: 6, y: -1},{ x: 11, y: 5}]
-//      ],
+
       enemyPaths: [[{ x: 0, y: 2},{ x: 5, y: 5},{ x: 10, y: 1}]
       ],
       textureMap: [
@@ -327,12 +315,12 @@ var World = function(){
         's','s','s','s','s','s','sb','s','s','g','s',
         'g','sb','s','s','s','s','s','s','s','s','s',
         's','s','s','g','s','s','g','g','s','s','s',
-        'w','sb','s','g','g','g','g','s','s','w','w',
+        'w','sb','s','g','gb','g','g','s','s','w','w',
         'w','s','s','s','g','g','g','g','s','w','w',
-        'w','w','s','s','g','g','g','g','s','w','w',
-        'w','w','s','g','g','g','s','g','s','w','w',
-        'w','w','w','s','s','s','s','s','s','w','w',
-        'w','w','w','w','w','w','w','w','w','w','w',
+        'w','s','s','s','g','g','g','gb','s','w','w',
+        'w','s','s','g','g','g','s','g','s','w','w',
+        'w','w','w','s','s','s','s','s','s','s','w',
+        'w','w','w','w','w','w','s','s','s','w','w',
         'w','w','w','w','w','w','w','w','w','w','w'
       ],
 
@@ -341,12 +329,12 @@ var World = function(){
         7,6,5,6,5,6,7,6,5,5,4,
         6,5,2,2,2,2,2,2,2,4,6,
         5,4,2,2,2,2,2,2,0,3,5,
-        0,3,2,2,4,2,2,2,2,0,0,
         0,3,2,2,2,2,2,2,2,0,0,
-        0,0,2,2,2,2,2,4,2,0,0,
-        0,0,2,2,2,2,2,2,2,0,0,
-        0,0,0,2,2,2,2,2,2,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,
+        0,2,2,2,2,2,2,2,2,0,0,
+        0,1,2,2,2,2,2,2,2,0,0,
+        0,1,2,2,2,2,2,2,2,0,0,
+        0,0,0,2,2,2,2,2,2,1,0,
+        0,0,0,0,0,0,1,1,1,0,0,
         0,0,0,0,0,0,0,0,0,0,0
       ],
       walkMap: [
@@ -355,36 +343,36 @@ var World = function(){
         0,0,1,1,1,1,1,1,1,0,0,
         0,0,1,1,1,1,1,1,0,0,0,
         0,0,1,1,0,1,1,1,1,0,0,
-        0,0,1,1,1,1,1,1,1,0,0,
-        0,0,1,1,1,1,1,0,1,0,0,
-        0,0,1,1,1,1,1,1,1,0,0,
-        0,0,0,1,1,1,1,1,1,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,
+        0,1,1,1,1,1,1,1,1,0,0,
+        0,1,1,1,1,1,1,0,1,0,0,
+        0,1,1,1,1,1,1,1,1,0,0,
+        0,0,0,1,1,1,1,1,1,1,0,
+        0,0,0,0,0,0,1,1,1,0,0,
         0,0,0,0,0,0,0,0,0,0,0
       ]
     }
   ];
 
-  this.currentMap = {};//this.maps[3];//
-  //this.currentMap.topoMap = this.randomizeTileHeights(this.currentMap.topoMap);
+  this.currentMap = {};
 
 };
 
 World.prototype.randomizeTileHeights = function(map){  //TODO add some texture to the landscape
-  cl(map);
+  cl('world randomizeTileHeights');
   var newMap = [];
   map.forEach(function(tile){
     newMap.push(tile + Math.random());
   });
-  cl(newMap);
   return newMap;
 }
 
 World.prototype.updateTime = function(dt){
+  cl('world updateTime');
   this.worldTime += dt;
 }
 
 World.prototype.maximumBlockElevation = function(){
+  cl('world maximumBlockElevation');
   var max = this.currentMap.topoMap[0];
   for( var i = 1; i < this.currentMap.totalTiles.x; i++){
     max = Math.max(max, this.currentMap.topoMap[i]);
@@ -393,16 +381,14 @@ World.prototype.maximumBlockElevation = function(){
 }
 
 World.prototype.init = function(){
-  //cl("world initialize");
-  ////console.log(this);
+  cl("world init");
   this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
     this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
     this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset;
-    ////console.log(this);
 };
 
 World.prototype.checkVictory = function() {
-
+  cl('world checkVictory');
     if (game.active) {
       //cl(this.worldTime);
         if (this.worldTime > 20) {
@@ -423,20 +409,11 @@ World.prototype.checkVictory = function() {
 
     }
     return false;
-}
-
-World.prototype.addBoulders = function(currentMap){
-  cl("boulder added");
-
-
-}
-
-World.prototype.enemySource = function() {
-  cl("enemy source");
-}
+};
 
 
 World.prototype.render = function(row, numCols) {
+  cl('world render row:' + row);
   for (col = 0; col < numCols; col++) {
     var resource,
       tileHeight = (this.currentMap.topoMap[col + numCols*row]);
@@ -473,130 +450,7 @@ World.prototype.render = function(row, numCols) {
   }
 }
 /*
-var World = function() {
-    //Size of the world map (in pixels)
-    this.sizeInPixels = {
-        width: 0,
-        height: 0
-    }
-    this.tileSize= {
-        x: 0,
-        y: 0
-    };
-    //World representation, as an array of Tiles
-    //'w' for water
-    //'s' for stone
-    //'g' for grass
-    //'x' for goal
-    this.victoryMap =
-    {
-        totalTiles: {
-            x: 5,
-            y: 6
-        },
-        map: [
-        'w','w','w','w','w',
-        's','w','w','w','s',
-        's','w','s','w','s',
-        's','g','g','g','s',
-        'g','w','w','w','g',
-        's','s','g','s','s'
-        ]
-    };
 
-    this.maps= [
-    {
-        totalTiles :{
-            x: 5,
-            y: 6
-        },
-        playerStartTile : {
-            x: 2,
-            y: 5
-        },
-        map: [
-        'w','w','x','w','w',
-        's','s','s','s','s',
-        's','s','s','s','s',
-        's','s','s','s','s',
-        'g','g','g','g','g',
-        'g','g','g','g','g'
-        ]
-    },
-    {
-        totalTiles: {
-            x: 5,
-            y: 8
-        },
-        playerStartTile : {
-            x: 2,
-            y: 7
-        },
-        map:[
-            'w','w','x','w','w',
-            's','s','s','s','s',
-            's','s','s','s','s',
-            's','s','s','s','s',
-            'w','w','g','w','w',
-            's','s','s','s','s',
-            's','s','s','s','s',
-            'g','g','g','g','g'
-        ]
-    },
-    {
-        totalTiles: {
-            x: 7,
-            y: 10
-        },
-        playerStartTile : {
-            x: 3,
-            y: 9
-        },
-        map:[
-            'w','w','w','x','w','w','w',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            'w','w','g','g','g','w','w',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            'g','g','g','g','g','g','g'
-        ]
-    },
-    {
-        totalTiles: {
-            x: 7,
-            y: 12
-        },
-        playerStartTile : {
-            x: 3,
-            y: 11
-        },
-        map:[
-            'w','w','w','x','w','w','w',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            's','s','s','s','s','s','s',
-            'g','g','g','g','g','g','g'
-        ]
-    }
-    ];
-    //This is the map used for the current game
-    this.currentMap = {};
-    //Tiles on which the player can walk
-    this.walkableTiles = ['g','s','x'];
-    //Tiles on which the enemy can be spawned
-    this.enemyTiles= ['s'];
-};
 
 World.prototype.checkVictory = function()  {
     if (game.running === 1) {

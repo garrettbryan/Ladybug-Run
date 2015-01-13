@@ -14,13 +14,36 @@
  * a little simpler to work with.
  */
 
+var clg = 0,
+    cgg = 0,
+    ceg = 0,
+    cpg = 0,
+    cycle = 0;
+
+
+cp = function(log){
+    if (cpg === 1){
+        console.log(log);
+    }
+};
+
 cl = function(log){
     if (clg === 1){
-        console.log(log)
+        console.log(log);
     }
-}
+};
 
-clg = 0;
+cg = function(log){
+    if (cgg === 1){
+        console.log(log);
+    }
+};
+
+ce = function(log){
+    if (ceg === 1){
+        console.log(log);
+    }
+};
 
 
 var Engine = (function(global) {
@@ -44,7 +67,8 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
     function main() {
-        cl('main');
+        cl('main ' + cycle);
+        cycle++;
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
@@ -92,7 +116,7 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
-        cl('  update')
+        cl('engine update')
         game.world.updateTime(dt);
 
         if (game.world.checkVictory()){
@@ -111,7 +135,7 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        cl('    updateEntities');
+        cl(' update Entities');
         game.player.update();
         game.enemy.update(dt);
         game.boss.update();
@@ -148,7 +172,7 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
-        cl('render');
+        cl('engine render');
         ctx.clearRect(0,0,canvas.width, canvas.height);
 
         game.renderStatusBar(ctx);
@@ -183,7 +207,7 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities(row) {
-        cl('renderEntities');
+        cl(' renderEntities row:' + row);
         game.player.render(row);
         game.enemy.render(row);
         game.boss.render(row);
