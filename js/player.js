@@ -294,11 +294,11 @@ Player.prototype.dismount = function(){
     this.steed.speed = 3;
 
     this.steed.tile.y = this.tile.y;
-    this.steed.tile.x = this.tile.x;
+    this.steed.tile.x = this.tile.x + this.direction.x;
     this.steed.steedOf = false;
     this.steed = false;
 
-    if (this.tile.y < 8){
+    if (this.tile.y < game.world.currentMap.totalTiles.y - 1 ){
         this.tile.y = this.tile.y + 1;
     } else {
         this.tile.y = this.tile.y - 1;

@@ -44,11 +44,20 @@ Game.prototype.startLevel = function(restart) {
         this.level = 1;
         this.score = 0;
     }
+
     this.world.currentMap = this.world.maps[this.level-1];
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
     // TODO create enemies;
     this.enemy.init();
+
+    var collectableAmount = 0;
+    this.allCollectables = [];
+    for (var i = collectableAmount; i < collectableAmount + 7; i++){
+        this.allCollectables[i] = new Collectable(i);
+        this.allCollectables[i].placeRandomly(this.world.currentMap);
+        console.log(this.allCollectables[i]);
+    }
 
     if(this.world.currentMap.hasOwnProperty('bossStartTile')){
         this.boss.init(this.world.currentMap.bossStartTile);

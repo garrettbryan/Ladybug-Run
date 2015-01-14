@@ -1,5 +1,7 @@
-var Collectable = function(posX, posY, speed, scale, type) {
-  GamePiece.call(this, speed, scale);
+var Collectable = function(type) {
+  this.scale = 0.25;
+  this.speed = 0;
+  GamePiece.call(this);
   var types = [
     {
       name: 'Blue Gem',
@@ -50,25 +52,24 @@ Collectable.prototype.attach = function(player){
   this.attachedTo = player;
 }
 
-Collectable.prototype.init = function() {
-    this.position = {
-        x : this.tile.x * game.world.pixelsPerTileUnit.x +
-            game.world.pixelsPerTileUnit.x / 2 -
-            this.center.x,
-        y : this.tile.y * game.world.pixelsPerTileUnit.y -
-            game.world.pixelsPerElevationUnit.y *
-            game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x] +
-            game.world.elevationOffset -
-            game.world.pixelsPerTileUnit.y / 2
-    };
+GamePiece.prototype.placeRandomly = function(currentMap){
+  this.tile = {
+    x: Math.floor(Math.random()*(currentMap.totalTiles.x)),
+    y: Math.floor(Math.random()*(currentMap.totalTiles.y)),
+  };
+  if (currentMap.walkMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] === 0){
+    this.placeRandomly(currentMap);
+  }
+  this.calculatePosition();
 }
 
 Collectable.prototype.update = function(dt) {
-    this.position.x = this.speed * this.direction.x * dt + this.position.x;
-    this.position.y = this.speed * this.direction.y * dt + this.position.y;
+  this.calculatePosition()
+  this.position.x = this.speed * this.direction.x * dt + this.position.x;
+  this.position.y = this.speed * this.direction.y * dt + this.position.y;
 
-    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
-    this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
+  this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
+  this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
 
 
 //    console.log(this.y);

@@ -136,8 +136,15 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         cl(' update Entities');
+        game.allCollectables.forEach(function(collectable) {
+            collectable.update(dt);
+        });
         game.player.update();
         game.enemy.update(dt);
+        game.allEnemies.forEach(function(enemy) {
+            enemy.update(dt);
+        });
+        game.boss.move(dt);
         game.boss.update();
 /*
         allCollectables.forEach(function(collectable) {
@@ -208,7 +215,13 @@ var Engine = (function(global) {
      */
     function renderEntities(row) {
         cl(' renderEntities row:' + row);
+        game.allCollectables.forEach(function(collectable) {
+            collectable.render(row);
+        });
         game.enemy.render(row);
+        game.allEnemies.forEach(function(enemy) {
+            enemy.render(row);
+        });
         game.player.render(row);
 
         game.boss.render(row);

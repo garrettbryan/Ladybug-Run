@@ -54,6 +54,8 @@ var GamePiece = function() {
     };
 }
 
+
+
 GamePiece.prototype.transport = function(p){
   cg('GamePiece transport');
   for (var i = 0; i < transporters.length; i++){
@@ -137,11 +139,11 @@ GamePiece.prototype.render = function(row) {
     this.sx, this.sy, this.sWidth, this.sHeight,
     this.position.x, this.position.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
-    for (boundary in this.collisionBoundary){
-      ctx.beginPath();
-      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-      ctx.stroke();
-    }
+//    for (boundary in this.collisionBoundary){
+//      ctx.beginPath();
+//      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[//boundary].r, 0, 2 * Math.PI, false);//
+//      ctx.stroke();
+//    }
     if (this.steed){
       //this.steed.renderRider();
     }

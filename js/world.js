@@ -153,7 +153,7 @@ var World = function(){
         x: 10,
         y: 3
       },
-      enemyPaths: [[{ x: -1, y: 0},{ x: 3, y: 0},{ x: 5, y: 3}, {x: -1, y: 2}],
+      enemyPaths: [[{ x: 0, y: 1},{ x: 3, y: 0},{ x: 5, y: 3}, {x: 0, y: 2}],
 
       ],
 
@@ -308,7 +308,7 @@ var World = function(){
         y: 2
       },
 
-      enemyPaths: [[{ x: 0, y: 2},{ x: 5, y: 5},{ x: 10, y: 1}]
+      enemyPaths: [[{ x: -1, y: 3},{ x: 5, y: 5},{ x: 11, y: 1}]
       ],
       textureMap: [
         's','s','s','s','s','s','s','s','g','gb','s',

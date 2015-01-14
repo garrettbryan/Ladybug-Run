@@ -10,15 +10,17 @@ Boss.prototype.init = function(tile) {
   this.tile = tile;
   this.moveAI = ['left', 'right', 'up', 'down', 'space'];
   this.moveInterval = 1;
-  //allEnemies.push(new Enemy(speed, 2,));
+  game.allEnemies.push(new Enemy());
 
   //for(var i = 0; i < 7; i++) {
   //  var c = new Collectable(x, y, 500, 0.3, 6);
   //  allCollectables.push(c);
   //  this.pickup(c);
   //}
-  //this.ride(allEnemies[allEnemies.length-1]);
+  this.ride(game.allEnemies[game.allEnemies.length-1]);
 }
+
+
 
 Boss.prototype.move = function(dt) {
   this.moveInterval -= dt;
