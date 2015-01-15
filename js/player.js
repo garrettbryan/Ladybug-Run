@@ -9,7 +9,7 @@ var Player = function(){
 */
 
 var Player = function(character){
-    cp("Player new");
+    cl("Player new");
     this.scale = 1;
     this.speed = 1;
 
@@ -53,7 +53,7 @@ Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.init = function(tile){
-    cp("Player initialize");
+    cp("Player " + this.name + " initialize" );
     this.tile = tile;
     this.calculatePosition();
 
@@ -71,7 +71,7 @@ Player.prototype.walkToTile = function() {
 }
 
 Player.prototype.update = function() {
-    cp('Player update');
+    //cp('Player update');
     this.calculatePosition();
     this.calculateCollisionCircles();
 
@@ -109,6 +109,8 @@ Player.prototype.update = function() {
 //    this.name = this.characters[this.character].name;
 };
 
+//TODO PAUSE FEATURE SET TIMEOUT AND TIMEOUT CLEAR
+
 Player.prototype.handleInput = function(key) {
     cp('Player handleInput');
     var tile0 = {
@@ -120,19 +122,31 @@ Player.prototype.handleInput = function(key) {
     switch(key){
         case 'left':
             this.tile.x = this.tile.x - 1;
-            this.direction.x = -1;
+            this.direction = {
+                x: -1,
+                y: 0
+            };
             break;
         case 'right':
             this.tile.x = this.tile.x + 1;
-            this.direction.x = 1;
+            this.direction = {
+                x: 1,
+                y: 0
+            };
             break;
         case 'up':
             this.tile.y = this.tile.y - 1;
-            this.direction.y = -1;
+            this.direction = {
+                x: 0,
+                y: -1
+            };
             break;
         case 'down':
             this.tile.y = this.tile.y + 1;
-            this.direction.y = 1;
+            this.direction = {
+                x: 0,
+                y: 1
+            };
             break;
         case 'space':
 
@@ -179,7 +193,7 @@ Player.prototype.tag = function(p){
 };
 
 Player.prototype.pickup = function(collectable){
-    cp('Player pickup');
+    cp('Player ' + this.name + ' pickup');
     collectable.attach(this);
     collectable.collisionBoundary.primary.collidesWith = [];
     collectable.position.x = this.position.x;
@@ -222,7 +236,7 @@ Player.prototype.death = function(){
 };
 
 Player.prototype.throw = function(){
-    cp('Player throw');
+    cp('Player ' + this.name + ' throw ' + this.direction.x + " " + this.direction.y);
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
         projectile.collisionBoundary.primary.collidesWith = [
@@ -231,6 +245,7 @@ Player.prototype.throw = function(){
             Transporter
         ];
         projectile.direction = this.direction;
+        projectile.speed = 400;
         this.collectablesWidth -= projectile.spriteDimensions.x;
         projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;
         projectile.position.x = this.collisionBoundary.primary.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;

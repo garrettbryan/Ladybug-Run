@@ -1,5 +1,5 @@
 var World = function(){
-  cl('world new');
+  cl('World new');
   this.tiles = {
     //these values will be reset per level
     x: 0,
@@ -357,6 +357,14 @@ var World = function(){
 
 };
 
+World.prototype.init = function(){
+  cl("world init");
+  this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+    this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
+    this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset;
+};
+
+
 World.prototype.randomizeTileHeights = function(map){  //TODO add some texture to the landscape
   cl('world randomizeTileHeights');
   var newMap = [];
@@ -368,7 +376,9 @@ World.prototype.randomizeTileHeights = function(map){  //TODO add some texture t
 
 World.prototype.updateTime = function(dt){
   cl('world updateTime');
-  this.worldTime += dt;
+  this.worldTime += 0;
+//  this.worldTime += dt;
+
 }
 
 World.prototype.maximumBlockElevation = function(){
@@ -377,15 +387,9 @@ World.prototype.maximumBlockElevation = function(){
   for( var i = 1; i < this.currentMap.totalTiles.x; i++){
     max = Math.max(max, this.currentMap.topoMap[i]);
   }
+  console.log(max);
   return max;
 }
-
-World.prototype.init = function(){
-  cl("world init");
-  this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-    this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
-    this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset;
-};
 
 World.prototype.checkVictory = function() {
   cl('world checkVictory');

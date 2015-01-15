@@ -139,11 +139,11 @@ GamePiece.prototype.render = function(row) {
     this.sx, this.sy, this.sWidth, this.sHeight,
     this.position.x, this.position.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
-//    for (boundary in this.collisionBoundary){
-//      ctx.beginPath();
-//      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[//boundary].r, 0, 2 * Math.PI, false);//
-//      ctx.stroke();
-//    }
+    for (boundary in this.collisionBoundary){
+      ctx.beginPath();
+      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+      ctx.stroke();
+    }
     if (this.steed){
       //this.steed.renderRider();
     }
@@ -175,9 +175,9 @@ GamePiece.prototype.calculatePosition = function(){
 
 GamePiece.prototype.calculateWorldPosition = function(tile){
   cg('GamePiece calculateWorldPosition');
-  console.log(tile.y + ' ' + tile.x + ' ' + game.world.currentMap.totalTiles.x);
-  console.log(Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x));
-  console.log(game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)]);
+//  console.log(tile.y + ' ' + tile.x + ' ' + game.world.currentMap.totalTiles.x);
+//  console.log(Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(//tile.x));
+//  console.log(game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)]);
   var result = {
     x : tile.x * game.world.pixelsPerTileUnit.x +
         game.world.pixelsPerTileUnit.x / 2,

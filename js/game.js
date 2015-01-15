@@ -19,23 +19,20 @@ Game.prototype.init = function(level, score) {
 
     this.world = new World();
 
+    this.allPlayers = [];
     this.player = new Player(characters[1]);
+
     this.enemy = new Enemy();
-
-
     this.boss = new Boss(2,1);
 
     this.level = level;
     this.score = score;
 
-    this.numberOfEnemies = 1;
 
-    //Enemies are spawned when the game is started.
+    //Collectables and Enemies are spawned when the game is started.
+    this.allCollectables = [];
     this.allEnemies = [];
 
-    this.allCollectables = [];
-    //TODO create players.
-    this.allPlayers = [];
 }
 
 Game.prototype.startLevel = function(restart) {
@@ -45,7 +42,7 @@ Game.prototype.startLevel = function(restart) {
         this.score = 0;
     }
 
-    this.world.currentMap = this.world.maps[this.level-1];
+    this.world.currentMap = this.world.maps[4];
     //this.world.currentMap = this.world.failureMap;
     this.active = true;
     // TODO create enemies;
@@ -56,7 +53,9 @@ Game.prototype.startLevel = function(restart) {
     for (var i = collectableAmount; i < collectableAmount + 7; i++){
         this.allCollectables[i] = new Collectable(i);
         this.allCollectables[i].placeRandomly(this.world.currentMap);
-        console.log(this.allCollectables[i]);
+        this.allCollectables[i].init();
+
+        //console.log(this.allCollectables[i]);
     }
 
     if(this.world.currentMap.hasOwnProperty('bossStartTile')){
@@ -82,8 +81,10 @@ Game.prototype.renderStatusBar = function(ctx){
     ctx.fillStyle    = '#000';
     ctx.font         = 'Italic 30px Sans-Serif';
     ctx.textBaseline = 'Top';
-    ctx.fillText  ('Score: ' + this.score , game.world.canvasSize.x/2, 30);
+    ctx.fillText  ('Score: ' + this.score , game.world.canvasSize.x*3/4, 30);
     ctx.fillText  ('Time: ' + this.world.worldTime.toFixed(2) , game.world.canvasSize.x/4, 30);
+    ctx.fillText  ('Level: ' + this.level , game.world.canvasSize.x/2, 30);
+
     ctx.restore();
 }
 

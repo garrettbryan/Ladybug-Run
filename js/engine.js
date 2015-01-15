@@ -206,6 +206,9 @@ var Engine = (function(global) {
             renderEntities(row);
         }
         game.enemy.renderNavPoints();
+        game.allCollectables.forEach(function(collectable) {
+            collectable.render();
+        });
 
     }
 
@@ -215,9 +218,7 @@ var Engine = (function(global) {
      */
     function renderEntities(row) {
         cl(' renderEntities row:' + row);
-        game.allCollectables.forEach(function(collectable) {
-            collectable.render(row);
-        });
+
         game.enemy.render(row);
         game.allEnemies.forEach(function(enemy) {
             enemy.render(row);
@@ -254,7 +255,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        cl("reset");
+        cl("Engine reset");
         game.world.init();
 
         canvas.width = game.world.canvasSize.x;

@@ -1,5 +1,5 @@
 var Enemy = function() {
-    ce('enemy');
+    cl('Enemy new');
     this.speed = 3;
     this.scale = 2;
 
@@ -103,8 +103,41 @@ Enemy.prototype.init = function(){
     ce('enemy init');
     //TODO SET ALL PARAMETERS FOR AN ENEMY
     this.assignPath(game.world.currentMap.enemyPaths);
+};
 
-}
+Enemy.prototype.assignPath = function (enemyPaths){
+    ce('enemy assignPath');
+
+    var vector = {},
+        vectorMagnitude,
+        normal = {};
+    this.navData.directions = [];
+    //randomly pick a possible enemy path in the current map
+    this.navData.navNodes = enemyPaths[Math.floor(Math.random() * enemyPaths.length)];
+
+    this.navData.currentNodeIndex = 0;
+    this.navData.currentNode = this.navData.navNodes[0];
+    this.navData.targetNode = this.navData.navNodes[1];
+    for (var i = 1; i < this.navData.navNodes.length; i++){
+        vector = {
+            x: this.navData.navNodes[i].x - this.navData.navNodes[i-1].x,
+            y: this.navData.navNodes[i].y - this.navData.navNodes[i-1].y
+        };
+        vectorMagnitude = Math.sqrt(vector.x * vector.x + vector.y * vector.y)
+
+        this.navData.directions.push({
+            x: vector.x / vectorMagnitude,
+            y: vector.y /  vectorMagnitude
+        });
+
+    };
+    this.direction = this.navData.directions[0];
+    this.tile = this.navData.currentNode;
+
+    this.calculatePosition();
+    this.navData.navPoints = this.calculateNavPoints(this.navData.navNodes);
+    this.navData.targetPoint = this.navData.navPoints[1];
+};
 
 Enemy.prototype.update = function(dt) {
     ce('enemy update');
@@ -168,40 +201,7 @@ Enemy.prototype.calculateNavPoints = function(navNodes){
     return navPoints;
 }
 
-Enemy.prototype.assignPath = function (enemyPaths){
-    ce('enemy assignPath');
 
-    var vector = {},
-        vectorMagnitude,
-        normal = {};
-    this.navData.directions = [];
-    //randomly pick a possible enemy path in the current map
-    this.navData.navNodes = enemyPaths[Math.floor(Math.random() * enemyPaths.length)];
-
-    this.navData.currentNodeIndex = 0;
-    this.navData.currentNode = this.navData.navNodes[0];
-    this.navData.targetNode = this.navData.navNodes[1];
-    for (var i = 1; i < this.navData.navNodes.length; i++){
-        vector = {
-            x: this.navData.navNodes[i].x - this.navData.navNodes[i-1].x,
-            y: this.navData.navNodes[i].y - this.navData.navNodes[i-1].y
-        };
-        vectorMagnitude = Math.sqrt(vector.x * vector.x + vector.y * vector.y)
-
-        this.navData.directions.push({
-            x: vector.x / vectorMagnitude,
-            y: vector.y /  vectorMagnitude
-        });
-
-    };
-    this.direction = this.navData.directions[0];
-    this.tile = this.navData.currentNode;
-
-    this.calculatePosition();
-    this.navData.navPoints = this.calculateNavPoints(this.navData.navNodes);
-    this.navData.targetPoint = this.navData.navPoints[1];
-
-}
 
 GamePiece.prototype.navigate = function(navData, result){
     ce('enemy navigate');
