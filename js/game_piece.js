@@ -1,12 +1,18 @@
 var GamePiece = function() {
   cg('GamePiece new');
 
+    this.draw = false;
+
     this.tile = {
-      x: -1,
-      y: -1
+      x: 0,
+      y: 0
     };
 
-    this.draw = false;
+    this.position = {
+      x: 0,
+      y: 0
+    };
+
 
     this.boardTileDimensions = {
         x: 101,
@@ -45,7 +51,7 @@ var GamePiece = function() {
     this.collisionBoundary = {
         'primary': {
             'collidesWith' : [],
-            'r': 30 * this.scale,
+            r: 30 * this.scale,
             x: 0,
             y: 0,
             xOffset: this.center.x,
@@ -173,7 +179,8 @@ GamePiece.prototype.calculatePosition = function(){
 
 }
 
-GamePiece.prototype.calculateWorldPosition = function(tile){
+GamePiece.prototype.calculateWorldPosition
+ = function(tile){
   cg('GamePiece calculateWorldPosition');
 //  console.log(tile.y + ' ' + tile.x + ' ' + game.world.currentMap.totalTiles.x);
 //  console.log(Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(//tile.x));

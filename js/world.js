@@ -25,7 +25,40 @@ var World = function(){
   this.pixelsPerBlockImg = {
     x: 101,
     y: 171
+  };
+
+  this.randomMap = {
+    scrollingMap: {
+      x: 0,
+      y: 0
+    },
+    totalTiles: {
+      x: 20,
+      y: 11,
+    },
+    playerStartTile: {
+      x: 0,
+      y: 0
+    },
+    enemyPaths: [],
+    textureMap: [],
+    topoMap: [],
+    walkMap: [],
+  };
+  for (var i = 0; i < 6; i++){
+      this.randomMap.enemyPaths.push([{ x: this.randomMap.totalTiles.x, y: i+2},{ x: -1, y: i+2}]);
   }
+  console.log(this.randomMap.enemyPaths);
+
+
+  this.possibleTiles = ['s','g','w'];
+  for (var i = 0; i < (this.randomMap.totalTiles.x + 1) * (this.randomMap.totalTiles.y); i++){
+    this.randomMap.textureMap.push(this.possibleTiles[Math.floor(Math.random() * 3 * Math.random())]);
+    this.randomMap.topoMap.push(0);
+    this.randomMap.walkMap.push(1);
+  }
+  console.log(this.randomMap.textureMap.length);
+
   this.failureMap = {
 
     totalTiles: {
@@ -374,11 +407,16 @@ World.prototype.randomizeTileHeights = function(map){  //TODO add some texture t
   return newMap;
 }
 
+World.prototype.update = function(dt){
+  cl('world updateTime');
+//  this.worldTime += 0;
+  this.worldTime += dt;
+}
+
 World.prototype.updateTime = function(dt){
   cl('world updateTime');
   this.worldTime += 0;
 //  this.worldTime += dt;
-
 }
 
 World.prototype.maximumBlockElevation = function(){
@@ -387,7 +425,7 @@ World.prototype.maximumBlockElevation = function(){
   for( var i = 1; i < this.currentMap.totalTiles.x; i++){
     max = Math.max(max, this.currentMap.topoMap[i]);
   }
-  console.log(max);
+  //console.log(max);
   return max;
 }
 
@@ -418,7 +456,8 @@ World.prototype.checkVictory = function() {
 
 World.prototype.render = function(row, numCols) {
   cl('world render row:' + row);
-  for (col = 0; col < numCols; col++) {
+
+  for (var col = 0; col < numCols; col++) {
     var resource,
       tileHeight = (this.currentMap.topoMap[col + numCols*row]);
 
@@ -453,9 +492,71 @@ World.prototype.render = function(row, numCols) {
 
   }
 }
+
+World.prototype.createRandomMapColumn = function(currentMap){
+  var numRows = this.randomMap.totalTiles.y;
+  for (var row = 0; row < 1; row++ ){
+    currentMap.textureMap.unshift(this.possibleTiles[Math.floor(Math.random() * 3 * Math.random())]);
+    currentMap.topoMap.unshift(0);
+    currentMap.walkMap.unshift(1);
+    currentMap.textureMap.pop();
+    currentMap.topoMap.pop();
+    currentMap.walkMap.pop();
+  }
+}
+
+World.prototype.generateRandomMap = function(){
+
+}
+
+World.prototype.renderTitleScreenMap = function(dt) {
+
+  console.log(dt);
+  this.randomMap.scrollingMap.x += dt;
+  if (this.randomMap.scrollingMap.x >= 0){
+    this.createRandomMapColumn(this.randomMap);
+    this.randomMap.scrollingMap.x = -1;
+  }
+  console.log(this.randomMap.scrollingMap.x);
+  //tile side scrolling map for bug messages
+  var numCols = this.randomMap.totalTiles.x,
+    numRows = this.randomMap.totalTiles.y;
+  for(var col = numCols; col >= 0; col--){
+    for(var row = 0; row < numRows; row++){
+      var resource,
+       tileHeight = (this.randomMap.topoMap[col + numCols * row]);
+
+      switch (this.randomMap.textureMap[col + numCols * row])   {
+        case 'w':
+        case 'wb':
+            resource = 'images/water-block.png';
+            break;
+        case 'g':
+        case 'gb':
+            resource = 'images/grass-block.png';
+            break;
+        case 's':
+        case 'sb':
+            resource = 'images/stone-block.png';
+            break;
+      }
+
+
+      //TODO IMPLEMENT RANDOMMAP GENERATOR
+      for (var z = 0; z <= tileHeight; z++){
+        ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x + this.randomMap.scrollingMap.x * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
+      }
+    }
+  }
+  //Testing different lighting styles by adding a black transparent rectangle.
+  //ctx.save();
+  //ctx.fillStyle = 'rgba(0,0,0,.75)';
+  //ctx.fillRect(0,0, numCols * this.pixelsPerTileUnit.x, numRows * this.pixelsPerTileUnit.y);
+  //ctx.restore();
+}
+
+
 /*
-
-
 World.prototype.checkVictory = function()  {
     if (game.running === 1) {
         var collisionZone = 50;

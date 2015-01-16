@@ -65,10 +65,16 @@ Player.prototype.walkToTile = function() {
     if (this.tile.x >= 0 && this.tile.x < game.world.currentMap.totalTiles.x &&
         this.tile.y >= 0 && this.tile.y < game.world.currentMap.totalTiles.y) {
     cp(game.world.currentMap.walkMap);
-      result = game.world.currentMap.walkMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x];
+        if (this.steed.scale >= 2) {
+        result = 1;
+        }else{
+          result = game.world.currentMap.walkMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x];
+        }
     }
     return result;
 }
+
+
 
 Player.prototype.update = function() {
     //cp('Player update');
@@ -245,7 +251,7 @@ Player.prototype.throw = function(){
             Transporter
         ];
         projectile.direction = this.direction;
-        projectile.speed = 400;
+        projectile.speed = this.speed;
         this.collectablesWidth -= projectile.spriteDimensions.x;
         projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;
         projectile.position.x = this.collisionBoundary.primary.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;

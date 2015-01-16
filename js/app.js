@@ -47,6 +47,46 @@ var mess = "";
 //var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
 
 */
+
+  var collectables = [
+    {
+      name: 'Blue Gem',
+      sprite: 'images/Gem Blue.png',
+      points: 50,
+    },
+    {
+      name: 'Green Gem',
+      sprite: 'images/Gem Green.png',
+      points: 50,
+    },
+    {
+      name: 'Orange Gem',
+      sprite: 'images/Gem Orange.png',
+      points: 50,
+    },
+    {
+      name: 'Heart',
+      sprite: 'images/Heart.png',
+      points: 50,
+    },
+    {
+      name: 'Key',
+      sprite: 'images/Key.png',
+      points: 50,
+
+    },
+    {
+      name: 'Star',
+      sprite: 'images/Star.png',
+      points: 50,
+    },
+    {
+      name: 'Rock',
+      sprite: 'images/Rock.png',
+      points: 50,
+    },
+  ];
+
 var characters = [
     {
         name: 'Bug Boy',
@@ -102,7 +142,7 @@ var gameEntities = [
   ];
 
 var game = new Game();
-game.init(1,0);
+game.init(5,0);
 game.startLevel();
 
 // This listens for key presses and sends the keys to your
