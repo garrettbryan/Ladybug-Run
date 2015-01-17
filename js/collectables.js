@@ -52,26 +52,13 @@ Collectable.prototype.init = function(){
     this.position.y = this.position.y + game.world.maximumBlockElevation() * game.world.pixelsPerElevationUnit.y
 }
 
-Collectable.prototype.render = function() {
-  cg('GamePiece ' + this.name + ' render');
-  ctx.drawImage(Resources.get(this.sprite),
-  this.sx, this.sy, this.sWidth, this.sHeight,
-  this.position.x, this.position.y,
-  this.spriteDimensions.x, this.spriteDimensions.y);
-  for (boundary in this.collisionBoundary){
-    ctx.beginPath();
-    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-      ctx.stroke();
-  }
-  if (this.steed){
-    //this.steed.renderRider();
-  }
-};
-
 Collectable.prototype.attach = function(player){
-  this.collisionBoundary.primary.r1 = this.collisionBoundary.primary.r;
-  this.collisionBoundary.primary.r = 0;
-  this.attachedTo = player;
+  this.collisionBoundary.primary.collidesWith = [];
+  this.carriedBy = player;
+  this.direction = {
+    x: 0,
+    y: 0
+  }
 }
 
 Collectable.prototype.placeRandomly = function(currentMap){
@@ -88,9 +75,18 @@ Collectable.prototype.placeRandomly = function(currentMap){
 
 Collectable.prototype.update = function(dt) {
 //  this.calculatePosition()
-  this.position.x = this.speed * this.direction.x * dt + this.position.x;
-  this.position.y = this.speed * this.direction.y * dt + this.position.y;
+  if (this.carriedBy){
+    this.tile = this.carriedBy.tile;
+    this.position = this.carriedBy.position;
+    this.offset = {
+      x: 0,
+      y: 0
+    }
 
+  }else{
+    this.position.x = this.speed * this.direction.x * dt + this.position.x;
+    this.position.y = this.speed * this.direction.y * dt + this.position.y;
+  }
   this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
   this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
 

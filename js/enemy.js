@@ -146,6 +146,9 @@ Enemy.prototype.update = function(dt) {
 
 
     if (this.steedOf){
+        this.collisionBoundary.primary.collidesWith = [];
+        this.collisionBoundary.secondary.collidesWith = [];
+
         //player controls positioning of a steed
     }else{
         this.navigate(this.navData, this.reachedTarget);
@@ -276,7 +279,7 @@ Enemy.prototype.becomeSteed = function(player){
   this.collisionBoundary.secondary.r1 = this.collisionBoundary.secondary.r;
   this.collisionBoundary.secondary.r = 0;
   this.speed = 0;
-  this.steedOf = true;
+  this.steedOf = player;
 }
 
 //Enemy.prototype.render = function() {
@@ -292,13 +295,6 @@ Enemy.prototype.becomeSteed = function(player){
 //  }
 //};
 
-Enemy.prototype.renderRider = function() {
-    ce('enemy renderRider');
-    ctx.drawImage(Resources.get(this.spriteFore),
-    this.sx, this.sy, this.sWidth, this.sHeight,
-    this.position.x, this.position.y,
-    this.spriteDimensions.x, this.spriteDimensions.y);
-}
 
 Enemy.prototype.renderNavPoints = function(){
     ce('enemy renderNavPoints');

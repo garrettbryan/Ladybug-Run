@@ -94,6 +94,7 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
     var radiiSum = (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
          (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
     if (distanceBetweenGamePieces < radiiSum) {
+        console.log("colllision");
         result.call(this, gamePiece);
     }
 }
@@ -126,7 +127,9 @@ GamePiece.prototype.retarget = function(targetPt){
 GamePiece.prototype.render = function(row) {
   cg('GamePiece ' + this.name + ' render' + row);
   //console.log(this.offset);
-
+  if (!row){
+    row = Math.ceil(this.tile.y);
+  }
   if (Math.ceil(this.tile.y) === row){
     ctx.drawImage(Resources.get(this.sprite),
     this.sx, this.sy, this.sWidth, this.sHeight,
@@ -136,9 +139,6 @@ GamePiece.prototype.render = function(row) {
       ctx.beginPath();
       ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
       ctx.stroke();
-    }
-    if (this.steed){
-      //this.steed.renderRider();
     }
   }
 };

@@ -110,37 +110,6 @@ var characters = [
     }
 ];
 
-var gameEntities = [
-    {
-      name: 'Blue Gem',
-      sprite: 'images/Gem Blue.png',
-    },
-    {
-      name: 'Green Gem',
-      sprite: 'images/Gem Green.png',
-    },
-    {
-      name: 'Orange Gem',
-      sprite: 'images/Gem Orange.png',
-    },
-    {
-      name: 'Heart',
-      sprite: 'images/Heart.png',
-    },
-    {
-      name: 'Key',
-      sprite: 'images/Key.png',
-    },
-    {
-      name: 'Star',
-      sprite: 'images/Star.png',
-    },
-    {
-      name: 'Rock',
-      sprite: 'images/Rock.png',
-    },
-  ];
-
 var game = new Game();
 game.init(5,0);
 game.startLevel();

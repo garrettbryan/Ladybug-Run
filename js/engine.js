@@ -206,9 +206,6 @@ var Engine = (function(global) {
             renderEntities(row);
         }
         game.enemy.renderNavPoints();
-        game.allCollectables.forEach(function(collectable) {
-            collectable.render();
-        });
 
     }
 
@@ -226,6 +223,10 @@ var Engine = (function(global) {
         game.player.render(row);
 
         game.boss.render(row);
+        game.allCollectables.forEach(function(collectable) {
+            collectable.render();
+//            console.log("render Collectable");
+        });
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
