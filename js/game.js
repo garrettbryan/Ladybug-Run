@@ -51,8 +51,7 @@ Game.prototype.startLevel = function(restart) {
     var collectableAmount = 0;
     this.allCollectables = [];
     for (var i = collectableAmount; i < collectableAmount + 7; i++){
-        this.allCollectables[i] = new Collectable(i);
-        this.allCollectables[i].placeRandomly(this.world.currentMap);
+        this.allCollectables[i] = new Collectable(collectables[i]);
         this.allCollectables[i].init();
 
         //console.log(this.allCollectables[i]);

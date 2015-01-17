@@ -136,9 +136,7 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
         cl(' update Entities');
-        game.allCollectables.forEach(function(collectable) {
-            collectable.update(dt);
-        });
+
         game.player.update();
         game.enemy.update(dt);
         game.allEnemies.forEach(function(enemy) {
@@ -146,6 +144,10 @@ var Engine = (function(global) {
         });
         game.boss.move(dt);
         game.boss.update();
+
+        game.allCollectables.forEach(function(collectable) {
+            collectable.update(dt);
+        });
 /*
         allCollectables.forEach(function(collectable) {
             collectable.update(dt);

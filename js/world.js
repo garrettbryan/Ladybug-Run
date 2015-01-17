@@ -48,7 +48,7 @@ var World = function(){
   for (var i = 0; i < 6; i++){
       this.randomMap.enemyPaths.push([{ x: this.randomMap.totalTiles.x, y: i+2},{ x: -1, y: i+2}]);
   }
-  console.log(this.randomMap.enemyPaths);
+  //console.log(this.randomMap.enemyPaths);
 
 
   this.possibleTiles = ['s','g','w'];
@@ -57,7 +57,7 @@ var World = function(){
     this.randomMap.topoMap.push(0);
     this.randomMap.walkMap.push(1);
   }
-  console.log(this.randomMap.textureMap.length);
+  //console.log(this.randomMap.textureMap.length);
 
   this.failureMap = {
 

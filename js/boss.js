@@ -16,10 +16,10 @@ Boss.prototype.init = function(tile) {
   game.allEnemies.push(new Enemy());
 
   for(var i = 0; i < 7; i++) {
-    var c = new Collectable(6);
-    c.speed = 600;
-    game.allCollectables.push(c);
-    this.pickup(c);
+    //var c = new Collectable(collectables[6]);
+    //c.speed = 600;
+    //game.allCollectables.push(c);
+    //this.pickup(c);
   }
   this.ride(game.allEnemies[game.allEnemies.length-1]);
 }

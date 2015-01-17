@@ -2,39 +2,11 @@ var Collectable = function(type) {
   this.scale = 0.25;
   this.speed = 0;
   GamePiece.call(this);
-  var types = [
-    {
-      name: 'Blue Gem',
-      sprite: 'images/Gem Blue.png',
-    },
-    {
-      name: 'Green Gem',
-      sprite: 'images/Gem Green.png',
-    },
-    {
-      name: 'Orange Gem',
-      sprite: 'images/Gem Orange.png',
-    },
-    {
-      name: 'Heart',
-      sprite: 'images/Heart.png',
-    },
-    {
-      name: 'Key',
-      sprite: 'images/Key.png',
-    },
-    {
-      name: 'Star',
-      sprite: 'images/Star.png',
-    },
-    {
-      name: 'Rock',
-      sprite: 'images/Rock.png',
-    },
-  ];
-  this.type = type;
-  this.sprite = types[this.type].sprite;
-  this.name = types[this.type].name;
+
+  this.sprite = type.sprite;
+  this.name = type.name;
+  this.points = type.points;
+
 
   this.collisionBoundary.primary.collidesWith = [
     Player
@@ -48,17 +20,19 @@ Collectable.prototype.constructor = Collectable;
 
 
 Collectable.prototype.init = function(){
+    this.placeRandomly(game.world.currentMap);
     this.calculatePosition()
     this.position.y = this.position.y + game.world.maximumBlockElevation() * game.world.pixelsPerElevationUnit.y
 }
 
 Collectable.prototype.attach = function(player){
+  console.log("collectable attach");
   this.collisionBoundary.primary.collidesWith = [];
   this.carriedBy = player;
-  this.direction = {
-    x: 0,
-    y: 0
-  }
+  this.tile = player.tile;
+  console.log(this.tile);
+  this.calculatePosition();
+  console.log(this.position);
 }
 
 Collectable.prototype.placeRandomly = function(currentMap){
@@ -66,29 +40,36 @@ Collectable.prototype.placeRandomly = function(currentMap){
     x: Math.floor(Math.random()*(currentMap.totalTiles.x)),
     y: Math.floor(Math.random()*(currentMap.totalTiles.y)),
   };
+  //console.log(this.tile);
   if (currentMap.walkMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] === 0){
     this.placeRandomly(currentMap);
+  }else{
+    this.calculatePosition();
   }
-  this.calculatePosition();
-  console.log(this.tile);
 }
 
 Collectable.prototype.update = function(dt) {
 //  this.calculatePosition()
   if (this.carriedBy){
     this.tile = this.carriedBy.tile;
-    this.position = this.carriedBy.position;
+    this.position = this.calculatePosition();
     this.offset = {
       x: 0,
       y: 0
-    }
+    };
 
   }else{
-    this.position.x = this.speed * this.direction.x * dt + this.position.x;
-    this.position.y = this.speed * this.direction.y * dt + this.position.y;
+    this.offset = {
+      x: 0,
+      y: 0
+    };
   }
-  this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
-  this.collisionBoundary.primary.y = this.position.y  + this.collisionBoundary.primary.yOffset;
+  this.offset = {
+    x: 0,
+    y: 0
+  };
+
+
 
 
 //    console.log(this.y);

@@ -126,14 +126,16 @@ GamePiece.prototype.retarget = function(targetPt){
 
 GamePiece.prototype.render = function(row) {
   cg('GamePiece ' + this.name + ' render' + row);
-  //console.log(this.offset);
   if (!row){
     row = Math.ceil(this.tile.y);
   }
   if (Math.ceil(this.tile.y) === row){
     ctx.drawImage(Resources.get(this.sprite),
     this.sx, this.sy, this.sWidth, this.sHeight,
-    this.position.x + this.offset.x, this.position.y - this.offset.y,
+    this.position.x +
+    this.offset.x,
+    this.position.y -
+    this.offset.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
     for (boundary in this.collisionBoundary){
       ctx.beginPath();
