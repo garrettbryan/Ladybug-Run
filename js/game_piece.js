@@ -3,51 +3,58 @@ var GamePiece = function() {
 
     this.draw = false;
 
-    this.tile = {
-      x: 0,
-      y: 0
-    };
-
-    this.position = {
-      x: 0,
-      y: 0
-    };
-
-
-    this.boardTileDimensions = {
-        x: 101,
-        y: 83
-    }
-
+/*
+I modified some of the sprites to have a left and right facing image. This data represents the source dimensions of the sprites.
+*/
     this.spriteDimensions = {
         x: 101 * this.scale,
         y: 171 * this.scale
     };
-
-    this.center = {
-        x: 101 / 2 * this.scale,
-        y: 120 * this.scale
-    };
-
-    this.position = {
-        x: this.tile.x * 101 + 101/2 - this.center.x,
-        y: this.tile.y * 83 - this.center.y
-    };
-
-    this.rotation = 0;
-
-
-    this.direction = {
-      'x': 0,
-      'y': 0
-    };
-
     this.sx = 0;
     this.sy = 0;
     this.sWidth = 101;
     this.sHeight = 171;
 
 
+/*
+Every GamePiece has a tile, that is used to determine screen position.
+The tiles are used for movement of game pieces, and rendering order. (Tiles
+and gamepieces towards the top of the canvas are rendered first to enhance
+the depth of the game.) The position is used for colisions, and targeting
+by the boss. The center is acually the point where the sprite should be
+alligned with the tile, e.g. looks like the player is standing in a
+certain position.
+The offset value moves the position of the sprit in relation to the center. So when a player picks up a collectable the center of the collectable will be the center of the player but the offset will position the collectable above the player's character's head.
+*/
+    this.tile = {
+      x: 0,
+      y: 0
+    };
+    this.position = {
+      x: 0,
+      y: 0
+    };
+    this.offset = {
+      x: 0,
+      y: 0
+    };
+    this.center = { //This value will change based on the sprite
+      x: this.spriteDimensions.x / 2,
+      y: 120 * this.scale
+    };
+    this.direction = { //This value is set by the direction buttons
+      x: 0,
+      y: 0
+    };
+    this.rotation = 0; //about the z axis
+
+
+/*
+The collision system measures the distance between the centers of various
+entities and if that distance is less than the sum of the
+collisionBoundary radii, then a collision happens and the a funcion is
+called detailing the interaction.
+*/
     this.collisionBoundary = {
         'primary': {
             'collidesWith' : [],
@@ -58,44 +65,6 @@ var GamePiece = function() {
             yOffset: this.center.y
         }
     };
-}
-
-
-
-GamePiece.prototype.transport = function(p){
-  cg('GamePiece transport');
-  for (var i = 0; i < transporters.length; i++){
-      if (transporters[i] === this){
-          p.tile.x = transporters[0].tile.x;
-          p.tile.y = transporters[0].tile.y;
-
-          transporters.splice(i,1);
-          transporters.push(this);
-          p.tile = transporters[0].tile;
-          transporters[0].collisionBoundary.primary.collidesWith = [];
-          transporters[1].collisionBoundary.primary.collidesWith = [];
-      }
-  }
-  transporters = [];
-  for (var i = 0; i < 2; i++){
-      transporters.push(function(){
-          return new Transporter(Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+2));
-      }());
-  }
-}
-
-GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
-  cg('GamePiece collisionCheck');
-    var distanceBetweenGamePieces =
-        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
-        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
-        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
-        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
-    var radiiSum = (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
-         (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
-    if (distanceBetweenGamePieces < radiiSum) {
-        result.call(this, gamePiece);
-    }
 }
 
 GamePiece.prototype.update = function(dt) {
@@ -114,6 +83,22 @@ GamePiece.prototype.update = function(dt) {
     this.name = this.types[this.type].name;
 */
 }
+
+GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
+  cg('GamePiece collisionCheck');
+    var distanceBetweenGamePieces =
+        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
+        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
+        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
+        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
+    var radiiSum = (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
+         (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
+    if (distanceBetweenGamePieces < radiiSum) {
+        result.call(this, gamePiece);
+    }
+}
+
+
 
 GamePiece.prototype.retarget = function(targetPt){
   ce('retarget');
@@ -140,10 +125,12 @@ GamePiece.prototype.retarget = function(targetPt){
 
 GamePiece.prototype.render = function(row) {
   cg('GamePiece ' + this.name + ' render' + row);
+  console.log(this.offset);
+
   if (Math.ceil(this.tile.y) === row){
     ctx.drawImage(Resources.get(this.sprite),
     this.sx, this.sy, this.sWidth, this.sHeight,
-    this.position.x, this.position.y,
+    this.position.x + this.offset.x, this.position.y - this.offset.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
     for (boundary in this.collisionBoundary){
       ctx.beginPath();
@@ -216,4 +203,26 @@ GamePiece.prototype.calculateCollisionCircles = function(){
 
   this.collisionBoundary.primary.y = this.position.y +
     this.collisionBoundary.primary.yOffset;
+}
+
+GamePiece.prototype.transport = function(p){
+  cg('GamePiece transport');
+  for (var i = 0; i < transporters.length; i++){
+      if (transporters[i] === this){
+          p.tile.x = transporters[0].tile.x;
+          p.tile.y = transporters[0].tile.y;
+
+          transporters.splice(i,1);
+          transporters.push(this);
+          p.tile = transporters[0].tile;
+          transporters[0].collisionBoundary.primary.collidesWith = [];
+          transporters[1].collisionBoundary.primary.collidesWith = [];
+      }
+  }
+  transporters = [];
+  for (var i = 0; i < 2; i++){
+      transporters.push(function(){
+          return new Transporter(Math.floor(Math.random()*4+5*i), Math.floor(Math.random()*5+2));
+      }());
+  }
 }

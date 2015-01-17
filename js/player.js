@@ -11,7 +11,7 @@ var Player = function(){
 var Player = function(character){
     cl("Player new");
     this.scale = 1;
-    this.speed = 1;
+    this.speed = 400;
 
     GamePiece.call(this);
 
