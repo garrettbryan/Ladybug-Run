@@ -21,6 +21,11 @@ var Player = function(character){
 
     this.center.y = 125 * this.scale;
 
+    this.tile.target = {
+        x: 0,
+        y: 0
+    };
+
     this.collectables = [];
     this.collectablesWidth = 0;
     this.collectablesSpacing = 0;

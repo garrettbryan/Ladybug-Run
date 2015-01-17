@@ -34,7 +34,7 @@ The offset value moves the position of the sprit in relation to the center. So w
       x: 0,
       y: 0
     };
-    this.offset = {
+    this.offset = { //only used during rendering
       x: 0,
       y: 0
     };
@@ -125,7 +125,7 @@ GamePiece.prototype.retarget = function(targetPt){
 
 GamePiece.prototype.render = function(row) {
   cg('GamePiece ' + this.name + ' render' + row);
-  console.log(this.offset);
+  //console.log(this.offset);
 
   if (Math.ceil(this.tile.y) === row){
     ctx.drawImage(Resources.get(this.sprite),

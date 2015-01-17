@@ -52,7 +52,7 @@ Collectable.prototype.init = function(){
     this.position.y = this.position.y + game.world.maximumBlockElevation() * game.world.pixelsPerElevationUnit.y
 }
 
-GamePiece.prototype.render = function() {
+Collectable.prototype.render = function() {
   cg('GamePiece ' + this.name + ' render');
   ctx.drawImage(Resources.get(this.sprite),
   this.sx, this.sy, this.sWidth, this.sHeight,
