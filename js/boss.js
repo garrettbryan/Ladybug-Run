@@ -13,7 +13,9 @@ Boss.prototype.init = function(tile) {
   //this.moveAI = ['space'];
   this.moveInterval = 1;
   this.speed = 600;
-  game.allEnemies.push(new Enemy());
+  var e = new Enemy();
+  this.ride(e);
+  game.allEnemies.push(e);
 
   for(var i = 0; i < 7; i++) {
     //var c = new Collectable(collectables[6]);
@@ -21,7 +23,6 @@ Boss.prototype.init = function(tile) {
     //game.allCollectables.push(c);
     //this.pickup(c);
   }
-  this.ride(game.allEnemies[game.allEnemies.length-1]);
 }
 
 GamePiece.prototype.target = function(player){

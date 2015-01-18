@@ -138,12 +138,12 @@ var Engine = (function(global) {
         cl(' update Entities');
 
         game.player.update();
-        game.enemy.update(dt);
+//        game.enemy.update(dt);
         game.allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        game.boss.move(dt);
-        game.boss.update();
+        //game.boss.move(dt);
+        //game.boss.update();
 
         game.allCollectables.forEach(function(collectable) {
             collectable.update(dt);
@@ -207,7 +207,7 @@ var Engine = (function(global) {
             game.world.render(row, numCols);
             renderEntities(row);
         }
-        game.enemy.renderNavPoints();
+//        game.enemy.renderNavPoints();
 
     }
 
@@ -218,13 +218,13 @@ var Engine = (function(global) {
     function renderEntities(row) {
         cl(' renderEntities row:' + row);
 
-        game.enemy.render(row);
+//        game.enemy.render(row);
         game.allEnemies.forEach(function(enemy) {
             enemy.render(row);
         });
         game.player.render(row);
 
-        game.boss.render(row);
+//        game.boss.render(row);
         game.allCollectables.forEach(function(collectable) {
             collectable.render();
 //            console.log("render Collectable");
@@ -265,6 +265,9 @@ var Engine = (function(global) {
         canvas.height = game.world.canvasSize.y;
 
         game.player.init(game.world.currentMap.playerStartTile);
+        game.allCollectables.forEach(function(collectable) {
+            collectable.init();
+        });
 
     }
 

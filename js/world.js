@@ -392,9 +392,9 @@ var World = function(){
 
 World.prototype.init = function(){
   cl("world init");
-  this.elevationOffset = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-    this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
-    this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.elevationOffset;
+  this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+  this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
+  this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.maxElevation;
 };
 
 
@@ -419,6 +419,9 @@ World.prototype.updateTime = function(dt){
 //  this.worldTime += dt;
 }
 
+/*
+Calculates the screen space needed by each additional elevation unit
+*/
 World.prototype.maximumBlockElevation = function(){
   cl('world maximumBlockElevation');
   var max = this.currentMap.topoMap[0];
@@ -479,14 +482,14 @@ World.prototype.render = function(row, numCols) {
           break;
     }
     for (var z = 0; z <= tileHeight; z++){
-      ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
+      ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.maxElevation);
     }
           switch (this.currentMap.textureMap[col + numCols*row])   {
         case 'wb':
         case 'gb':
         case 'sb':
             resource = 'images/Rock.png';
-            ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
+            ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.maxElevation);
             break;
       }
 

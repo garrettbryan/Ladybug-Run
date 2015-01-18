@@ -50,38 +50,38 @@ var mess = "";
 
   var collectables = [
     {
-      name: 'Blue Gem',
+      elementName: 'Blue Gem',
       sprite: 'images/Gem Blue.png',
       points: 50,
     },
     {
-      name: 'Green Gem',
+      elementName: 'Green Gem',
       sprite: 'images/Gem Green.png',
       points: 50,
     },
     {
-      name: 'Orange Gem',
+      elementName: 'Orange Gem',
       sprite: 'images/Gem Orange.png',
       points: 50,
     },
     {
-      name: 'Heart',
+      elementName: 'Heart',
       sprite: 'images/Heart.png',
       points: 50,
     },
     {
-      name: 'Key',
+      elementName: 'Key',
       sprite: 'images/Key.png',
       points: 50,
 
     },
     {
-      name: 'Star',
+      elementName: 'Star',
       sprite: 'images/Star.png',
       points: 50,
     },
     {
-      name: 'Rock',
+      elementName: 'Rock',
       sprite: 'images/Rock.png',
       points: 50,
     },
@@ -89,23 +89,23 @@ var mess = "";
 
 var characters = [
     {
-        name: 'Bug Boy',
+        elementName: 'Bug Boy',
         sprite :'images/char-boy.png',
     },
     {
-        name: 'Cat Girl',
+        elementName: 'Cat Girl',
         sprite: 'images/char-cat-girl.png',
     },
     {
-        name: 'Goth Girl with Issues',
+        elementName: 'Goth Girl with Issues',
         sprite: 'images/char-horn-girl.png',
     },
     {
-        name: 'Pinky',
+        elementName: 'Pinky',
         sprite: 'images/char-pink-girl.png',
     },
     {
-        name: 'Princess Lily',
+        elementName: 'Princess Lily',
         sprite: 'images/char-princess-girl.png',
     }
 ];

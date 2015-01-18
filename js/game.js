@@ -16,17 +16,20 @@ var Game = function () {
 
 Game.prototype.init = function(level, score) {
     cl("game init");
+    this.level = level;
+    this.score = score;
 
     this.world = new World();
+    this.world.currentMap = this.world.maps[this.level-1];
+
 
     this.allPlayers = [];
     this.player = new Player(characters[1]);
 
-    this.enemy = new Enemy();
-    this.boss = new Boss(2,1);
+    //this.enemy = new Enemy();
+    //this.boss = new Boss(2,1);
 
-    this.level = level;
-    this.score = score;
+
 
 
     //Collectables and Enemies are spawned when the game is started.
@@ -42,23 +45,19 @@ Game.prototype.startLevel = function(restart) {
         this.score = 0;
     }
 
-    this.world.currentMap = this.world.maps[this.level-1];
     //this.world.currentMap = this.world.randomMap;
     this.active = true;
     // TODO create enemies;
-    this.enemy.init();
+    //this.enemy.init();
 
     var collectableAmount = 0;
-    this.allCollectables = [];
-    for (var i = collectableAmount; i < collectableAmount + 7; i++){
-        this.allCollectables[i] = new Collectable(collectables[i]);
-        this.allCollectables[i].init();
 
-        //console.log(this.allCollectables[i]);
+    for (var i = 0; i <  7; i++){
+        this.allCollectables[i] = new Collectable(collectables[i]);
     }
 
     if(this.world.currentMap.hasOwnProperty('bossStartTile')){
-        this.boss.init(this.world.currentMap.bossStartTile);
+        //this.boss.init(this.world.currentMap.bossStartTile);
     }
 
 

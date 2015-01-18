@@ -59,10 +59,10 @@ called detailing the interaction.
         'primary': {
             'collidesWith' : [],
             r: 30 * this.scale,
-            x: 0,
-            y: 0,
-            xOffset: this.center.x,
-            yOffset: this.center.y
+            'offset': {
+                'x': this.center.x,
+                'y': this.center.y
+            }
         }
     };
 }
@@ -74,14 +74,9 @@ GamePiece.prototype.update = function(dt) {
         this.y = this.attachedTo.y + 30;
     }
     for (boundary in this.collisionBoundary){
-      this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
-      this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
+      this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].offset.x;
+      this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].offset.y
     }
-/*
-
-    this.sprite = this.types[this.type].sprite;
-    this.name = this.types[this.type].name;
-*/
 }
 
 GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
@@ -132,14 +127,12 @@ GamePiece.prototype.render = function(row) {
   if (Math.ceil(this.tile.y) === row){
     ctx.drawImage(Resources.get(this.sprite),
     this.sx, this.sy, this.sWidth, this.sHeight,
-    this.position.x +
-    this.offset.x,
-    this.position.y -
-    this.offset.y,
+    this.position.x - this.center.x + this.offset.x,
+    this.position.y - this.center.y - this.offset.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
     for (boundary in this.collisionBoundary){
       ctx.beginPath();
-      ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+      ctx.arc(this.position.x, this.position.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
       ctx.stroke();
     }
   }
@@ -158,32 +151,14 @@ GamePiece.prototype.calculatePosition = function(){
   cg('GamePiece calculatePosition ' + this.name);
   this.position = {
     x : this.tile.x * game.world.pixelsPerTileUnit.x +
-        game.world.pixelsPerTileUnit.x / 2 -
-        this.center.x,
-    y : (this.tile.y + 1) * game.world.pixelsPerTileUnit.y -
-        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] +
-        game.world.elevationOffset  -
-        this.center.y
-  };
-
-}
-
-GamePiece.prototype.calculateWorldPosition
- = function(tile){
-  cg('GamePiece calculateWorldPosition');
-//  console.log(tile.y + ' ' + tile.x + ' ' + game.world.currentMap.totalTiles.x);
-//  console.log(Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(//tile.x));
-//  console.log(game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)]);
-  var result = {
-    x : tile.x * game.world.pixelsPerTileUnit.x +
         game.world.pixelsPerTileUnit.x / 2,
-    y : game.world.pixelsPerTileUnit.y + game.world.maximumBlockElevation() * game.world.pixelsPerElevationUnit.y -
-        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(tile.y) * game.world.currentMap.totalTiles.x + Math.floor(tile.x)] +
-        tile.y * game.world.pixelsPerTileUnit.y
+    y : (this.tile.y + 1) * game.world.pixelsPerTileUnit.y -
+        game.world.pixelsPerElevationUnit.y *
+        game.world.currentMap.topoMap[Math.floor(this.tile.y)
+         * game.world.currentMap.totalTiles.x +
+         Math.floor(this.tile.x)]
+         + game.world.maxElevation
   };
-
-
-return result;
 }
 
 GamePiece.prototype.calculateTile = function(){
@@ -200,11 +175,8 @@ GamePiece.prototype.calculateTile = function(){
 
 GamePiece.prototype.calculateCollisionCircles = function(){
   cg('GamePiece calculateCollisionCircles');
-  this.collisionBoundary.primary.x = this.position.x +
-    this.collisionBoundary.primary.xOffset;
-
-  this.collisionBoundary.primary.y = this.position.y +
-    this.collisionBoundary.primary.yOffset;
+  this.collisionBoundary.primary.x = this.position.x;
+  this.collisionBoundary.primary.y = this.position.y;
 }
 
 GamePiece.prototype.transport = function(p){

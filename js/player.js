@@ -1,41 +1,17 @@
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
-/*
-var Player = function(){
-
-}
-*/
-
 var Player = function(character){
-    cl("Player new");
     this.scale = 1;
     this.speed = 400;
 
     GamePiece.call(this);
 
-    this.character = character;
-    this.sprite = this.character.sprite;
-    this.name = this.character.name;
+    this.sprite = character.sprite;
+    this.elementName = character.elementName;
 
     this.center.y = 125 * this.scale;
-
-    this.tile.target = {
-        x: 0,
-        y: 0
-    };
 
     this.collectables = [];
     this.collectablesWidth = 0;
     this.collectablesSpacing = 0;
-
-    this.sx = 0;
-    this.sy = 0;
-    this.sWidth = 101;
-    this.sHeight = 171;
-
-    this.name = 'player';
 
     this.collisionBoundary = {
         'primary': {
@@ -46,10 +22,10 @@ var Player = function(character){
                 Transporter
             ],
             'r': 15 * this.scale,
-            'x': this.tile.x * 101 + 101/2,
-            'y': this.tile.y * 83,
-            'xOffset': this.center.x,
-            'yOffset': this.center.y
+            'offset': {
+                'x': this.center.x,
+                'y': this.center.y
+            }
         }
     };
 };
@@ -58,7 +34,7 @@ Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.init = function(tile){
-    cp("Player " + this.name + " initialize" );
+    cp("Player " + this.elementName + " initialize" );
     this.tile = tile;
 }
 
@@ -101,9 +77,9 @@ Player.prototype.walkToTile = function() {
     }
     return result;
 }
-
+/*
 Player.prototype.calculatePosition = function(dt){
-  cg('GamePiece calculatePosition ' + this.name);
+  cg('GamePiece calculatePosition ' + this.elementName);
 
   this.position = {
     x : this.tile.x * game.world.pixelsPerTileUnit.x +
@@ -116,6 +92,7 @@ Player.prototype.calculatePosition = function(dt){
   };
 
 }
+*/
 
 //TODO PAUSE FEATURE SET TIMEOUT AND TIMEOUT CLEAR
 
@@ -227,7 +204,7 @@ Player.prototype.death = function(){
 };
 
 Player.prototype.throw = function(){
-    cp('Player ' + this.name + ' throw ' + this.direction.x + " " + this.direction.y);
+    cp('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
         projectile.collisionBoundary.primary.collidesWith = [
@@ -347,7 +324,7 @@ Player.prototype.calculateSteedPosition = function(){
 }
 
 Player.prototype.pickup = function(collectable){
-    cp('Player ' + this.name + ' pickup');
+    cp('Player ' + this.elementName + ' pickup');
     collectable.attach(this);
     this.collectables.push(collectable);
     this.collectablesWidth += collectable.spriteDimensions.x;
