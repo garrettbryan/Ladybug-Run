@@ -81,17 +81,22 @@ GamePiece.prototype.update = function(dt) {
 
 GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
   cg('GamePiece collisionCheck');
-    var distanceBetweenGamePieces =
-        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) *
-        (gamePiece.collisionBoundary[boundary].x - this.collisionBoundary.primary.x) +
-        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y) *
-        (gamePiece.collisionBoundary[boundary].y - this.collisionBoundary.primary.y);
-    var radiiSum = (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r) *
-         (gamePiece.collisionBoundary[boundary].r + this.collisionBoundary.primary.r);
-    if (distanceBetweenGamePieces < radiiSum) {
-        console.log("colllision");
-        result.call(this, gamePiece);
-    }
+  var that = this;
+  gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider){
+      if (that instanceof collider) {
+        var distanceBetweenGamePieces =
+            (gamePiece.position.x - that.position.x) *
+            (gamePiece.position.x - that.position.x) +
+            (gamePiece.position.y - that.position.y) *
+            (gamePiece.position.y - that.position.y);
+        var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
+             (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
+        if (distanceBetweenGamePieces < radiiSum) {
+            console.log("colllision");
+            result.call(that, gamePiece);
+        }
+      }
+  });
 }
 
 
@@ -169,15 +174,8 @@ GamePiece.prototype.calculateTile = function(){
       game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x]) /
       game.world.pixelsPerTileUnit.y - 1
   };
-
-
 }
 
-GamePiece.prototype.calculateCollisionCircles = function(){
-  cg('GamePiece calculateCollisionCircles');
-  this.collisionBoundary.primary.x = this.position.x;
-  this.collisionBoundary.primary.y = this.position.y;
-}
 
 GamePiece.prototype.transport = function(p){
   cg('GamePiece transport');
