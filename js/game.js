@@ -27,7 +27,7 @@ Game.prototype.init = function(level, score) {
     this.player = new Player(characters[1]);
 
     //this.enemy = new Enemy();
-    //this.boss = new Boss(2,1);
+    this.boss = new Boss(2,1);
 
 
 
@@ -54,10 +54,6 @@ Game.prototype.startLevel = function(restart) {
 
     for (var i = 0; i <  7; i++){
         this.allCollectables[i] = new Collectable(collectables[i]);
-    }
-
-    if(this.world.currentMap.hasOwnProperty('bossStartTile')){
-        //this.boss.init(this.world.currentMap.bossStartTile);
     }
 
 

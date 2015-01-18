@@ -18,10 +18,10 @@ Boss.prototype.init = function(tile) {
   game.allEnemies.push(e);
 
   for(var i = 0; i < 7; i++) {
-    //var c = new Collectable(collectables[6]);
-    //c.speed = 600;
-    //game.allCollectables.push(c);
-    //this.pickup(c);
+    var c = new Collectable(collectables[6]);
+    c.speed = 600;
+    game.allCollectables.push(c);
+    this.pickup(c);
   }
 }
 
@@ -29,8 +29,8 @@ GamePiece.prototype.target = function(player){
   ce('target');
 
   var vector = {},
-    vector1 = this.calculateWorldPosition(this.tile);
-    vector2 = this.calculateWorldPosition(player.tile);
+    vector1 = this.position;
+    vector2 = player.position;
     vectorMagnitude = 0,
     normal = {};
 

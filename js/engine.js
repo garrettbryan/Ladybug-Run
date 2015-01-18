@@ -142,8 +142,8 @@ var Engine = (function(global) {
         game.allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        //game.boss.move(dt);
-        //game.boss.update();
+        game.boss.move(dt);
+        game.boss.update();
 
         game.allCollectables.forEach(function(collectable) {
             collectable.update(dt);
@@ -268,6 +268,10 @@ var Engine = (function(global) {
         game.allCollectables.forEach(function(collectable) {
             collectable.init();
         });
+        if(game.world.currentMap.hasOwnProperty('bossStartTile')){
+            game.boss.init(game.world.currentMap.bossStartTile);
+        }
+
 
     }
 
