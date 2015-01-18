@@ -196,12 +196,13 @@ Player.prototype.throw = function(){
             Enemy,
             Transporter
         ];
+        //projectile.tile = this.tile;
+        //projectile.calculatePosition();
         projectile.direction = this.direction;
         projectile.speed = this.speed;
         this.collectablesWidth -= projectile.spriteDimensions.x;
-        projectile.collisionBoundary.primary.r = projectile.collisionBoundary.primary.r1;
-        projectile.position.x = this.collisionBoundary.primary.x - projectile.center.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
-        projectile.position.y = this.collisionBoundary.primary.y - projectile.center.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
+        projectile.position.x = this.position.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
+        projectile.position.y = this.position.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
         projectile.carriedBy = "";
 
 
