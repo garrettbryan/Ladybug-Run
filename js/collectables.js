@@ -23,25 +23,17 @@ Collectable.prototype.init = function(){
 }
 
 Collectable.prototype.update = function(dt) {
-  this.calculatePosition()
   if (this.carriedBy){
     this.tile = this.carriedBy.tile;
-    this.position = this.calculatePosition();
-    this.offset = {
-      x: 0,
-      y: 0
-    };
-
+    this.position = this.carriedBy.position;
   }else{
+    this.position.x = this.position.x + this.speed * dt * this.direction.x;
+    this.position.y = this.position.y + this.speed * dt * this.direction.y;
   }
   this.offset = {
     x: 0,
     y: 0
   };
-  for (boundary in this.collisionBoundary){
-    this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
-    this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
-  }
 };
 
 Collectable.prototype.attach = function(player){
@@ -66,21 +58,3 @@ Collectable.prototype.placeRandomly = function(currentMap){
     console.log(this.tile);
   }
 }
-
-Collectable.prototype.update = function(dt) {
-  this.calculatePosition()
-  if (this.carriedBy){
-    this.tile = this.carriedBy.tile;
-    this.calculatePosition();
-    this.offset = {
-      x: 0,
-      y: 50
-    };
-
-  }else{
-    this.offset = {
-      x: 0,
-      y: 0
-    };
-  }
-};
