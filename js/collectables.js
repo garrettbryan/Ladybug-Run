@@ -68,13 +68,13 @@ Collectable.prototype.placeRandomly = function(currentMap){
 }
 
 Collectable.prototype.update = function(dt) {
-//  this.calculatePosition()
+  this.calculatePosition()
   if (this.carriedBy){
     this.tile = this.carriedBy.tile;
-    this.position = this.calculatePosition();
+    this.calculatePosition();
     this.offset = {
       x: 0,
-      y: 0
+      y: 50
     };
 
   }else{
@@ -82,13 +82,5 @@ Collectable.prototype.update = function(dt) {
       x: 0,
       y: 0
     };
-  }
-  this.offset = {
-    x: 0,
-    y: 0
-  };
-  for (boundary in this.collisionBoundary){
-    this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].xOffset;
-    this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
   }
 };

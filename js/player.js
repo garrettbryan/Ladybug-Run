@@ -41,7 +41,6 @@ Player.prototype.init = function(tile){
 Player.prototype.update = function(dt) {
     //cp('Player update');
     this.calculatePosition();
-    this.calculateCollisionCircles();
     if (this.steed){
         this.steed.tile = this.tile;
         this.steed.direction = this.direction;
@@ -77,22 +76,7 @@ Player.prototype.walkToTile = function() {
     }
     return result;
 }
-/*
-Player.prototype.calculatePosition = function(dt){
-  cg('GamePiece calculatePosition ' + this.elementName);
 
-  this.position = {
-    x : this.tile.x * game.world.pixelsPerTileUnit.x +
-        game.world.pixelsPerTileUnit.x / 2 -
-        this.center.x,
-    y : (this.tile.y + 1) * game.world.pixelsPerTileUnit.y -
-        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] +
-        game.world.elevationOffset  -
-        this.center.y
-  };
-
-}
-*/
 
 //TODO PAUSE FEATURE SET TIMEOUT AND TIMEOUT CLEAR
 
@@ -341,6 +325,7 @@ Player.prototype.calculateCollectableSpacing = function() {
 }
 
 Player.prototype.anyCollisions = function() {
+    //console.log("player collision checks");
     for ( var enemy in game.allEnemies){
         if (!this.steed){
             this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
@@ -350,6 +335,7 @@ Player.prototype.anyCollisions = function() {
     for ( var collectable in game.allCollectables){
         this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
     }
+
     for ( var i = 1; i < game.allPlayers.length; i++){
         this.collisionCheck(game.allPlayers[i], "primary", this.tag)
     }
