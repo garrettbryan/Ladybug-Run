@@ -58,6 +58,7 @@ Player.prototype.update = function(dt) {
             y: 0
         };
     }
+
     this.anyCollisions();
     this.calculateCollectableSpacing();
 };
@@ -187,34 +188,7 @@ Player.prototype.death = function(){
     }
 };
 
-Player.prototype.throw = function(){
-    cp('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
-    if (this.collectables.length > 0){
-        var projectile = this.collectables.pop();
-        projectile.collisionBoundary.primary.collidesWith = [
-            Player,
-            Enemy,
-            Transporter
-        ];
-        //projectile.tile = this.tile;
-        //projectile.calculatePosition();
-        projectile.direction = this.direction;
-        projectile.speed = this.speed;
-        this.collectablesWidth -= projectile.spriteDimensions.x;
-        projectile.position.x = this.position.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
-        projectile.position.y = this.position.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
-        projectile.carriedBy = "";
 
-
-    }
-};
-
-Player.prototype.catchIt = function(collectable){
-    cp('Player catchIt');
-    for ( var collectable in game.allCollectables){
-        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
-    }
-};
 
 Player.prototype.ride = function(steed){
     cp('Player ride');
@@ -275,6 +249,19 @@ Player.prototype.dismount = function(){
 
 }
 
+Player.prototype.calculateSteedPosition = function(){
+        this.steed.direction = this.direction;
+
+        this.steed.positon = this.position;
+        this.steed.row = this.row;
+
+//        this.position.x = this.position.x + 10 * this.steed.scale;
+//        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
+}
+
+/*
+TODO: verify wait function works, if not fix it
+*/
 Player.prototype.wait = function() {
     cp('Player wait');
 
@@ -298,19 +285,15 @@ Player.prototype.wait = function() {
     }
 };
 
-Player.prototype.calculateSteedPosition = function(){
-        this.steed.direction = this.direction;
 
-        this.steed.positon = this.position;
-        this.steed.row = this.row;
 
-//        this.position.x = this.position.x + 10 * this.steed.scale;
-//        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
-}
-
+/*
+When a collectable is picked up by a player or boss, the collectable is added to the character's collectables array. The collectables collidesWith array is set to empty, the offset positioning object for the sprite is modified by the pickup and calculateCollectableSpacing methods.  See the collectable update function fo r more.
+*/
 Player.prototype.pickup = function(collectable){
     cp('Player ' + this.elementName + ' pickup');
-    collectable.attach(this);
+    collectable.collisionBoundary.primary.collidesWith = [];
+    collectable.carriedBy = this;
     this.collectables.push(collectable);
     this.collectablesWidth += collectable.spriteDimensions.x;
     this.calculateCollectableSpacing();
@@ -319,12 +302,52 @@ Player.prototype.pickup = function(collectable){
 Player.prototype.calculateCollectableSpacing = function() {
     this.collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
-        this.collectables[i].offset.x = -this.collectablesWidth/2 + this.collectablesSpacing;
-        this.collectables[i].offset.y = 20 * this.scale;
+        this.collectables[i].offset.x = -this.collectablesWidth/2 + this.collectables[i].center.x + this.collectablesSpacing;
+        this.collectables[i].offset.y = 60 * this.scale;
         this.collectablesSpacing += this.collectables[i].spriteDimensions.x;
     }
 }
 
+/*
+When a player character is not currently active (the player is not directly controlling the character) then the engine puts the nonactive characters into a wait state where they can still catch objects.
+*/
+Player.prototype.catchIt = function(collectable){
+    cp('Player catchIt');
+    for ( var collectable in game.allCollectables){
+        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
+    }
+};
+
+/*
+When a collectable is thrown the collectable is removed from the players collectables array and held in a temporary "projectile" variable. The collidesWith array populated with the correct game entities. The projectile offset is returned to zero. The projectile direction, speed, and position is set with appropriate values. Then the projectile's carriedBy property is set to the empty string severing any relationship. The position of the projectile is then updated in the collectable update method.
+*/
+Player.prototype.throw = function(){
+    cp('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
+    if (this.collectables.length > 0){
+        var projectile = this.collectables.pop();
+        projectile.collisionBoundary.primary.collidesWith = [
+            Player,
+            Enemy,
+            Transporter
+        ];
+        projectile.direction = this.direction;
+        projectile.speed = this.speed;
+        projectile.offset = {
+            x: 0,
+            y: 0
+        };
+        this.collectablesWidth -= projectile.spriteDimensions.x;
+        projectile.position.x = this.position.x + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.x;
+        projectile.position.y = this.position.y + (this.collisionBoundary.primary.r + projectile.collisionBoundary.primary.r + 5) * projectile.direction.y;
+        projectile.carriedBy = "";
+
+
+    }
+};
+
+/*
+The majority of interactions center around the player characters. The active player collisions happen here.
+*/
 Player.prototype.anyCollisions = function() {
     //console.log("player collision checks");
     for ( var enemy in game.allEnemies){

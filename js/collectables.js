@@ -1,3 +1,6 @@
+/*
+Collectables have a number of characteristics. They have a certain amount of points associated with them when picked up, which will increase the score, and also can be thrown to attack enemies which will reduce the score because the collectable is no longer carried by the player.
+*/
 var Collectable = function(collectable) {
   this.scale = 0.25;
   this.speed = 400;
@@ -16,42 +19,35 @@ var Collectable = function(collectable) {
 Collectable.prototype = Object.create(GamePiece.prototype);
 Collectable.prototype.constructor = Collectable;
 
+/*
+The init method places a collectable onto the level map on a walkable tile. Then calculates the position so the update function has an initial value.
+*/
 Collectable.prototype.init = function(){
     this.placeRandomly(game.world.currentMap);
     this.calculatePosition();
-    //this.position.y = this.position.y + game.world.maximumBlockElevation() * game.world.pixelsPerElevationUnit.y
 }
 
+/*
+If a collectable has been picked up then the update function uses the carriers tile data. If the collectable is not attached then the position is determined by the previous position and any position change due to a speed and direction value. If the speed or direction is 0 then the collectable will be in its default state motionless on a tile.
+*/
 Collectable.prototype.update = function(dt) {
   if (this.carriedBy){
     this.tile = this.carriedBy.tile;
-    this.position = this.carriedBy.position;
+    this.calculatePosition();
   }else{
     this.position.x = this.position.x + this.speed * dt * this.direction.x;
     this.position.y = this.position.y + this.speed * dt * this.direction.y;
   }
-  this.offset = {
-    x: 0,
-    y: 0
-  };
 };
 
-Collectable.prototype.attach = function(player){
-  console.log("collectable attach");
-  this.collisionBoundary.primary.collidesWith = [];
-  this.carriedBy = player;
-  this.tile = player.tile;
-  console.log(this.tile);
-  this.calculatePosition();
-  console.log(this.position);
-}
-
+/*
+Randomly places the collectables onto a walkable tile for any map.
+*/
 Collectable.prototype.placeRandomly = function(currentMap){
   this.tile = {
     x: Math.floor(Math.random()*(currentMap.totalTiles.x)),
     y: Math.floor(Math.random()*(currentMap.totalTiles.y)),
   };
-  //console.log(this.tile);
   if (currentMap.walkMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] === 0){
     this.placeRandomly(currentMap);
   }else{
