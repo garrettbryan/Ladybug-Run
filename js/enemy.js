@@ -18,16 +18,17 @@ var Enemy = function() {
     };
     this.directions = [];
     this.direction = {
-        'x': 0,
+        'x': 1,
         'y': 0
     };
+    this.lastDirection = 0;
 
     this.tile = {
         x: 4,
         y: 4
     };
 
-    this.center.y = 110 * this.scale;
+    this.center.y = 125 * this.scale;
 
     this.spriteDimensions = {
         x: 101 * this.scale,
@@ -51,31 +52,29 @@ var Enemy = function() {
                 Collectable
             ],
             'r': 20 * this.scale,
-            'x': 0,
-            'y': 0,
-            'xOffset': 25 * this.scale,
-            'yOffset': this.center.y
+            'offset': {
+                'x': 25 * this.scale,
+                'y': 0
+            }
         },
         secondary : {
             'collidesWith' : [
                 Player,
-                Enemy,
-                Collectable
             ],
             'r': 20 * this.scale,
-            'x': 0,
-            'y': 0,
-            'xOffset': -25 * this.scale,
-            'yOffset': this.center.y
+            'offset': {
+                'x': -50 * this.scale,
+                'y': 0
+            }
         },
         navigatory : {
             'collidesWith' : [
             ],
             r: 2 * this.scale,
-            x: 0,
-            y: 0,
-            'xOffset': 0,
-            'yOffset': this.center.y
+            'offset': {
+                'x': 0,
+                'y': 0
+            }
         }
     };
 
@@ -93,7 +92,6 @@ var Enemy = function() {
             'y': 0
         }
     };
-
 };
 
 Enemy.prototype = Object.create(GamePiece.prototype);
@@ -141,15 +139,10 @@ Enemy.prototype.assignPath = function (enemyPaths){
 
 Enemy.prototype.update = function(dt) {
     ce('enemy update');
-
-    //TODO IF NOT NAVIGATING THEN ENEMY IS BEING RIDDEN
-
-
-    if (this.steedOf){
-        this.collisionBoundary.primary.collidesWith = [];
-        this.collisionBoundary.secondary.collidesWith = [];
-
-        //player controls positioning of a steed
+    if (this.rider){
+        this.tile = this.rider.tile;
+        //direction with a rider comes from the riders handleInput method.
+        this.calculatePosition();
     }else{
         this.navigate(this.navData, this.reachedTarget);
         ce(this.navData.targetPoint);
@@ -159,21 +152,20 @@ Enemy.prototype.update = function(dt) {
     }
     this.reflectCollisionBoundaries();
     this.chooseSpriteDirection();
-
-
 };
 
 Enemy.prototype.reflectCollisionBoundaries = function(){
     ce('enemy reflectCollisionBoundaries');
-
+    var reflect;
     for (boundary in this.collisionBoundary){
-    if (this.direction.x >= 0) {
-        this.collisionBoundary[boundary].x = this.position.x + this.center.x + this.collisionBoundary[boundary].xOffset;
-    } else {
-        this.collisionBoundary[boundary].x = this.position.x + this.center.x - this.collisionBoundary[boundary].xOffset;
+        if (this.lastDirection === this.direction.x) {
+            reflect = 1;
+        } else {
+            reflect = -1;
+        }
+    this.collisionBoundary[boundary].offset.x = this.collisionBoundary[boundary].offset.x * reflect;
     }
-      this.collisionBoundary[boundary].y = this.position.y  + this.collisionBoundary[boundary].yOffset;
-    }
+    this.lastDirection = this.direction.x;
 }
 
 Enemy.prototype.chooseSpriteDirection = function(){
@@ -204,8 +196,6 @@ Enemy.prototype.calculateNavPoints = function(navNodes){
     return navPoints;
 }
 
-
-
 GamePiece.prototype.navigate = function(navData, result){
     ce('enemy navigate');
     var distanceToNextNavPoint =
@@ -219,8 +209,6 @@ GamePiece.prototype.navigate = function(navData, result){
 
         result.call(this);
     }
-
-
 }
 
 Enemy.prototype.reachedTarget = function(){
@@ -241,7 +229,6 @@ Enemy.prototype.reachedTarget = function(){
         this.tile = this.navData.navNodes[0];
         //this.tile = this.currentNode;
     }
-
 }
 
 Enemy.prototype.death = function(){
@@ -269,32 +256,6 @@ Enemy.prototype.death = function(){
 //    this.tileX = 4;
 //    this.tileY = 7;
 };
-
-Enemy.prototype.becomeSteed = function(player){
-    ce('enemy becomeSteed');
-
-
-  this.collisionBoundary.primary.r1 = this.collisionBoundary.primary.r;
-  this.collisionBoundary.primary.r = 0;
-  this.collisionBoundary.secondary.r1 = this.collisionBoundary.secondary.r;
-  this.collisionBoundary.secondary.r = 0;
-  this.speed = 0;
-  this.steedOf = player;
-}
-
-//Enemy.prototype.render = function() {
-//    //ctx.scale(-1,1);
-//    ctx.drawImage(Resources.get(this.sprite),
-//        this.sx, this.sy, this.sWidth, this.sHeight,
-//        this.position.x, this.position.y,
-//        this.spriteDimensions.x, this.spriteDimensions.y);
-//  for (boundary in this.collisionBoundary){
-//    ctx.beginPath();
-//    ctx.arc(this.collisionBoundary[boundary].x, this.collisionBoundary[boundary].y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-//    ctx.stroke();
-//  }
-//};
-
 
 Enemy.prototype.renderNavPoints = function(){
     ce('enemy renderNavPoints');

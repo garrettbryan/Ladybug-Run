@@ -224,7 +224,7 @@ var Engine = (function(global) {
         });
         game.player.render(row);
 
-//        game.boss.render(row);
+        game.boss.render(row);
         game.allCollectables.forEach(function(collectable) {
             collectable.render();
 //            console.log("render Collectable");

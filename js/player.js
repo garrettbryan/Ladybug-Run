@@ -23,8 +23,8 @@ var Player = function(character){
             ],
             'r': 15 * this.scale,
             'offset': {
-                'x': this.center.x,
-                'y': this.center.y
+                'x': 0,
+                'y': 0
             }
         }
     };
@@ -36,20 +36,16 @@ Player.prototype.constructor = Player;
 Player.prototype.init = function(tile){
     cp("Player " + this.elementName + " initialize" );
     this.tile = tile;
+//    var e = new Enemy();
+//    this.ride(e);
+//    game.allEnemies.push(e);
 }
 
 Player.prototype.update = function(dt) {
     //cp('Player update');
-    this.calculatePosition();
     if (this.steed){
-        this.steed.tile = this.tile;
-        this.steed.direction = this.direction;
-        this.steed.tile = this.tile;
-        this.steed.offset.y = 10 * this.steed.scale
-        this.steed.calculatePosition();
-
         this.offset = {
-            x: 40 * this.steed.scale * this.steed.direction.x,
+            x: 15 * this.steed.scale * this.steed.direction.x,
             y: 40 * this.steed.scale
         };
     }else{
@@ -58,7 +54,7 @@ Player.prototype.update = function(dt) {
             y: 0
         };
     }
-
+    this.calculatePosition();
     this.anyCollisions();
     this.calculateCollectableSpacing();
 };
@@ -96,6 +92,7 @@ Player.prototype.handleInput = function(key) {
                 x: -1,
                 y: 0
             };
+            if (this.steed) this.steed.direction = this.direction;
             break;
         case 'right':
             this.tile.x = this.tile.x + 1;
@@ -103,6 +100,7 @@ Player.prototype.handleInput = function(key) {
                 x: 1,
                 y: 0
             };
+            if (this.steed) this.steed.direction = this.direction;
             break;
         case 'up':
             this.tile.y = this.tile.y - 1;
@@ -127,12 +125,10 @@ Player.prototype.handleInput = function(key) {
             this.dismount();
             break;
     }
-
     if (this.walkToTile() === 0){
-        this.tile= tile0;
+        this.tile = tile0;
         this.direction = direction0;
     }
-
 };
 
 Player.prototype.tag = function(p){
@@ -191,30 +187,19 @@ Player.prototype.death = function(){
 
 
 Player.prototype.ride = function(steed){
-    cp('Player ride');
-    this.steed = steed;
-    steed.becomeSteed(this);
-
-
+    cp('Player ' + this.elementName + ' ride');
     steed.collisionBoundary.primary.collidesWith = [];
     steed.collisionBoundary.secondary.collidesWith = [];
+    steed.rider = this;
+    this.steed = steed;
 
-    steed.direction = {
-        'x': 0,
-        'y': 0
-    };
+    steed.speed = 0;
+    steed.direction = this.direction;
 
-    this.ridingOffset = {
+    this.offset = {
         x : 0,
-        y : -7 * steed.scale,
-    },
-
-    this.collisionBoundary.primary.collidesWith = [
-        Player,
-        Collectable,
-        Transporter
-    ];
-
+        y : 40 * steed.scale,
+    };
 }
 
 Player.prototype.dismount = function(){
@@ -237,7 +222,7 @@ Player.prototype.dismount = function(){
 
     this.steed.tile.y = this.tile.y;
     this.steed.tile.x = this.tile.x + this.direction.x;
-    this.steed.steedOf = false;
+    this.steed.rider = false;
     this.steed = false;
 
     if (this.tile.y < game.world.currentMap.totalTiles.y - 1 ){
@@ -303,7 +288,7 @@ Player.prototype.calculateCollectableSpacing = function() {
     this.collectablesSpacing = 0;
     for (var i = 0; i < this.collectables.length; i++){
         this.collectables[i].offset.x = -this.collectablesWidth/2 + this.collectables[i].center.x + this.collectablesSpacing;
-        this.collectables[i].offset.y = 60 * this.scale;
+        this.collectables[i].offset.y = 60 * this.scale + this.offset.y;
         this.collectablesSpacing += this.collectables[i].spriteDimensions.x;
     }
 }

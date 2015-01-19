@@ -42,7 +42,7 @@ The offset value moves the position of the sprit in relation to the center. So w
       x: this.spriteDimensions.x / 2,
       y: 120 * this.scale
     };
-    this.direction = { //This value is set by the direction buttons
+    this.direction = { //This value is set by the direction buttons for player,
       x: 0,
       y: 0
     };
@@ -60,8 +60,8 @@ called detailing the interaction.
             'collidesWith' : [],
             r: 30 * this.scale,
             'offset': {
-                'x': this.center.x,
-                'y': this.center.y
+                'x': 0,
+                'y': 0
             }
         }
     };
@@ -85,10 +85,14 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
   gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider){
       if (that instanceof collider) {
         var distanceBetweenGamePieces =
-            (gamePiece.position.x - that.position.x) *
-            (gamePiece.position.x - that.position.x) +
-            (gamePiece.position.y - that.position.y) *
-            (gamePiece.position.y - that.position.y);
+            (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+            that.position.x + that.collisionBoundary[boundary].offset.x) *
+            (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+            that.position.x + that.collisionBoundary[boundary].offset.x) +
+            (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
+            that.position.y + that.collisionBoundary[boundary].offset.y) *
+            (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.x -
+            that.position.y + that.collisionBoundary[boundary].offset.y);
         var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
              (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
         if (distanceBetweenGamePieces < radiiSum) {
@@ -136,8 +140,9 @@ GamePiece.prototype.render = function(row) {
     this.position.y - this.center.y - this.offset.y,
     this.spriteDimensions.x, this.spriteDimensions.y);
     for (boundary in this.collisionBoundary){
+//      console.log(this);
       ctx.beginPath();
-      ctx.arc(this.position.x, this.position.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+      ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
       ctx.stroke();
     }
   }
