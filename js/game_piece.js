@@ -86,13 +86,13 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
       if (that instanceof collider) {
         var distanceBetweenGamePieces =
             (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-            that.position.x + that.collisionBoundary[boundary].offset.x) *
+            that.position.x + that.collisionBoundary.primary.offset.x) *
             (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-            that.position.x + that.collisionBoundary[boundary].offset.x) +
+            that.position.x + that.collisionBoundary.primary.offset.x) +
             (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
-            that.position.y + that.collisionBoundary[boundary].offset.y) *
+            that.position.y + that.collisionBoundary.primary.offset.y) *
             (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.x -
-            that.position.y + that.collisionBoundary[boundary].offset.y);
+            that.position.y + that.collisionBoundary.primary.offset.y);
         var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
              (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
         if (distanceBetweenGamePieces < radiiSum) {
@@ -142,7 +142,7 @@ GamePiece.prototype.render = function(row) {
     for (boundary in this.collisionBoundary){
 //      console.log(this);
       ctx.beginPath();
-      ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+      ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x + this.offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
       ctx.stroke();
     }
   }

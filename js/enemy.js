@@ -63,7 +63,7 @@ var Enemy = function() {
             ],
             'r': 20 * this.scale,
             'offset': {
-                'x': -50 * this.scale,
+                'x': -25 * this.scale,
                 'y': 0
             }
         },

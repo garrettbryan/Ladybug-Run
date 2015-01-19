@@ -36,17 +36,21 @@ Player.prototype.constructor = Player;
 Player.prototype.init = function(tile){
     cp("Player " + this.elementName + " initialize" );
     this.tile = tile;
-//    var e = new Enemy();
-//    this.ride(e);
-//    game.allEnemies.push(e);
+    var e = new Enemy();
+    this.ride(e);
+    game.allEnemies.push(e);
 }
 
 Player.prototype.update = function(dt) {
     //cp('Player update');
     if (this.steed){
         this.offset = {
-            x: 15 * this.steed.scale * this.steed.direction.x,
+            x: 0,
             y: 40 * this.steed.scale
+        };
+        this.steed.offset = {
+            x: -15 * this.steed.scale * this.steed.direction.x,
+            y: 0
         };
     }else{
         this.offset = {
@@ -74,9 +78,9 @@ Player.prototype.walkToTile = function() {
     return result;
 }
 
-
-//TODO PAUSE FEATURE SET TIMEOUT AND TIMEOUT CLEAR
-
+/*
+HandleInput takes specific key up events and updates player properties. If an inaccesable tile is sttempted tha the player does not move.
+*/
 Player.prototype.handleInput = function(key) {
     cp('Player handleInput');
     var tile0 = {
@@ -160,55 +164,44 @@ Player.prototype.tag = function(p){
 
 Player.prototype.death = function(){
     cp('Player death');
+    this.collectables.forEach(function(collectable){
+        console.log(collectable);
+        collectable.placeRandomly(game.world.currentMap);
+    });
+
     if (this.steed){
-        for(var i = 0; i < game.allEnemies.length; i++){
-            if (this.steed === game.allEnemies[i]){
-                game.allEnemies.splice(i,1);
-            }
-        }
-    }
-    if (this.collectables){
-        for (var j = 0; j < this.collectables.length; j++){
-            for (var i = 0; i < game.allCollectables.length; i++){
-                if (this.collectables[j] === game.allCollectables[i]){
-                    game.allCollectables.splice(i,1);
-                }
-            }
-        }
-        this.collectables = [];
+        this.dismount();
+        console.log("dismount");
 
+    }else{
+        console.log("I died");
     }
-    game.allPlayers.shift();
 
-    if (game.allPlayers.length === 0){
-    }
+    //reset();
+//    game.allPlayers.shift();
+//
+//    if (game.allPlayers.length === 0){
+//    }
 };
 
 
 
 Player.prototype.ride = function(steed){
     cp('Player ' + this.elementName + ' ride');
-    steed.collisionBoundary.primary.collidesWith = [];
-    steed.collisionBoundary.secondary.collidesWith = [];
+    console.log('ride');
+//    steed.collisionBoundary.primary.collidesWith = [];
+//    steed.collisionBoundary.secondary.collidesWith = [];
     steed.rider = this;
     this.steed = steed;
 
     steed.speed = 0;
     steed.direction = this.direction;
-
-    this.offset = {
-        x : 0,
-        y : 40 * steed.scale,
-    };
 }
 
 Player.prototype.dismount = function(){
     cp('Player dismount');
     //this.steed.direction.x = 1;
     //game.allEnemies.push(this.steed);
-
-    this.steed.collisionBoundary.primary.r = this.steed.collisionBoundary.primary.r1;
-    this.steed.collisionBoundary.secondary.r = this.steed.collisionBoundary.secondary.r1;
 
     this.steed.collisionBoundary.primary.collidesWith = [
         Player,
@@ -220,10 +213,10 @@ Player.prototype.dismount = function(){
     ];
     this.steed.speed = 3;
 
-    this.steed.tile.y = this.tile.y;
-    this.steed.tile.x = this.tile.x + this.direction.x;
-    this.steed.rider = false;
-    this.steed = false;
+    this.steed.tile = this.tile;
+    this.steed.calculatePosition();
+    this.steed.rider = '';
+    this.steed = '';
 
     if (this.tile.y < game.world.currentMap.totalTiles.y - 1 ){
         this.tile.y = this.tile.y + 1;
@@ -232,16 +225,6 @@ Player.prototype.dismount = function(){
     }
 
 
-}
-
-Player.prototype.calculateSteedPosition = function(){
-        this.steed.direction = this.direction;
-
-        this.steed.positon = this.position;
-        this.steed.row = this.row;
-
-//        this.position.x = this.position.x + 10 * this.steed.scale;
-//        this.position.y = this.position.y - 0.15 * this.steed.spriteDimensions.y;
 }
 
 /*
