@@ -2,10 +2,8 @@ var Enemy = function() {
     cl('Enemy new');
     this.speed = 3;
     this.scale = 2;
-
     GamePiece.call(this);
 
-//Path information comes from the world maps
     this.pathNodes = [];
     this.currentNodeIndex = 0;
     this.currentNode = {
@@ -35,7 +33,6 @@ var Enemy = function() {
         y: 171 * this.scale
     };
 
-    // sprites
     this.name = 'Lady Bug';
     this.sprite = 'images/enemy-bug_sprite_sheet.png';
     this.spriteFore = 'images/enemy-bug-front_sprite_sheet.png';
@@ -144,46 +141,16 @@ Enemy.prototype.update = function(dt) {
         //direction with a rider comes from the riders handleInput method.
         this.calculatePosition();
     }else{
-        this.navigate(this.navData, this.reachedTarget);
-        ce(this.navData.targetPoint);
-        ce(this.position);
-        this.retarget(this.navData.targetPoint);
-        this.move(dt);
+//        this.navigate(this.navData, this.reachedTarget);
+//        ce(this.navData.targetPoint);
+//        ce(this.position);
+//        this.retarget(this.navData.targetPoint);
+//        this.move(dt);
     }
     this.reflectCollisionBoundaries();
     this.chooseSpriteDirection();
 };
 
-Enemy.prototype.reflectCollisionBoundaries = function(){
-    ce('enemy reflectCollisionBoundaries');
-    var reflect;
-    for (boundary in this.collisionBoundary){
-        if (this.lastDirection === this.direction.x) {
-            reflect = 1;
-        } else {
-            reflect = -1;
-        }
-    this.collisionBoundary[boundary].offset.x = this.collisionBoundary[boundary].offset.x * reflect;
-    }
-    this.lastDirection = this.direction.x;
-}
-
-Enemy.prototype.chooseSpriteDirection = function(){
-    ce('enemy chooseSpriteDirection');
-
-
-    if (this.direction.x >= 0){
-        this.sx = 0;
-        this.sy = 0;
-        this.sWidth = 101;
-        this.sHeight = 171;
-    } else {
-        this.sx = 0;
-        this.sy = 171;
-        this.sWidth = 101;
-        this.sHeight = 171;
-    }
-}
 
 Enemy.prototype.calculateNavPoints = function(navNodes){
     ce('enemy calculateNavPoints');
@@ -264,5 +231,36 @@ Enemy.prototype.renderNavPoints = function(){
       ctx.beginPath();
       ctx.arc(this.navData.navPoints[navPoint].x, this.navData.navPoints[navPoint].y, this.navData.r, 0, 2 * Math.PI, false);
       ctx.stroke();
+    }
+}
+
+/*
+When an enemy changes x direction, the sprite changes to show the current x direction, the collision boundaries reflect about the y axis.
+*/
+Enemy.prototype.reflectCollisionBoundaries = function(){
+    ce('enemy reflectCollisionBoundaries');
+    if (this.direction.x >= 0){
+        this.collisionBoundary.primary.offset.x = Math.abs(this.collisionBoundary.primary.offset.x);
+        this.collisionBoundary.secondary.offset.x = -Math.abs(this.collisionBoundary.secondary.offset.x);
+    }else{
+        this.collisionBoundary.primary.offset.x = -Math.abs(this.collisionBoundary.primary.offset.x);
+        this.collisionBoundary.secondary.offset.x = Math.abs(this.collisionBoundary.secondary.offset.x);
+    }
+}
+
+Enemy.prototype.chooseSpriteDirection = function(){
+    ce('enemy chooseSpriteDirection');
+
+
+    if (this.direction.x >= 0){
+        this.sx = 0;
+        this.sy = 0;
+        this.sWidth = 101;
+        this.sHeight = 171;
+    } else {
+        this.sx = 0;
+        this.sy = 171;
+        this.sWidth = 101;
+        this.sHeight = 171;
     }
 }

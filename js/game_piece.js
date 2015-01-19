@@ -79,9 +79,13 @@ GamePiece.prototype.update = function(dt) {
     }
 }
 
+/*
+CollisionCheck determines if an object has collided with this. Then runs a result method on this object. CollisonCheck returns a boolean objectsCollide.
+*/
 GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
   cg('GamePiece collisionCheck');
-  var that = this;
+  var that = this,
+    objectsCollide = false;
   gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider){
       if (that instanceof collider) {
         var distanceBetweenGamePieces =
@@ -98,12 +102,12 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result){
         if (distanceBetweenGamePieces < radiiSum) {
             console.log("colllision");
             result.call(that, gamePiece);
+            objectsCollide = true;
         }
       }
   });
+  return objectsCollide;
 }
-
-
 
 GamePiece.prototype.retarget = function(targetPt){
   ce('retarget');
@@ -130,45 +134,51 @@ GamePiece.prototype.retarget = function(targetPt){
 
 GamePiece.prototype.render = function(row) {
   cg('GamePiece ' + this.name + ' render' + row);
-  if (!row){
-    row = Math.ceil(this.tile.y);
-  }
-  if (Math.ceil(this.tile.y) === row){
-    ctx.drawImage(Resources.get(this.sprite),
-    this.sx, this.sy, this.sWidth, this.sHeight,
-    this.position.x - this.center.x + this.offset.x,
-    this.position.y - this.center.y - this.offset.y,
-    this.spriteDimensions.x, this.spriteDimensions.y);
-    for (boundary in this.collisionBoundary){
-//      console.log(this);
-      ctx.beginPath();
-      ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x + this.offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-      ctx.stroke();
+  if (this.draw){
+    if (!row){
+      row = Math.ceil(this.tile.y);
+    }
+    if (Math.ceil(this.tile.y) === row){
+      ctx.drawImage(Resources.get(this.sprite),
+      this.sx, this.sy, this.sWidth, this.sHeight,
+      this.position.x - this.center.x + this.offset.x,
+      this.position.y - this.center.y - this.offset.y,
+      this.spriteDimensions.x, this.spriteDimensions.y);
+      for (boundary in this.collisionBoundary){
+  //      console.log(this);
+        ctx.beginPath();
+        ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x + this.offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+        ctx.stroke();
+      }
     }
   }
 };
 
 GamePiece.prototype.move = function(dt){
   cg('GamePiece move ' + this.name);
-  this.tile = {
-    x: this.tile.x + this.speed * dt * this.direction.x,
-    y: this.tile.y + this.speed * dt * this.direction.y
+  if (this.draw){
+    this.tile = {
+      x: this.tile.x + this.speed * dt * this.direction.x,
+      y: this.tile.y + this.speed * dt * this.direction.y
+    }
+    this.calculatePosition();
   }
-  this.calculatePosition();
 }
 
 GamePiece.prototype.calculatePosition = function(){
   cg('GamePiece calculatePosition ' + this.name);
-  this.position = {
-    x : this.tile.x * game.world.pixelsPerTileUnit.x +
-        game.world.pixelsPerTileUnit.x / 2,
-    y : (this.tile.y + 1) * game.world.pixelsPerTileUnit.y -
-        game.world.pixelsPerElevationUnit.y *
-        game.world.currentMap.topoMap[Math.floor(this.tile.y)
-         * game.world.currentMap.totalTiles.x +
-         Math.floor(this.tile.x)]
-         + game.world.maxElevation
-  };
+  if (this.draw){
+    this.position = {
+      x : this.tile.x * game.world.pixelsPerTileUnit.x +
+          game.world.pixelsPerTileUnit.x / 2,
+      y : (this.tile.y + 1) * game.world.pixelsPerTileUnit.y -
+          game.world.pixelsPerElevationUnit.y *
+          game.world.currentMap.topoMap[Math.floor(this.tile.y)
+           * game.world.currentMap.totalTiles.x +
+           Math.floor(this.tile.x)]
+           + game.world.maxElevation
+    };
+  }
 }
 
 GamePiece.prototype.calculateTile = function(){

@@ -39,6 +39,8 @@ Player.prototype.init = function(tile){
     var e = new Enemy();
     this.ride(e);
     game.allEnemies.push(e);
+    e.draw = true;
+    this.draw = true;
 }
 
 Player.prototype.update = function(dt) {
@@ -175,6 +177,7 @@ Player.prototype.death = function(){
 
     }else{
         console.log("I died");
+        this.draw = false;
     }
 
     //reset();
@@ -200,8 +203,7 @@ Player.prototype.ride = function(steed){
 
 Player.prototype.dismount = function(){
     cp('Player dismount');
-    //this.steed.direction.x = 1;
-    //game.allEnemies.push(this.steed);
+
 
     this.steed.collisionBoundary.primary.collidesWith = [
         Player,
@@ -211,8 +213,9 @@ Player.prototype.dismount = function(){
     this.steed.collisionBoundary.secondary.collidesWith = [
         Player
     ];
-    this.steed.speed = 3;
 
+    this.steed.speed = 0;
+    this.steed.direction = this.direction;
     this.steed.tile = this.tile;
     this.steed.calculatePosition();
     this.steed.rider = '';
@@ -260,6 +263,7 @@ When a collectable is picked up by a player or boss, the collectable is added to
 */
 Player.prototype.pickup = function(collectable){
     cp('Player ' + this.elementName + ' pickup');
+    collectable.projectile = false;
     collectable.collisionBoundary.primary.collidesWith = [];
     collectable.carriedBy = this;
     this.collectables.push(collectable);
@@ -293,6 +297,7 @@ Player.prototype.throw = function(){
     cp('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
     if (this.collectables.length > 0){
         var projectile = this.collectables.pop();
+        projectile.projectile = true;
         projectile.collisionBoundary.primary.collidesWith = [
             Player,
             Enemy,
@@ -321,11 +326,17 @@ Player.prototype.anyCollisions = function() {
     for ( var enemy in game.allEnemies){
         if (!this.steed){
             this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
-            this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
+            if (game.allEnemies[enemy].scale >= this.scale){
+                this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
+            }
         }
     }
     for ( var collectable in game.allCollectables){
-        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
+        if (game.allCollectables[collectable].projectile && this.collisionCheck(game.allCollectables[collectable], "primary", this.death)){
+            game.allCollectables[collectable].draw = false;
+        }else{
+            this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
+        }
     }
 
     for ( var i = 1; i < game.allPlayers.length; i++){

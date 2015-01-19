@@ -9,6 +9,7 @@ var Collectable = function(collectable) {
   this.sprite = collectable.sprite;
   this.elementName = collectable.elementName;
   this.points = collectable.points;
+  this.projectile = false;
 
 
   this.collisionBoundary.primary.collidesWith = [
@@ -24,6 +25,7 @@ The init method places a collectable onto the level map on a walkable tile. Then
 */
 Collectable.prototype.init = function(){
     this.placeRandomly(game.world.currentMap);
+    this.draw = true;
     this.calculatePosition();
 }
 
