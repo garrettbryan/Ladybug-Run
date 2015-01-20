@@ -14,6 +14,7 @@
    * image. It will then call our private image loading function accordingly.
    */
   function load(urlOrArr) {
+    cl('load');
     if (urlOrArr instanceof Array) {
       /* If the developer passed in an array of images
        * loop through each value and call our image
@@ -35,6 +36,7 @@
    * called by the public image loader function.
    */
   function _load(url) {
+    cl('_load');
     if (resourceCache[url]) {
       /* If this URL has been previously loaded it will exist within
        * our resourceCache array. Just return that image rather
@@ -77,6 +79,7 @@
    * the same as calling load() on that URL.
    */
   function get(url) {
+    cl('get');
     return resourceCache[url];
   }
 
@@ -84,6 +87,7 @@
    * for loading have in fact been completed loaded.
    */
   function isReady() {
+    cl('isReady');
     var ready = true;
     for (var k in resourceCache) {
       if (resourceCache.hasOwnProperty(k) &&
@@ -98,6 +102,7 @@
    * when all requested images are properly loaded.
    */
   function onReady(func) {
+    cl('onReady');
     readyCallbacks.push(func);
   }
 
