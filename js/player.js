@@ -1,4 +1,5 @@
 var Player = function(character) {
+  this.active = false;
   this.scale = 1;
 
   GamePiece.call(this);
@@ -83,59 +84,81 @@ Player.prototype.walkToTile = function() {
 }
 
 /*
-HandleInput takes specific key up events and updates player properties. If an inaccesable tile is sttempted tha the player does not move.
+HandleInput changes input meaning based on status of player. If the player.active is true then the player can move the character on the game board. If player.active is false then the player may choose an option from a menu. specific key up events and updates player properties. If an inaccesable tile is sttempted than the player does not move.
 */
 Player.prototype.handleInput = function(key) {
   cp('Player handleInput');
-  var tile0 = {
-      x: this.tile.x,
-      y: this.tile.y
-    },
-    direction0 = this.direction;
+  if (this.active){
+    var tile0 = {
+        x: this.tile.x,
+        y: this.tile.y
+      },
+      direction0 = this.direction;
 
-  switch (key) {
-    case 'left':
-      this.tile.x = this.tile.x - 1;
-      this.direction = {
-        x: -1,
-        y: 0
-      };
-      if (this.steed) this.steed.direction = this.direction;
-      break;
-    case 'right':
-      this.tile.x = this.tile.x + 1;
-      this.direction = {
-        x: 1,
-        y: 0
-      };
-      if (this.steed) this.steed.direction = this.direction;
-      break;
-    case 'up':
-      this.tile.y = this.tile.y - 1;
-      this.direction = {
-        x: 0,
-        y: -1
-      };
-      break;
-    case 'down':
-      this.tile.y = this.tile.y + 1;
-      this.direction = {
-        x: 0,
-        y: 1
-      };
-      break;
-    case 'space':
+    switch (key) {
+      case 'left':
+        this.tile.x = this.tile.x - 1;
+        this.direction = {
+          x: -1,
+          y: 0
+        };
+        if (this.steed) this.steed.direction = this.direction;
+        break;
+      case 'right':
+        this.tile.x = this.tile.x + 1;
+        this.direction = {
+          x: 1,
+          y: 0
+        };
+        if (this.steed) this.steed.direction = this.direction;
+        break;
+      case 'up':
+        this.tile.y = this.tile.y - 1;
+        this.direction = {
+          x: 0,
+          y: -1
+        };
+        break;
+      case 'down':
+        this.tile.y = this.tile.y + 1;
+        this.direction = {
+          x: 0,
+          y: 1
+        };
+        break;
+      case 'space':
 
-      this.throw();
-      break;
-    case 'dismount':
+        this.throw();
+        break;
+      case 'dismount':
 
-      this.dismount();
-      break;
-  }
-  if (this.walkToTile() === 0) {
-    this.tile = tile0;
-    this.direction = direction0;
+        this.dismount();
+        break;
+    }
+    if (this.walkToTile() === 0) {
+      this.tile = tile0;
+      this.direction = direction0;
+    }
+  }else{
+    switch (key) {
+      case 'left':
+      console.log('previous Option');
+        break;
+      case 'right':
+      console.log('next Option');
+        break;
+      case 'up':
+      console.log('previous Option');
+        break;
+      case 'down':
+      console.log('next Option');
+        break;
+      case 'space':
+      console.log('select');
+        break;
+      case 'dismount':
+        break;
+    }
   }
 };
 
