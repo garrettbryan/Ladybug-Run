@@ -14,7 +14,7 @@
  * a little simpler to work with.
  */
 
-var clg = 0,
+var clg = 1,
   cgg = 0,
   ceg = 0,
   cpg = 0,
@@ -100,7 +100,7 @@ var Engine = (function(global) {
    * game loop.
    */
   function init() {
-    cl('Engine Initilize');
+    cl('engine initilize');
     reset();
     lastTime = Date.now();
     main();
@@ -135,7 +135,7 @@ var Engine = (function(global) {
    * render methods.
    */
   function updateEntities(dt) {
-    cl(' update Entities');
+    cl(' update entities');
 
     game.player.update();
     //        game.enemy.update(dt);
@@ -184,7 +184,7 @@ var Engine = (function(global) {
     cl('engine render');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    game.renderStatusBar(ctx);
+    game.renderStatusBar();
 
     var numRows = game.world.currentMap.totalTiles.y,
       numCols = game.world.currentMap.totalTiles.x,
@@ -207,8 +207,9 @@ var Engine = (function(global) {
       game.world.render(row, numCols);
       renderEntities(row);
     }
-    //        game.enemy.renderNavPoints();
+      game.renderTitle();
 
+    //        game.enemy.renderNavPoints();
   }
 
   /* This function is called by the render function and is called on each game
@@ -216,7 +217,7 @@ var Engine = (function(global) {
    * on your enemy and player entities within app.js
    */
   function renderEntities(row) {
-    cl(' renderEntities row:' + row);
+    cl(' render entities row:' + row);
 
     //        game.enemy.render(row);
     game.allEnemies.forEach(function(enemy) {
@@ -250,15 +251,13 @@ var Engine = (function(global) {
                 player.render();
             });
     */
-
   }
 
-  /* This function does nothing but it could have been a good place to
-   * handle game reset states - maybe a new game menu or a game over screen
-   * those sorts of things. It's only called once by the init() method.
-   */
+/*
+The reset function resets the canvas to display the currentMap. It should first display a title screen. Then
+*/
   function reset() {
-    cl("Engine reset");
+    cl("engine reset");
     game.world.init();
 
     canvas.width = game.world.canvasSize.x;
