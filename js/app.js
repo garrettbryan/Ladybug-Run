@@ -96,6 +96,7 @@ var characters = [{
   sprite: 'images/char-princess-girl.png',
 }];
 
+cl('app.js');
 var game = new Game();
 game.init(1, 0);
 game.startLevel();
