@@ -1,5 +1,8 @@
 var World = function() {
   cl('World new');
+
+  this.currentMap = {};
+
   this.tiles = {
     //these values will be reset per level
     x: 0,
@@ -470,8 +473,6 @@ var World = function() {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
       ]
     }];
-
-  this.currentMap = {};
 };
 
 World.prototype.init = function() {
