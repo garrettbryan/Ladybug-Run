@@ -15,297 +15,297 @@
  */
 
 var clg = 0,
-    cgg = 0,
-    ceg = 0,
-    cpg = 0,
-    cycle = 0;
+  cgg = 0,
+  ceg = 0,
+  cpg = 0,
+  cycle = 0;
 
 
-cp = function(log){
-    if (cpg === 1){
-        console.log(log);
-    }
+cp = function(log) {
+  if (cpg === 1) {
+    console.log(log);
+  }
 };
 
-cl = function(log){
-    if (clg === 1){
-        console.log(log);
-    }
+cl = function(log) {
+  if (clg === 1) {
+    console.log(log);
+  }
 };
 
-cg = function(log){
-    if (cgg === 1){
-        console.log(log);
-    }
+cg = function(log) {
+  if (cgg === 1) {
+    console.log(log);
+  }
 };
 
-ce = function(log){
-    if (ceg === 1){
-        console.log(log);
-    }
+ce = function(log) {
+  if (ceg === 1) {
+    console.log(log);
+  }
 };
 
 
 var Engine = (function(global) {
-    cl('engine');
-    /* Predefine the variables we'll be using within this scope,
-     * create the canvas element, grab the 2D context for that canvas
-     * set the canvas elements height/width and add it to the DOM.
+  cl('engine');
+  /* Predefine the variables we'll be using within this scope,
+   * create the canvas element, grab the 2D context for that canvas
+   * set the canvas elements height/width and add it to the DOM.
+   */
+  var doc = global.document,
+    win = global.window,
+    canvas = doc.createElement('canvas'),
+    ctx = canvas.getContext('2d'),
+
+    lastTime;
+
+  canvas.width = 1010;
+  canvas.height = 808;
+  doc.body.appendChild(canvas);
+
+  /* This function serves as the kickoff point for the game loop itself
+   * and handles properly calling the update and render methods.
+   */
+  function main() {
+    cl('main ' + cycle);
+    cycle++;
+    /* Get our time delta information which is required if your game
+     * requires smooth animation. Because everyone's computer processes
+     * instructions at different speeds we need a constant value that
+     * would be the same for everyone (regardless of how fast their
+     * computer is) - hurray time!
      */
-    var doc = global.document,
-        win = global.window,
-        canvas = doc.createElement('canvas'),
-        ctx = canvas.getContext('2d'),
+    var now = Date.now(),
+      dt = (now - lastTime) / 1000.0;
 
-        lastTime;
-
-    canvas.width = 1010;
-    canvas.height = 808;
-    doc.body.appendChild(canvas);
-
-    /* This function serves as the kickoff point for the game loop itself
-     * and handles properly calling the update and render methods.
+    /* Call our update/render functions, pass along the time delta to
+     * our update function since it may be used for smooth animation.
      */
-    function main() {
-        cl('main ' + cycle);
-        cycle++;
-        /* Get our time delta information which is required if your game
-         * requires smooth animation. Because everyone's computer processes
-         * instructions at different speeds we need a constant value that
-         * would be the same for everyone (regardless of how fast their
-         * computer is) - hurray time!
-         */
-        var now = Date.now(),
-            dt = (now - lastTime) / 1000.0;
-
-        /* Call our update/render functions, pass along the time delta to
-         * our update function since it may be used for smooth animation.
-         */
-        update(dt);
-        render();
-        //game.world.renderTitleScreenMap(dt);
-        /* Set our lastTime variable which is used to determine the time delta
-         * for the next time this function is called.
-         */
-        lastTime = now;
-
-        /* Use the browser's requestAnimationFrame function to call this
-         * function again as soon as the browser is able to draw another frame.
-         */
-        win.requestAnimationFrame(main);
-    };
-
-    /* This function does some initial setup that should only occur once,
-     * particularly setting the lastTime variable that is required for the
-     * game loop.
+    update(dt);
+    render();
+    //game.world.renderTitleScreenMap(dt);
+    /* Set our lastTime variable which is used to determine the time delta
+     * for the next time this function is called.
      */
-    function init() {
-        cl('Engine Initilize');
-        reset();
-        lastTime = Date.now();
-        main();
+    lastTime = now;
+
+    /* Use the browser's requestAnimationFrame function to call this
+     * function again as soon as the browser is able to draw another frame.
+     */
+    win.requestAnimationFrame(main);
+  };
+
+  /* This function does some initial setup that should only occur once,
+   * particularly setting the lastTime variable that is required for the
+   * game loop.
+   */
+  function init() {
+    cl('Engine Initilize');
+    reset();
+    lastTime = Date.now();
+    main();
+  }
+
+  /* This function is called by main (our game loop) and itself calls all
+   * of the functions which may need to update entity's data. Based on how
+   * you implement your collision detection (when two entities occupy the
+   * same space, for instance when your character should die), you may find
+   * the need to add an additional function call here. For now, we've left
+   * it commented out - you may or may not want to implement this
+   * functionality this way (you could just implement collision detection
+   * on the entities themselves within your app.js file).
+   */
+  function update(dt) {
+    cl('engine update')
+    game.world.updateTime(dt);
+
+    if (game.world.checkVictory()) {
+      reset();
     }
 
-    /* This function is called by main (our game loop) and itself calls all
-     * of the functions which may need to update entity's data. Based on how
-     * you implement your collision detection (when two entities occupy the
-     * same space, for instance when your character should die), you may find
-     * the need to add an additional function call here. For now, we've left
-     * it commented out - you may or may not want to implement this
-     * functionality this way (you could just implement collision detection
-     * on the entities themselves within your app.js file).
+    updateEntities(dt);
+    // checkCollisions();
+  }
+
+  /* This is called by the update function  and loops through all of the
+   * objects within your allEnemies array as defined in app.js and calls
+   * their update() methods. It will then call the update function for your
+   * player object. These update methods should focus purely on updating
+   * the data/properties related to  the object. Do your drawing in your
+   * render methods.
+   */
+  function updateEntities(dt) {
+    cl(' update Entities');
+
+    game.player.update();
+    //        game.enemy.update(dt);
+    game.allEnemies.forEach(function(enemy) {
+      enemy.update(dt);
+    });
+    game.boss.move(dt);
+    game.boss.update();
+
+    game.allCollectables.forEach(function(collectable) {
+      collectable.update(dt);
+    });
+    /*
+            allCollectables.forEach(function(collectable) {
+                collectable.update(dt);
+            });
+
+            allEnemies.forEach(function(enemy) {
+                enemy.update(dt);
+            });
+            //cl(dt);
+            allPlayers[4].move(dt);
+
+            transporters.forEach(function(transporter) {
+                transporter.update(dt);
+            });
+
+            if (allPlayers.length > 0){
+                allPlayers[0].update(dt);
+            }
+
+            allPlayers.forEach(function(player){
+                player.catchIt();
+                player.wait();
+            });
+    */
+  }
+
+  /* This function initially draws the "game level", it will then call
+   * the renderEntities function. Remember, this function is called every
+   * game tick (or loop of the game engine) because that's how games work -
+   * they are flipbooks creating the illusion of animation but in reality
+   * they are just drawing the entire screen over and over.
+   */
+  function render() {
+    cl('engine render');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    game.renderStatusBar(ctx);
+
+    var numRows = game.world.currentMap.totalTiles.y,
+      numCols = game.world.currentMap.totalTiles.x,
+      row, col;
+
+    /* Loop through the number of rows and columns we've defined above
+     * and, using the rowImages array, draw the correct image for that
+     * portion of the "grid"
      */
-    function update(dt) {
-        cl('engine update')
-        game.world.updateTime(dt);
+    for (row = 0; row < numRows; row++) {
+      /* The drawImage function of the canvas' context element
+       * requires 3 parameters: the image to draw, the x coordinate
+       * to start drawing and the y coordinate to start drawing.
+       * We're using our Resources helpers to refer to our images
+       * so that we get the benefits of caching these images, since
+       * we're using them over and over.
+       */
+      // Modified so that it reads the tileMap array in world.
 
-        if (game.world.checkVictory()){
-            reset();
-        }
+      game.world.render(row, numCols);
+      renderEntities(row);
+    }
+    //        game.enemy.renderNavPoints();
 
-        updateEntities(dt);
-        // checkCollisions();
+  }
+
+  /* This function is called by the render function and is called on each game
+   * tick. It's purpose is to then call the render functions you have defined
+   * on your enemy and player entities within app.js
+   */
+  function renderEntities(row) {
+    cl(' renderEntities row:' + row);
+
+    //        game.enemy.render(row);
+    game.allEnemies.forEach(function(enemy) {
+      enemy.render(row);
+    });
+    game.player.render(row);
+
+    game.boss.render(row);
+    game.allCollectables.forEach(function(collectable) {
+      collectable.render();
+      //            console.log("render Collectable");
+    });
+    /* Loop through all of the objects within the allEnemies array and call
+     * the render function you have defined.
+     */
+
+    /*
+            transporters.forEach(function(transporter) {
+                transporter.render();
+            });
+
+            allCollectables.forEach(function(collectable) {
+                collectable.render();
+            });
+
+            allEnemies.forEach(function(enemy) {
+                enemy.render();
+            });
+
+            allPlayers.forEach(function(player){
+                player.render();
+            });
+    */
+
+  }
+
+  /* This function does nothing but it could have been a good place to
+   * handle game reset states - maybe a new game menu or a game over screen
+   * those sorts of things. It's only called once by the init() method.
+   */
+  function reset() {
+    cl("Engine reset");
+    game.world.init();
+
+    canvas.width = game.world.canvasSize.x;
+    canvas.height = game.world.canvasSize.y;
+
+    game.player.init(game.world.currentMap.playerStartTile);
+    game.allCollectables.forEach(function(collectable) {
+      collectable.init();
+    });
+    if (game.world.currentMap.hasOwnProperty('bossStartTile')) {
+      game.boss.init(game.world.currentMap.bossStartTile);
     }
 
-    /* This is called by the update function  and loops through all of the
-     * objects within your allEnemies array as defined in app.js and calls
-     * their update() methods. It will then call the update function for your
-     * player object. These update methods should focus purely on updating
-     * the data/properties related to  the object. Do your drawing in your
-     * render methods.
-     */
-    function updateEntities(dt) {
-        cl(' update Entities');
 
-        game.player.update();
-//        game.enemy.update(dt);
-        game.allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
-        game.boss.move(dt);
-        game.boss.update();
+  }
 
-        game.allCollectables.forEach(function(collectable) {
-            collectable.update(dt);
-        });
-/*
-        allCollectables.forEach(function(collectable) {
-            collectable.update(dt);
-        });
-
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
-        //cl(dt);
-        allPlayers[4].move(dt);
-
-        transporters.forEach(function(transporter) {
-            transporter.update(dt);
-        });
-
-        if (allPlayers.length > 0){
-            allPlayers[0].update(dt);
-        }
-
-        allPlayers.forEach(function(player){
-            player.catchIt();
-            player.wait();
-        });
-*/
-    }
-
-    /* This function initially draws the "game level", it will then call
-     * the renderEntities function. Remember, this function is called every
-     * game tick (or loop of the game engine) because that's how games work -
-     * they are flipbooks creating the illusion of animation but in reality
-     * they are just drawing the entire screen over and over.
-     */
-    function render() {
-        cl('engine render');
-        ctx.clearRect(0,0,canvas.width, canvas.height);
-
-        game.renderStatusBar(ctx);
-
-      var numRows = game.world.currentMap.totalTiles.y,
-        numCols = game.world.currentMap.totalTiles.x,
-        row, col;
-
-            /* Loop through the number of rows and columns we've defined above
-             * and, using the rowImages array, draw the correct image for that
-             * portion of the "grid"
-             */
-        for (row = 0; row < numRows; row++) {
-        /* The drawImage function of the canvas' context element
-        * requires 3 parameters: the image to draw, the x coordinate
-        * to start drawing and the y coordinate to start drawing.
-        * We're using our Resources helpers to refer to our images
-        * so that we get the benefits of caching these images, since
-        * we're using them over and over.
-        */
-        // Modified so that it reads the tileMap array in world.
-
-            game.world.render(row, numCols);
-            renderEntities(row);
-        }
-//        game.enemy.renderNavPoints();
-
-    }
-
-    /* This function is called by the render function and is called on each game
-     * tick. It's purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
-    function renderEntities(row) {
-        cl(' renderEntities row:' + row);
-
-//        game.enemy.render(row);
-        game.allEnemies.forEach(function(enemy) {
-            enemy.render(row);
-        });
-        game.player.render(row);
-
-        game.boss.render(row);
-        game.allCollectables.forEach(function(collectable) {
-            collectable.render();
-//            console.log("render Collectable");
-        });
-        /* Loop through all of the objects within the allEnemies array and call
-         * the render function you have defined.
-         */
-
-/*
-        transporters.forEach(function(transporter) {
-            transporter.render();
-        });
-
-        allCollectables.forEach(function(collectable) {
-            collectable.render();
-        });
-
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
-
-        allPlayers.forEach(function(player){
-            player.render();
-        });
-*/
-
-    }
-
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
-    function reset() {
-        cl("Engine reset");
-        game.world.init();
-
-        canvas.width = game.world.canvasSize.x;
-        canvas.height = game.world.canvasSize.y;
-
-        game.player.init(game.world.currentMap.playerStartTile);
-        game.allCollectables.forEach(function(collectable) {
-            collectable.init();
-        });
-        if(game.world.currentMap.hasOwnProperty('bossStartTile')){
-            game.boss.init(game.world.currentMap.bossStartTile);
-        }
-
-
-    }
-
-    /* Go ahead and load all of the images we know we're going to need to
-     * draw our game level. Then set init as the callback method, so that when
-     * all of these images are properly loaded our game will start.
-     */
-    Resources.load([
-	'images/char-boy.png',
-	'images/char-cat-girl.png',
-	'images/char-horn-girl.png',
-	'images/char-pink-girl.png',
-	'images/char-princess-girl.png',
+  /* Go ahead and load all of the images we know we're going to need to
+   * draw our game level. Then set init as the callback method, so that when
+   * all of these images are properly loaded our game will start.
+   */
+  Resources.load([
+    'images/char-boy.png',
+    'images/char-cat-girl.png',
+    'images/char-horn-girl.png',
+    'images/char-pink-girl.png',
+    'images/char-princess-girl.png',
     'images/enemy-bug-front_sprite_sheet.png',
     'images/enemy-bug_sprite_sheet.png',
-	'images/Gem Blue.png',
-	'images/Gem Green.png',
-	'images/Gem Orange.png',
-	'images/grass-block.png',
-	'images/Heart.png',
-	'images/Key.png',
-	'images/Rock.png',
-	'images/Selector.png',
-	'images/Star.png',
-	'images/stone-block.png',
-	'images/water-block.png',
+    'images/Gem Blue.png',
+    'images/Gem Green.png',
+    'images/Gem Orange.png',
+    'images/grass-block.png',
+    'images/Heart.png',
+    'images/Key.png',
+    'images/Rock.png',
+    'images/Selector.png',
+    'images/Star.png',
+    'images/stone-block.png',
+    'images/water-block.png',
     'images/white-block.png'
-    ]);
-    cl('resources');
-    Resources.onReady(init);
+  ]);
+  cl('resources');
+  Resources.onReady(init);
 
-    /* Assign the canvas' context object to the global variable (the window
-     * object when run in a browser) so that developer's can use it more easily
-     * from within their app.js files.
-     */
-    global.ctx = ctx;
+  /* Assign the canvas' context object to the global variable (the window
+   * object when run in a browser) so that developer's can use it more easily
+   * from within their app.js files.
+   */
+  global.ctx = ctx;
 })(this);

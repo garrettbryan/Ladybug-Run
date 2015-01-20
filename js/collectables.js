@@ -3,7 +3,7 @@ Collectables have a number of characteristics. They have a certain amount of poi
 */
 var Collectable = function(collectable) {
   this.scale = 0.25;
-  this.speed = 400;
+  this.speed = 0;
   GamePiece.call(this);
 
   this.sprite = collectable.sprite;
@@ -23,20 +23,20 @@ Collectable.prototype.constructor = Collectable;
 /*
 The init method places a collectable onto the level map on a walkable tile. Then calculates the position so the update function has an initial value.
 */
-Collectable.prototype.init = function(){
-    this.placeRandomly(game.world.currentMap);
-    this.draw = true;
-    this.calculatePosition();
+Collectable.prototype.init = function() {
+  this.placeRandomly(game.world.currentMap);
+  this.draw = true;
+  this.calculatePosition();
 }
 
 /*
 If a collectable has been picked up then the update function uses the carriers tile data. If the collectable is not attached then the position is determined by the previous position and any position change due to a speed and direction value. If the speed or direction is 0 then the collectable will be in its default state motionless on a tile.
 */
 Collectable.prototype.update = function(dt) {
-  if (this.carriedBy){
+  if (this.carriedBy) {
     this.tile = this.carriedBy.tile;
     this.calculatePosition();
-  }else{
+  } else {
     this.position.x = this.position.x + this.speed * dt * this.direction.x;
     this.position.y = this.position.y + this.speed * dt * this.direction.y;
   }
@@ -45,14 +45,14 @@ Collectable.prototype.update = function(dt) {
 /*
 Randomly places the collectables onto a walkable tile for any map.
 */
-Collectable.prototype.placeRandomly = function(currentMap){
+Collectable.prototype.placeRandomly = function(currentMap) {
   this.tile = {
-    x: Math.floor(Math.random()*(currentMap.totalTiles.x)),
-    y: Math.floor(Math.random()*(currentMap.totalTiles.y)),
+    x: Math.floor(Math.random() * (currentMap.totalTiles.x)),
+    y: Math.floor(Math.random() * (currentMap.totalTiles.y)),
   };
-  if (currentMap.walkMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] === 0){
+  if (currentMap.walkMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] === 0) {
     this.placeRandomly(currentMap);
-  }else{
+  } else {
     console.log(this.tile);
   }
 }

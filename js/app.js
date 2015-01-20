@@ -48,84 +48,70 @@ var mess = "";
 
 */
 
-  var collectables = [
-    {
-      elementName: 'Blue Gem',
-      sprite: 'images/Gem Blue.png',
-      points: 50,
-    },
-    {
-      elementName: 'Green Gem',
-      sprite: 'images/Gem Green.png',
-      points: 50,
-    },
-    {
-      elementName: 'Orange Gem',
-      sprite: 'images/Gem Orange.png',
-      points: 50,
-    },
-    {
-      elementName: 'Heart',
-      sprite: 'images/Heart.png',
-      points: 50,
-    },
-    {
-      elementName: 'Key',
-      sprite: 'images/Key.png',
-      points: 50,
+var collectables = [{
+  elementName: 'Blue Gem',
+  sprite: 'images/Gem Blue.png',
+  points: 50,
+}, {
+  elementName: 'Green Gem',
+  sprite: 'images/Gem Green.png',
+  points: 50,
+}, {
+  elementName: 'Orange Gem',
+  sprite: 'images/Gem Orange.png',
+  points: 50,
+}, {
+  elementName: 'Heart',
+  sprite: 'images/Heart.png',
+  points: 50,
+}, {
+  elementName: 'Key',
+  sprite: 'images/Key.png',
+  points: 50,
 
-    },
-    {
-      elementName: 'Star',
-      sprite: 'images/Star.png',
-      points: 50,
-    },
-    {
-      elementName: 'Rock',
-      sprite: 'images/Rock.png',
-      points: 50,
-    },
-  ];
+}, {
+  elementName: 'Star',
+  sprite: 'images/Star.png',
+  points: 50,
+}, {
+  elementName: 'Rock',
+  sprite: 'images/Rock.png',
+  points: 50,
+}, ];
 
-var characters = [
-    {
-        elementName: 'Bug Boy',
-        sprite :'images/char-boy.png',
-    },
-    {
-        elementName: 'Cat Girl',
-        sprite: 'images/char-cat-girl.png',
-    },
-    {
-        elementName: 'Goth Girl with Issues',
-        sprite: 'images/char-horn-girl.png',
-    },
-    {
-        elementName: 'Pinky',
-        sprite: 'images/char-pink-girl.png',
-    },
-    {
-        elementName: 'Princess Lily',
-        sprite: 'images/char-princess-girl.png',
-    }
-];
+var characters = [{
+  elementName: 'Bug Boy',
+  sprite: 'images/char-boy.png',
+}, {
+  elementName: 'Cat Girl',
+  sprite: 'images/char-cat-girl.png',
+}, {
+  elementName: 'Goth Girl with Issues',
+  sprite: 'images/char-horn-girl.png',
+}, {
+  elementName: 'Pinky',
+  sprite: 'images/char-pink-girl.png',
+}, {
+  elementName: 'Princess Lily',
+  sprite: 'images/char-princess-girl.png',
+}];
 
 var game = new Game();
-game.init(5,0);
+game.init(1, 0);
 game.startLevel();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down',
-        32: 'space',
-        68: 'dismount'
+  var allowedKeys = {
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down',
+    32: 'space',
+    68: 'dismount'
 
-    };
+  };
 
-    game.player.handleInput(allowedKeys[e.keyCode]);
+  game.player.handleInput(allowedKeys[e.keyCode]);
 });

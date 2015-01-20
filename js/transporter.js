@@ -23,21 +23,20 @@ var Transporter = function(posX, posY) {
 Transporter.prototype = Object.create(GamePiece.prototype);
 Transporter.prototype.constructor = Transporter;
 
-Transporter.prototype.update = function(){
-    this.x = - this.boardTileDimensions.x + this.tile.x * this.boardTileDimensions.x + 101/2;
-    this.y = - this.boardTileDimensions.y + this.tile.y * this.boardTileDimensions.y;
+Transporter.prototype.update = function() {
+  this.x = -this.boardTileDimensions.x + this.tile.x * this.boardTileDimensions.x + 101 / 2;
+  this.y = -this.boardTileDimensions.y + this.tile.y * this.boardTileDimensions.y;
 
-    this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
-    this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
+  this.collisionBoundary.primary.x = this.position.x + this.collisionBoundary.primary.xOffset;
+  this.collisionBoundary.primary.y = this.position.y + this.collisionBoundary.primary.yOffset;
 
-    for (var player in allPlayers){
-      this.collisionCheck(allPlayers[player], "primary", this.transport);
-    }
-    for (var enemy in allEnemies){
-      this.collisionCheck(allEnemies[enemy], "primary", this.transport);
-    }
-//    for (var collectable in allCollectables){
-//      this.collisionCheck(allCollectables[collectable], "primary", //this.transport);
-//    }
+  for (var player in allPlayers) {
+    this.collisionCheck(allPlayers[player], "primary", this.transport);
+  }
+  for (var enemy in allEnemies) {
+    this.collisionCheck(allEnemies[enemy], "primary", this.transport);
+  }
+  //    for (var collectable in allCollectables){
+  //      this.collisionCheck(allCollectables[collectable], "primary", //this.transport);
+  //    }
 }
-
