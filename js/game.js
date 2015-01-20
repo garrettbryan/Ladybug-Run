@@ -20,7 +20,6 @@ Game.prototype.init = function(level, score) {
   this.score = score;
 
   this.world = new World();
-  this.world.currentMap = this.world.maps[this.level - 1];
 
 
   this.allPlayers = [];
@@ -44,8 +43,8 @@ Game.prototype.startLevel = function(restart) {
     this.score = 0;
   }
 
-  //this.world.currentMap = this.world.randomMap;
-  this.world.currentMap = this.world.maps[this.level - 1];
+  this.world.currentMap = this.world.randomMap;
+  //this.world.currentMap = this.world.maps[this.level - 1];
   this.active = true;
   // TODO create enemies;
   //this.enemy.init();
@@ -69,7 +68,7 @@ Game.prototype.failure = function() {
   this.world.currentMap = this.world.failureMap;
 }
 
-Game.prototype.renderStatusBar = function(ctx) {
+Game.prototype.renderStatusBar = function() {
   cl("game renderStatusBar");
   ctx.save();
   ctx.fillStyle = '#000';
@@ -79,6 +78,41 @@ Game.prototype.renderStatusBar = function(ctx) {
   ctx.fillText('Time: ' + this.world.worldTime.toFixed(2), game.world.canvasSize.x / 4, 30);
   ctx.fillText('Level: ' + this.level, game.world.canvasSize.x / 2, 30);
 
+  ctx.restore();
+}
+
+Game.prototype.renderTitle = function() {
+  cl("game renderTitle");
+  ctx.save();
+  ctx.font = 'Italic 80px Sans-Serif';
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = '#000';
+  ctx.shadowOffsetX = 10;
+  ctx.shadowOffsetY = 10;
+  ctx.shadowBlur = 10;
+  ctx.textBaseline = 'Top';
+  ctx.fillText('Ladybug Run', game.world.canvasSize.x / 4, game.world.canvasSize.y / 2);
+  ctx.font = 'Italic 50px Sans-Serif';
+  ctx.fillText('An Epic in 5 Levels', game.world.canvasSize.x / 4, game.world.canvasSize.y / 2 + 60);
+  ctx.font = 'Italic 30px Sans-Serif';
+  ctx.fillText('By: Garrett Bryan', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50);
+  ctx.fillText('Press the Spacebar to Play', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50 + 50);
+  ctx.restore();
+}
+
+Game.prototype.renderDifficultyOption = function() {
+  cl("game renderDifficultyOption");
+  ctx.save();
+  ctx.font = 'Italic 80px Sans-Serif';
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = '#000';
+  ctx.shadowOffsetX = 10;
+  ctx.shadowOffsetY = 10;
+  ctx.shadowBlur = 10;
+  ctx.textBaseline = 'Top';
+  ctx.font = 'Italic 30px Sans-Serif';
+  ctx.fillText('Difficulty', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50);
+  ctx.fillText('Press the Spacebar to Select', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50 + 50);
   ctx.restore();
 }
 
