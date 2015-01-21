@@ -43,17 +43,21 @@ Game.prototype.startLevel = function(restart) {
     this.score = 0;
   }
 
-  //this.world.currentMap = this.world.randomMap;
-  this.world.currentMap = this.world.maps[this.level - 1];
-  this.active = true;
+  this.player.active = true;
+  if (this.player.active){
+    this.world.currentMap = this.world.maps[this.level - 1];
+    var collectableAmount = 0;
+    for (var i = 0; i < 7; i++) {
+      this.allCollectables.push(new Collectable(collectables[i]));
+    }
+  } else {
+    this.world.currentMap = this.world.randomMap;
+    this.player.draw = false;
+  }
   // TODO create enemies;
   //this.enemy.init();
 
-  var collectableAmount = 0;
 
-  for (var i = 0; i < 7; i++) {
-    this.allCollectables[i] = new Collectable(collectables[i]);
-  }
 
 
 }

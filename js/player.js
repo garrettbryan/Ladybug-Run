@@ -206,8 +206,8 @@ Player.prototype.death = function() {
     this.drop();
     this.noCollisions();
   }
-
-  game.startLevel(true);
+  console.log('Do the failure thing');
+  //game.startLevel(true);
 };
 
 
@@ -253,19 +253,19 @@ Player.prototype.dismount = function() {
   this.steed = '';
 
 
-  console.log(this.tile);
+//  console.log(this.tile);
   for (var i = this.tile.x - 1; i < this.tile.x + 2; i++) {
-    console.log(i);
+//    console.log(i);
     for (var j = this.tile.y - 1; j < this.tile.y + 2; j++) {
-      console.log(j);
+//      console.log(j);
       if (i >= 0 && i < game.world.currentMap.totalTiles.x && j >= 0 && j < game.world.currentMap.totalTiles.y && !(j === this.tile.y)) {
-        console.log(game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i]);
+//        console.log(game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i]);
         if (game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i] === 1) {
           this.tile = {
             x: i,
             y: j
           };
-          console.log(this.tile);
+//          console.log(this.tile);
           i = game.world.currentMap.totalTiles.x;
           j = game.world.currentMap.totalTiles.y;
         }
