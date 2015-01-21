@@ -37,6 +37,14 @@ var createBugMessage = function(message) {
 var bugCharacterFormation = function(character) {
   var bugArray = [];
   switch (character) {
+    case "'":
+      bugArray = [
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+      ];
     case " ":
       bugArray = [
         [0, 0, 0, 0, 0],
