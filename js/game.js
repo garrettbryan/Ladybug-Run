@@ -43,8 +43,8 @@ Game.prototype.startLevel = function(restart) {
     this.score = 0;
   }
 
-  this.world.currentMap = this.world.randomMap;
-  //this.world.currentMap = this.world.maps[this.level - 1];
+  //this.world.currentMap = this.world.randomMap;
+  this.world.currentMap = this.world.maps[this.level - 1];
   this.active = true;
   // TODO create enemies;
   //this.enemy.init();

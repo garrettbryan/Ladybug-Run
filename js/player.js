@@ -155,6 +155,7 @@ Player.prototype.handleInput = function(key) {
         break;
       case 'space':
       console.log('select');
+      this.active = true;
         break;
       case 'dismount':
         break;

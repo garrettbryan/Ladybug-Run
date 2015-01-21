@@ -184,6 +184,8 @@ var World = function() {
         }]
       ],
 
+      enemyMessage = "A long time ago.";
+
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w',
         'w', 'w', 'g', 'g', 'w', 'g', 'g', 'w', 'w',
@@ -246,6 +248,8 @@ var World = function() {
 
       ],
 
+      enemyMessage = "A cold wind blows from the east.";
+
       textureMap: [
         's', 's', 'g', 's', 'w', 'w', 's', 's', 's', 's', 's',
         's', 's', 'sb', 'g', 'g', 'w', 'w', 's', 'g', 's', 's',
@@ -297,6 +301,9 @@ var World = function() {
           y: 2
         }]
       ],
+
+      enemyMessage = "No place is secure.";
+
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'wb', 'w', 'w', 'w', 'w',
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 's', 'w', 'w',
@@ -360,6 +367,10 @@ var World = function() {
           y: 5
         }]
       ],
+
+      enemyMessage = "All your base is belong to us!";
+
+
       textureMap: [
         's', 'g', 's', 's', 's', 's', 's', 'g', 's', 's', 's', 's',
         's', 'g', 'g', 's', 's', 's', 's', 'g', 's', 's', 's', 's',
@@ -432,6 +443,9 @@ var World = function() {
           y: 1
         }]
       ],
+
+      enemyMessage = "Ladybug's attack!";
+
       textureMap: [
         's', 's', 's', 's', 's', 's', 's', 's', 'g', 'gb', 's',
         's', 's', 's', 's', 's', 's', 'sb', 's', 's', 'g', 's',
@@ -535,6 +549,15 @@ World.prototype.checkVictory = function() {
   return false;
 };
 
+World.prototype.renderLevelIntro = function(row, numCols) {
+  if (game.player.active) {
+
+    game.renderStatusBar();
+  } else {
+
+  }
+}
+
 
 World.prototype.render = function(row, numCols) {
   cl('world render row:' + row);
@@ -587,12 +610,8 @@ World.prototype.createRandomMapColumn = function(currentMap) {
   }
 }
 
-World.prototype.generateRandomMap = function() {
-
-}
 
 World.prototype.renderTitleScreenMap = function(dt) {
-
   console.log(dt);
   this.randomMap.scrollingMap.x += dt;
   if (this.randomMap.scrollingMap.x >= 0) {
@@ -635,6 +654,8 @@ World.prototype.renderTitleScreenMap = function(dt) {
   //ctx.fillStyle = 'rgba(0,0,0,.75)';
   //ctx.fillRect(0,0, numCols * this.pixelsPerTileUnit.x, numRows * this.pixelsPerTileUnit.y);
   //ctx.restore();
+  game.renderTitle();
+
 }
 
 
