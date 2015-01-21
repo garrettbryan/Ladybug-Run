@@ -87,26 +87,28 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
   cg('GamePiece collisionCheck');
   var that = this,
     objectsCollide = false;
-  gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
-    if (that instanceof collider) {
-      var distanceBetweenGamePieces =
-        (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-          that.position.x - that.collisionBoundary.primary.offset.x) *
-        (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-          that.position.x - that.collisionBoundary.primary.offset.x) +
-        (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
-          that.position.y - that.collisionBoundary.primary.offset.y) *
-        (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
-          that.position.y - that.collisionBoundary.primary.offset.y);
-      var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
-        (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
-      if (distanceBetweenGamePieces < radiiSum) {
-        console.log("colllision");
-        result.call(that, gamePiece);
-        objectsCollide = true;
+  if (Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
+    gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
+      if (that instanceof collider) {
+        var distanceBetweenGamePieces =
+          (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+            that.position.x - that.collisionBoundary.primary.offset.x) *
+          (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+            that.position.x - that.collisionBoundary.primary.offset.x) +
+          (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
+            that.position.y - that.collisionBoundary.primary.offset.y) *
+          (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
+            that.position.y - that.collisionBoundary.primary.offset.y);
+        var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
+          (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
+        if (distanceBetweenGamePieces < radiiSum) {
+          console.log("colllision");
+          result.call(that, gamePiece);
+          objectsCollide = true;
+        }
       }
-    }
-  });
+    });
+  }
   return objectsCollide;
 }
 
