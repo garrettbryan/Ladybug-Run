@@ -137,6 +137,8 @@ var Engine = (function(global) {
   function updateEntities(dt) {
     cl(' update entities');
 
+    game.world.update(dt);
+
     game.player.update();
     //        game.enemy.update(dt);
     game.allEnemies.forEach(function(enemy) {
