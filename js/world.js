@@ -3,6 +3,10 @@ var World = function() {
 
   this.currentMap = {};
 
+  this.offset = {
+    x: 0
+  };
+
   this.tiles = {
     //these values will be reset per level
     x: 0,
@@ -184,7 +188,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage = "A long time ago.";
+      enemyMessage : "A long time ago.",
 
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w',
@@ -248,7 +252,7 @@ var World = function() {
 
       ],
 
-      enemyMessage = "A cold wind blows from the east.";
+      enemyMessage : "A cold wind blows from the east.",
 
       textureMap: [
         's', 's', 'g', 's', 'w', 'w', 's', 's', 's', 's', 's',
@@ -302,7 +306,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage = "No place is secure.";
+      enemyMessage : "No place is secure.",
 
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'wb', 'w', 'w', 'w', 'w',
@@ -368,7 +372,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage = "All your base is belong to us!";
+      enemyMessage : "All your base is belong to us!",
 
 
       textureMap: [
@@ -444,7 +448,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage = "Ladybug's attack!";
+      enemyMessage : "Ladybug's attack!",
 
       textureMap: [
         's', 's', 's', 's', 's', 's', 's', 's', 'g', 'gb', 's',
@@ -508,7 +512,6 @@ World.prototype.randomizeTileHeights = function(map) { //TODO add some texture t
 
 World.prototype.updateTime = function(dt) {
   cl('world updateTime');
-  this.worldTime += 0;
   this.worldTime += dt;
 }
 
@@ -549,18 +552,15 @@ World.prototype.checkVictory = function() {
   return false;
 };
 
-World.prototype.renderLevelIntro = function(row, numCols) {
-  if (game.player.active) {
 
-    game.renderStatusBar();
-  } else {
-
-  }
-}
-
-
+/*
+The world render method checks for a scrolling map. If the scrolling map is in use, the for loop needs to be adjusted so that the tile removal is not rendered to the canvas.
+*/
 World.prototype.render = function(row, numCols) {
   cl('world render row:' + row);
+  if (this.currentMap === this.randomMap){
+    numCols++;
+  }
 
   for (var col = 0; col < numCols; col++) {
     var resource,
@@ -584,19 +584,24 @@ World.prototype.render = function(row, numCols) {
         break;
     }
     for (var z = 0; z <= tileHeight; z++) {
-      ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.maxElevation);
+      ctx.drawImage(Resources.get(resource), (col + this.offset.x) * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.maxElevation);
     }
     switch (this.currentMap.textureMap[col + numCols * row]) {
       case 'wb':
       case 'gb':
       case 'sb':
         resource = 'images/Rock.png';
-        ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.maxElevation);
+        ctx.drawImage(Resources.get(resource), (col + this.offset.x) * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.maxElevation);
         break;
     }
 
   }
 }
+
+
+
+
+
 
 World.prototype.createRandomMapColumn = function(currentMap) {
   var numRows = this.randomMap.totalTiles.y;
@@ -610,53 +615,22 @@ World.prototype.createRandomMapColumn = function(currentMap) {
   }
 }
 
-
-World.prototype.renderTitleScreenMap = function(dt) {
-  console.log(dt);
-  this.randomMap.scrollingMap.x += dt;
-  if (this.randomMap.scrollingMap.x >= 0) {
-    this.createRandomMapColumn(this.randomMap);
-    this.randomMap.scrollingMap.x = -1;
-  }
-  console.log(this.randomMap.scrollingMap.x);
-  //tile side scrolling map for bug messages
-  var numCols = this.randomMap.totalTiles.x,
-    numRows = this.randomMap.totalTiles.y;
-  for (var col = numCols; col >= 0; col--) {
-    for (var row = 0; row < numRows; row++) {
-      var resource,
-        tileHeight = (this.randomMap.topoMap[col + numCols * row]);
-
-      switch (this.randomMap.textureMap[col + numCols * row]) {
-        case 'w':
-        case 'wb':
-          resource = 'images/water-block.png';
-          break;
-        case 'g':
-        case 'gb':
-          resource = 'images/grass-block.png';
-          break;
-        case 's':
-        case 'sb':
-          resource = 'images/stone-block.png';
-          break;
-      }
-
-
-      //TODO IMPLEMENT RANDOMMAP GENERATOR
-      for (var z = 0; z <= tileHeight; z++) {
-        ctx.drawImage(Resources.get(resource), col * this.pixelsPerTileUnit.x + this.randomMap.scrollingMap.x * this.pixelsPerTileUnit.x, row * this.pixelsPerTileUnit.y - this.pixelsPerElevationUnit.y * z + this.elevationOffset);
-      }
+/*
+The world update checks for the randomMap which is the scrolling map. If random map is in use, then it updates the offset.x property for a simulated tracking shot.
+*/
+World.prototype.update = function(dt) {
+  cl('world update');
+  if (this.currentMap === this.randomMap){
+    this.offset.x += dt;
+    if (this.offset.x >= 0) {
+      this.createRandomMapColumn(this.randomMap);
+      this.offset.x = -1;
     }
+  }else{
+    this.offset.x = 0;
   }
-  //Testing different lighting styles by adding a black transparent rectangle.
-  //ctx.save();
-  //ctx.fillStyle = 'rgba(0,0,0,.75)';
-  //ctx.fillRect(0,0, numCols * this.pixelsPerTileUnit.x, numRows * this.pixelsPerTileUnit.y);
-  //ctx.restore();
-  game.renderTitle();
-
 }
+
 
 
 /*
