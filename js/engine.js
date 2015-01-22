@@ -57,7 +57,8 @@ var Engine = (function(global) {
     canvas = doc.createElement('canvas'),
     ctx = canvas.getContext('2d'),
 
-    lastTime;
+    lastTime,
+    lastPlayerState;
 
   canvas.width = 1010;
   canvas.height = 808;
@@ -67,7 +68,7 @@ var Engine = (function(global) {
    * and handles properly calling the update and render methods.
    */
   function main() {
-    cl('main ' + cycle);
+    cl('engine main ' + cycle);
     cycle++;
     /* Get our time delta information which is required if your game
      * requires smooth animation. Because everyone's computer processes
@@ -88,6 +89,11 @@ var Engine = (function(global) {
      * for the next time this function is called.
      */
     lastTime = now;
+
+    /*
+    lastPlayerState can be compared to the current player.active property to determine if there has been a change. If there has been a change then to reset the canvas window.
+    */
+    lastPlayerState = game.player.active;
 
     /* Use the browser's requestAnimationFrame function to call this
      * function again as soon as the browser is able to draw another frame.
@@ -120,6 +126,10 @@ var Engine = (function(global) {
     game.world.updateTime(dt);
 
     if (game.world.checkVictory()) {
+      reset();
+    }
+
+    if (game.world.playLevel(lastPlayerState !== game.player.active)){
       reset();
     }
 
