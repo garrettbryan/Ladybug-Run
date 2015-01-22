@@ -51,32 +51,32 @@ var mess = "";
 var collectables = [{
   elementName: 'Blue Gem',
   sprite: 'images/Gem Blue.png',
-  points: 50,
+  points: 40,
 }, {
   elementName: 'Green Gem',
   sprite: 'images/Gem Green.png',
-  points: 50,
+  points: 60,
 }, {
   elementName: 'Orange Gem',
   sprite: 'images/Gem Orange.png',
-  points: 50,
+  points: 100,
 }, {
   elementName: 'Heart',
   sprite: 'images/Heart.png',
-  points: 50,
+  points: 75,
 }, {
   elementName: 'Key',
   sprite: 'images/Key.png',
-  points: 50,
+  points: 200,
 
 }, {
   elementName: 'Star',
   sprite: 'images/Star.png',
-  points: 50,
+  points: 500,
 }, {
   elementName: 'Rock',
   sprite: 'images/Rock.png',
-  points: 50,
+  points: -100,
 }, ];
 
 var characters = [{

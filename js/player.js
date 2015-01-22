@@ -315,6 +315,7 @@ Player.prototype.pickup = function(collectable) {
   collectable.projectile = false;
   collectable.collisionBoundary.primary.collidesWith = [];
   collectable.carriedBy = this;
+  game.score += collectable.points;
   this.collectables.push(collectable);
   this.collectablesWidth += collectable.spriteDimensions.x;
   this.calculateCollectableSpacing();
@@ -347,6 +348,8 @@ Player.prototype.throw = function() {
   if (this.collectables.length > 0) {
     var projectile = this.collectables.pop();
     projectile.projectile = true;
+    game.score -= projectile.points;
+
     projectile.collisionBoundary.primary.collidesWith = [
       Player,
       Enemy,

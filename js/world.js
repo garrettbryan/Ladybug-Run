@@ -569,11 +569,18 @@ World.prototype.checkVictory = function() {
 World.prototype.playLevel = function(LastStateDifferent){
   cl('world playlevel');
   if (LastStateDifferent) {
+    game.allCollectables = [];
+    game.player.collectables = [];
+    game.player.collectablesSpacing = 0;
+    game.player.collectablesWidth = 0;
     var result = true;
     if (game.player.active) {
       game.player.draw = true;
       game.player.active = true;
       this.currentMap = this.maps[game.level - 1];
+      for (var i = 0; i < 7; i++){
+        game.allCollectables.push(new Collectable(collectables[i]));
+      }
     }else{
       game.player.draw = false;
       game.player.active = false;
