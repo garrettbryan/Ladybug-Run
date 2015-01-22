@@ -389,7 +389,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage : "All your base is belong to us!",
+      enemyMessage : "All your base are belong to us!",
 
 
       textureMap: [
