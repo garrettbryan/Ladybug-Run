@@ -43,17 +43,10 @@ Game.prototype.startLevel = function(restart) {
     this.score = 0;
   }
 
-  this.player.active = true;
-  if (this.player.active){
-    this.world.currentMap = this.world.maps[this.level - 1];
-    var collectableAmount = 0;
-    for (var i = 0; i < 7; i++) {
-      this.allCollectables.push(new Collectable(collectables[i]));
-    }
-  } else {
-    this.world.currentMap = this.world.randomMap;
-    this.player.draw = false;
-  }
+//  this.world.cutscene(this.player.active);
+  this.world.playLevel(true);
+
+
   // TODO create enemies;
   //this.enemy.init();
 
