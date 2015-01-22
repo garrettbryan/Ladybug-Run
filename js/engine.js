@@ -14,7 +14,7 @@
  * a little simpler to work with.
  */
 
-var clg = 0,
+var clg = 1,
   cgg = 0,
   ceg = 0,
   cpg = 0,

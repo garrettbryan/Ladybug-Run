@@ -567,6 +567,7 @@ World.prototype.checkVictory = function() {
 };
 
 World.prototype.playLevel = function(LastStateDifferent){
+  cl('world playlevel');
   if (LastStateDifferent) {
     var result = true;
     if (game.player.active) {
