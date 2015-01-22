@@ -3,6 +3,8 @@ var World = function() {
 
   this.currentMap = {};
 
+  this.loadLevel = false;
+
   this.offset = {
     x: 0
   };
@@ -229,7 +231,7 @@ var World = function() {
     }, {
       totalTiles: {
         x: 11,
-        y: 5
+        y: 10
       },
       playerStartTile: {
         x: 10,
@@ -259,7 +261,12 @@ var World = function() {
         's', 's', 'sb', 'g', 'g', 'w', 'w', 's', 'g', 's', 's',
         's', 's', 's', 's', 'g', 'g', 'w', 'w', 's', 's', 's',
         's', 's', 's', 's', 'g', 'g', 'g', 'w', 'w', 's', 's',
-        'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'w', 'w', 'g'
+        'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'w', 'w', 'g',
+        'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'w', 'w', 'g',
+        's', 's', 's', 's', 'g', 'g', 'g', 'w', 'w', 's', 's',
+        's', 's', 's', 's', 'g', 'g', 'w', 'w', 's', 's', 's',
+        's', 's', 'sb', 'g', 'g', 'w', 'w', 's', 'g', 's', 's',
+        's', 's', 'g', 's', 'w', 'w', 's', 's', 's', 's', 's'
       ],
 
       topoMap: [
@@ -267,14 +274,24 @@ var World = function() {
         1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+        1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
+        1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1,
+        1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1
       ],
       walkMap: [
         1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1,
         1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+        1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1,
+        1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1,
+        1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1
       ]
     }, {
       totalTiles: {
@@ -530,28 +547,42 @@ World.prototype.maximumBlockElevation = function() {
 
 World.prototype.checkVictory = function() {
   cl('world checkVictory');
-  if (game.active) {
-    //cl(this.worldTime);
-    if (this.worldTime > 20) {
-      if (game.level < game.world.maps.length) {
-        game.level++;
-        game.score += 1000;
-        this.worldTime = 0;
-        this.init();
-        game.startLevel(false);
-        return true;
-      } else {
-        cl("victory sequence");
-        this.init();
-        game.failure();
-        return true;
-      }
+  if (this.worldTime > 20) {
+    if (game.level < game.world.maps.length) {
+      game.level++;
+      game.score += 1000;
+      this.worldTime = 0;
+      game.player.draw = false;
+      game.player.active = false;
+      this.currentMap = this.randomMap;
+      return true;
+    } else {
+      cl("victory sequence");
+      this.init();
+      game.victory();
+      return true;
     }
-
   }
   return false;
 };
 
+World.prototype.playLevel = function(LastStateDifferent){
+  if (LastStateDifferent) {
+    var result = true;
+    if (game.player.active) {
+      game.player.draw = true;
+      game.player.active = true;
+      this.currentMap = this.maps[game.level - 1];
+    }else{
+      game.player.draw = false;
+      game.player.active = false;
+      this.currentMap = this.randomMap;
+    }
+  }else{
+    result = false;
+  }
+  return result;
+}
 
 /*
 The world render method checks for a scrolling map. If the scrolling map is in use, the for loop needs to be adjusted so that the tile removal is not rendered to the canvas.
