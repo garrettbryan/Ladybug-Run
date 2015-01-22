@@ -186,7 +186,7 @@ GamePiece.prototype.render = function(row) {
 
 GamePiece.prototype.move = function(dt) {
   cg('GamePiece move ' + this.name);
-  if (this.draw) {
+  if (this.active) {
     this.tile = {
       x: this.tile.x + this.speed * dt * this.direction.x,
       y: this.tile.y + this.speed * dt * this.direction.y
@@ -197,7 +197,7 @@ GamePiece.prototype.move = function(dt) {
 
 GamePiece.prototype.calculatePosition = function() {
   cg('GamePiece calculatePosition ' + this.name);
-  if (this.draw) {
+  if (this.active) {
     this.position = {
       x: this.tile.x * game.world.pixelsPerTileUnit.x +
         game.world.pixelsPerTileUnit.x / 2,
