@@ -48,6 +48,8 @@ Player.prototype.init = function(tile) {
 
 Player.prototype.update = function(dt) {
   //cp('Player update');
+
+
   if (this.steed) {
     this.offset = {
       x: 0,
@@ -213,7 +215,7 @@ Player.prototype.death = function() {
 
 Player.prototype.ride = function(steed) {
   cp('Player ' + this.elementName + ' ride');
-  console.log('ride');
+  console.log('Player ' + this.elementName + ' ride');
 
   if (steed.rider) {
     steed.rider.dismount();
