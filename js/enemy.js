@@ -93,6 +93,20 @@ var Enemy = function() {
 Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
+Enemy.prototype.initMessageBug = function(bugValues){
+  //console.log(bugValues);
+  this.draw = true;
+  this.tile.x = 21;
+  this.tile.y = bugValues[1];
+  this.calculatePosition();
+  this.direction = {
+    x: -1,
+    y: 0
+  };
+  this.speed = 10;
+  this.scale = 1;
+}
+
 Enemy.prototype.init = function() {
   ce('enemy init');
   //TODO SET ALL PARAMETERS FOR AN ENEMY

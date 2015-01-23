@@ -1,6 +1,7 @@
 var Game = function() {
   cl('game new');
   this.lives = 0;
+  this.menu = 0;
   this.level = 0;
   this.topScore = 0;
   this.score = 0;
@@ -21,19 +22,30 @@ Game.prototype.init = function(level, score) {
 
   this.world = new World();
 
-
   this.allPlayers = [];
   this.player = new Player(characters[1]);
 
   //this.enemy = new Enemy();
-  this.boss = new Boss(2, 1);
-
-
+  this.boss = new Boss();
 
   //Collectables and Enemies are spawned when the game is started.
   this.allCollectables = [];
   this.allEnemies = [];
+  this.messageBugs = [];
 
+  this.allMenus = [];
+  this.allMenus.push(new Menu("title"));
+  for (var i = 0; i < titleMenu.length; i++){
+    console.log(titleMenu[i]);
+    console.log(this.allMenus[0]);
+    this.allMenus[0].add(titleMenu[i]); //TODO is this redering
+  }
+
+}
+
+Game.prototype.title = function() {
+  cl('game title');
+  this.world.currentMap = this.world.randomMap;
 }
 
 Game.prototype.startLevel = function(restart) {
@@ -49,10 +61,6 @@ Game.prototype.startLevel = function(restart) {
 
   // TODO create enemies;
   //this.enemy.init();
-
-
-
-
 }
 
 Game.prototype.victory = function() {
@@ -81,19 +89,19 @@ Game.prototype.renderStatusBar = function() {
 Game.prototype.renderTitle = function() {
   cl("game renderTitle");
   ctx.save();
-  ctx.font = 'Italic 80px Sans-Serif';
-  ctx.fillStyle = '#fff';
+  ctx.font = 'Bold 300px Sans-Serif';
+  ctx.fillStyle = '#667AD9';
   ctx.shadowColor = '#000';
-  ctx.shadowOffsetX = 10;
-  ctx.shadowOffsetY = 10;
-  ctx.shadowBlur = 10;
+  ctx.shadowOffsetX = 5;
+  ctx.shadowOffsetY = 5;
+  ctx.shadowBlur = 5;
   ctx.textBaseline = 'Top';
-  ctx.fillText('Ladybug Run', game.world.canvasSize.x / 4, game.world.canvasSize.y / 2);
+  ctx.fillText('Ladybug Run', game.world.canvasSize.x * 0.025, game.world.canvasSize.y * 0.3);
+  ctx.font = 'Italic 100px Sans-Serif';
+  ctx.fillText('An Epic Five Levels', game.world.canvasSize.x * 0.025, game.world.canvasSize.y * 0.8);
   ctx.font = 'Italic 50px Sans-Serif';
-  ctx.fillText('An Epic in 5 Levels', game.world.canvasSize.x / 4, game.world.canvasSize.y / 2 + 60);
-  ctx.font = 'Italic 30px Sans-Serif';
-  ctx.fillText('By: Garrett Bryan', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50);
-  ctx.fillText('Press the Spacebar to Play', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50 + 50);
+  //ctx.fillText('By: Garrett Bryan', game.world.canvasSize.x * 0.025 , game.world.canvasSize.y * 0.9);
+  ctx.fillText('Press the Spacebar to Play',game.world.canvasSize.x * 0.025 , game.world.canvasSize.y * 0.9);
   ctx.restore();
 }
 

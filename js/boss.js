@@ -14,6 +14,7 @@ Boss.prototype.init = function(tile) {
     x: 1,
     y: 0
   };
+  this.scale = 2;
   this.name = "Boss";
   this.moveAI = ['left', 'right', 'up', 'down', 'space'];
   this.collisionBoundary.primary.collidesWith = []; //this.moveAI = ['space'];
@@ -37,6 +38,29 @@ Boss.prototype.init = function(tile) {
     game.allCollectables.push(c);
     this.pickup(c);
   }
+}
+
+Boss.prototype.cutscene = function(tile){
+  this.tile = tile;
+  this.lastDirection = 1;
+  this.direction = {
+    x: 1,
+    y: 0
+  };
+  this.name = "Boss";
+  this.collisionBoundary.primary.collidesWith = []; //this.moveAI = ['space'];
+  this.moveInterval = 1;
+  this.speed = 800;
+  var e = new Enemy();
+  e.lastDirection = 1;
+  e.direction = {
+    x: 1,
+    y: 0
+  };
+  this.ride(e);
+  game.allEnemies.push(e);
+  this.draw = true;
+  e.draw = true;
 }
 
 GamePiece.prototype.target = function(player) {
@@ -64,6 +88,7 @@ GamePiece.prototype.target = function(player) {
 };
 
 Boss.prototype.move = function(dt) {
+//  console.log("boss move");
   this.moveInterval -= dt;
   this.target(game.player);
 

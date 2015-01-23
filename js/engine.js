@@ -82,6 +82,9 @@ var Engine = (function(global) {
     /* Call our update/render functions, pass along the time delta to
      * our update function since it may be used for smooth animation.
      */
+  //  console.log(game.world.bugMessage);
+    sendbugMessage(dt, game.world.bugMessage);
+    //console.log(game.allEnemies.length);
     update(dt);
     render();
     //game.world.renderTitleScreenMap(dt);
@@ -219,7 +222,8 @@ var Engine = (function(global) {
       game.world.render(row, numCols);
       renderEntities(row);
     }
-      game.renderTitle();
+      //game.renderTitle();
+      game.allMenus[0].render();
 
     //        game.enemy.renderNavPoints();
   }
@@ -271,6 +275,8 @@ The reset function resets the canvas to display the currentMap. It should first 
   function reset() {
     cl("engine reset");
     game.world.init();
+
+    game.allMenus[0].layout(game.world);
 
     canvas.width = game.world.canvasSize.x;
     canvas.height = game.world.canvasSize.y;

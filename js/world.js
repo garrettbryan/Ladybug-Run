@@ -46,9 +46,15 @@ var World = function() {
       y: 11,
     },
     playerStartTile: {
-      x: 0,
-      y: 0
+      x: -1,
+      y: -1
     },
+
+    bossStartTile: {
+      x: 10,
+      y: 8
+    },
+
     enemyPaths: [],
     textureMap: [],
     topoMap: [],
@@ -190,7 +196,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage : "A long time ago.",
+      enemyMessage : "A long time ago . . .",
 
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w',
@@ -323,7 +329,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage : "No place is secure.",
+      enemyMessage : "We will find you.",
 
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'wb', 'w', 'w', 'w', 'w',
@@ -465,7 +471,7 @@ var World = function() {
         }]
       ],
 
-      enemyMessage : "Ladybug's attack!",
+      enemyMessage : "LADYBUGS ATTACK!",
 
       textureMap: [
         's', 's', 's', 's', 's', 's', 's', 's', 'g', 'gb', 's',
@@ -513,6 +519,7 @@ var World = function() {
 World.prototype.init = function() {
   cl("world init");
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+  this.bugMessage = createBugMessage(this.maps[game.level - 1].enemyMessage);
   this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
   this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.maxElevation;
 };
@@ -529,7 +536,9 @@ World.prototype.randomizeTileHeights = function(map) { //TODO add some texture t
 
 World.prototype.updateTime = function(dt) {
   cl('world updateTime');
-  this.worldTime += dt;
+  if (game.player.active){
+   this.worldTime += dt;
+  }
 }
 
 /*

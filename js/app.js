@@ -46,7 +46,38 @@ var transporters = [];
 var mess = "";
 //var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
 
-*/
+*/var titleMenu = [
+  {
+    tag: 'h1',
+    active: false,
+    content: 'Ladybug Run',
+    gameVariable: '',
+    position: {
+//      x:  game.world.canvasSize.x * 0.025,
+//      y:  game.world.canvasSize.y * 0.3
+    }
+  },
+  {
+    tag: 'h2',
+    active: false,
+    content: 'An Epic Five Levels',
+    gameVariable: '',
+    position: {
+//      x: game.world.canvasSize.x * 0.025,
+//      y:  game.world.canvasSize.y * 0.8
+    }
+  },
+  {
+    tag: 'h3',
+    active: true,
+    content: 'Press the Spacebar to Play',
+    gameVariable: '',
+    position: {
+//    x:  game.world.canvasSize.x * 0.025,
+//    y:  game.world.canvasSize.y * 0.9
+    }
+  }
+]
 
 var collectables = [{
   elementName: 'Blue Gem',
