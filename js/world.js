@@ -519,7 +519,6 @@ var World = function() {
 World.prototype.init = function() {
   cl("world init");
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-  this.bugMessage = createBugMessage(this.maps[game.level - 1].enemyMessage);
   this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
   this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.maxElevation;
 };
@@ -563,6 +562,8 @@ World.prototype.checkVictory = function() {
       this.worldTime = 0;
       game.player.draw = false;
       game.player.active = false;
+      console.log(this.maps[game.level-1].enemyMessage);
+//      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
       this.currentMap = this.randomMap;
       return true;
     } else {
@@ -593,6 +594,7 @@ World.prototype.playLevel = function(LastStateDifferent){
     }else{
       game.player.draw = false;
       game.player.active = false;
+      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
       this.currentMap = this.randomMap;
     }
   }else{

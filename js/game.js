@@ -31,7 +31,7 @@ Game.prototype.init = function(level, score) {
   //Collectables and Enemies are spawned when the game is started.
   this.allCollectables = [];
   this.allEnemies = [];
-  this.messageBugs = [];
+  this.messageBugs = new BugMessage();
 
   this.allMenus = [];
   this.allMenus.push(new Menu("title"));

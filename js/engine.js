@@ -83,7 +83,7 @@ var Engine = (function(global) {
      * our update function since it may be used for smooth animation.
      */
   //  console.log(game.world.bugMessage);
-    sendbugMessage(dt, game.world.bugMessage);
+    //sendbugMessage(dt, game.world.bugMessage);
     //console.log(game.allEnemies.length);
     update(dt);
     render();
@@ -149,6 +149,8 @@ var Engine = (function(global) {
    */
   function updateEntities(dt) {
     cl(' update entities');
+
+    game.messageBugs.update(dt);
 
     game.world.update(dt);
 
@@ -236,6 +238,7 @@ var Engine = (function(global) {
     cl(' render entities row:' + row);
 
     //        game.enemy.render(row);
+    game.messageBugs.render(row);
     game.allEnemies.forEach(function(enemy) {
       enemy.render(row);
     });

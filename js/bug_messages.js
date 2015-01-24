@@ -1,42 +1,71 @@
-var sendbugMessage = function(dt, bugMessage) {
-  for (i = 0; i < bugMessage.length; i++) {
-    //console.log(bugMessage[i][4]);
-    //console.log(dt);
-    if (bugMessage[i][4] < 0) {  //if the time offset is less than 0
-      var bugValues = bugMessage.shift(),
-        e = new Enemy();
-      e.initMessageBug(bugValues);
-      game.allEnemies.push(e);
-    } else {
-      bugMessage[i][4] -= 10 * dt;
-    }
-  }
-}
+/*
+BugMessage creates a 2D array of bugs with initiatioon values and a time offset value. sendBugMessage loops through each bug element and decrements index 4 until it is less than zero then the bug is created and sent on it's way. Hopefully in a recognizable pattern!  The values stored in the 2D array are:
+position.x, position.y, speed, scale, time offset.
+*/
+
+var BugMessage = function() {
+  this.bugProperties = [];
+  this.allbugs = [];
+};
 
 /*
 createBugMessage creates a 2D array of bugs with initiatioon values and a time offset value. sendBugMessage loops through each bug element and decrements index 4 until it is less than zero then the bug is created and sent on it's way. Hopefully in a recognizable pattern!  The values stored in each array are
 position.x, position.y, speed, scale, time offset.
 */
-var createBugMessage = function(message) {
-  var bugMessageFormation = [];
-  for (var characterIndex = 0, bugCols = 0; characterIndex < message.length; characterIndex++) {
-    bugCols += 1;
-    var character = bugCharacterFormation(message[characterIndex]);
-    //        console.log(character);
-    for (var j = 0; j < character[0].length; j++) { // Array index is ordered as such to send out columns at a time
+BugMessage.prototype.create = function(message){
+  for (var i = 0, bugCols = 0; i < message.length; i++) { //i is the message index
+    bugCols += 1; // this variable spaces out the columns of bugs
+    var character = this.bugCharacters(message[i]);
+    for (var j = 0; j < character[0].length; j++) { //j is the col index
       bugCols += 1;
-      for (var i = 0; i < character.length; i++) {
-        if (character[i][j] >= 1) {
-          //console.log(character[i][j]);
-          bugMessageFormation.push([10, i + 3, -1 * character[i][j] * 2, character[i][j], bugCols + j/4 ]);
+      for (var k = 0; k < character.length; k++) {//k is the row index
+        if (character[k][j] >= 1) {
+          this.bugProperties.push([10, k + 3, -1 * character[k][j] * 2, character[k][j], bugCols + j/4 - 2 ]); //
         }
       }
     }
   }
-  return bugMessageFormation;
+  //console.log(this.bugProperties);
 };
 
-var bugCharacterFormation = function(character) {
+BugMessage.prototype.erase = function(){
+  this.bugProperties = [];
+  this.allbugs = [];
+};
+
+/*
+sendBugMessage decrements the time offset value until it reaches zero, then it creates a bug and allows the enemy update funtion to work.
+*/
+BugMessage.prototype.update = function(dt) {
+  for (var i = 0; i < this.bugProperties.length; i++) {
+    //console.log(this.bugProperties[i][4]);
+    //console.log(dt);
+    if (this.bugProperties[i][4] <= 0) {  //if the time offset is less than 0
+      var bugValues = this.bugProperties.shift(),
+        e = new Enemy();
+      e.initMessageBug(bugValues);
+      console.log(e);
+      this.allbugs.push(e);
+    } else {
+      this.bugProperties[i][4] -= 10 * dt;
+    }
+  }
+  this.allbugs.forEach(function(enemy) {
+    enemy.update(dt);
+  });
+  var lastBug = this.allbugs.length-1;
+  if (this.allbugs.length === 1 && this.allbugs[lastBug].position.x < -101) {
+    this.erase();
+  }
+}
+
+BugMessage.prototype.render = function(row){
+  this.allbugs.forEach(function(enemy){
+    enemy.render(row);
+  });
+}
+
+BugMessage.prototype.bugCharacters = function(character) {
   var bugArray = [];
   switch (character) {
     case ">":
