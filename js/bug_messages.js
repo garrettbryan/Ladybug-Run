@@ -13,9 +13,13 @@ createBugMessage creates a 2D array of bugs with initiatioon values and a time o
 position.x, position.y, speed, scale, time offset.
 */
 BugMessage.prototype.create = function(message){
+  cl('bugmessage create');
+  this.bugProperties = [];
+  var character;
   for (var i = 0, bugCols = 0; i < message.length; i++) { //i is the message index
     bugCols += 1; // this variable spaces out the columns of bugs
-    var character = this.bugCharacters(message[i]);
+    character = this.bugCharacters(message[i]);
+    console.log(message[i]);
     for (var j = 0; j < character[0].length; j++) { //j is the col index
       bugCols += 1;
       for (var k = 0; k < character.length; k++) {//k is the row index
@@ -44,7 +48,7 @@ BugMessage.prototype.update = function(dt) {
       var bugValues = this.bugProperties.shift(),
         e = new Enemy();
       e.initMessageBug(bugValues);
-      console.log(e);
+      //console.log(e);
       this.allbugs.push(e);
     } else {
       this.bugProperties[i][4] -= 10 * dt;
@@ -53,16 +57,21 @@ BugMessage.prototype.update = function(dt) {
   this.allbugs.forEach(function(enemy) {
     enemy.update(dt);
   });
-  var lastBug = this.allbugs.length-1;
-  if (this.allbugs.length === 1 && this.allbugs[lastBug].position.x < -101) {
-    this.erase();
-  }
+  //var lastBug = this.allbugs.length-1;
+  //if (this.allbugs && this.allbugs[length - 1].position.x < -101) {
+  //  this.erase();
+  //  game.player.active = true;
+  //}
 }
 
 BugMessage.prototype.render = function(row){
-  this.allbugs.forEach(function(enemy){
-    enemy.render(row);
-  });
+  for (var i = 0; i < this.allbugs.length; i++) {
+    this.allbugs[i].render(row);
+  }
+
+//  this.allbugs.forEach(function(enemy){
+//    enemy.render(row);
+//  });
 }
 
 BugMessage.prototype.bugCharacters = function(character) {
@@ -70,20 +79,20 @@ BugMessage.prototype.bugCharacters = function(character) {
   switch (character) {
     case ">":
       bugArray = [
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1],
-        [0, 1, 0],
-        [1, 0, 0]
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 1, 0, 0],
+        [1, 0, 0, 0]
       ];
       break;
     case "<":
       bugArray = [
-        [0, 0, 1],
-        [0, 1, 0],
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1]
+        [0, 0, 1, 0],
+        [0, 1, 0, 0],
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0]
       ];
       break;
     case ".":
@@ -126,7 +135,7 @@ BugMessage.prototype.bugCharacters = function(character) {
       bugArray = [
         [0, 0, 1, 0, 0, 0],
         [0, 1, 0, 1, 0, 0],
-        [0, 1, 0, 1, 0, 0],
+        [1, 0, 0, 0, 1, 0],
         [1, 1, 1, 1, 1, 0],
         [1, 0, 0, 0, 1, 0]
       ];

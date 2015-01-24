@@ -5,7 +5,7 @@ var Menu = function(menuName) {
 
   this.style = {
     all: {
-      fillColor: '#667ad9',
+      fillColor: '#BB3B0B',
       shadowColor: '#000',
       shadowOffsetX : 5,
       shadowOffsetY : 5,

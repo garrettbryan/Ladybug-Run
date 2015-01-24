@@ -81,7 +81,6 @@ var World = function() {
   //console.log(this.randomMap.textureMap.length);
 
   this.failureMap = {
-
       totalTiles: {
         x: 5,
         y: 4
@@ -516,6 +515,9 @@ var World = function() {
     }];
 };
 
+/*
+This method is called when the canvas size needs to be recalculated.
+*/
 World.prototype.init = function() {
   cl("world init");
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
@@ -545,6 +547,7 @@ Calculates the screen space needed by each additional elevation unit
 */
 World.prototype.maximumBlockElevation = function() {
   cl('world maximumBlockElevation');
+  console.log(game.level);
   var max = this.currentMap.topoMap[0];
   for (var i = 1; i < this.currentMap.totalTiles.x; i++) {
     max = Math.max(max, this.currentMap.topoMap[i]);
@@ -578,12 +581,13 @@ World.prototype.checkVictory = function() {
 
 World.prototype.playLevel = function(LastStateDifferent){
   cl('world playlevel');
+  var result = false;
   if (LastStateDifferent) {
+    result = true;
     game.allCollectables = [];
     game.player.collectables = [];
     game.player.collectablesSpacing = 0;
     game.player.collectablesWidth = 0;
-    var result = true;
     if (game.player.active) {
       game.player.draw = true;
       game.player.active = true;
@@ -594,12 +598,14 @@ World.prototype.playLevel = function(LastStateDifferent){
     }else{
       game.player.draw = false;
       game.player.active = false;
-      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
+      if (game.level !== 0){
+        game.messageBugs.create(this.maps[game.level-1].enemyMessage);
+      }
+      //game.messageBugs.create("a");
       this.currentMap = this.randomMap;
     }
-  }else{
-    result = false;
   }
+
   return result;
 }
 
@@ -607,7 +613,7 @@ World.prototype.playLevel = function(LastStateDifferent){
 The world render method checks for a scrolling map. If the scrolling map is in use, the for loop needs to be adjusted so that the tile removal is not rendered to the canvas.
 */
 World.prototype.render = function(row, numCols) {
-  cl('world render row:' + row);
+  cr('world render row:' + row);
   if (this.currentMap === this.randomMap){
     numCols++;
   }

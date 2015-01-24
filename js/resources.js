@@ -79,7 +79,7 @@
    * the same as calling load() on that URL.
    */
   function get(url) {
-    cl('get');
+    cr('get');
     return resourceCache[url];
   }
 

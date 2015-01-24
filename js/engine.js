@@ -18,8 +18,14 @@ var clg = 0,
   cgg = 0,
   ceg = 0,
   cpg = 0,
+  crg = 0,
   cycle = 0;
 
+cr = function(log) {
+  if (crg === 1) {
+    console.log(log);
+  }
+};
 
 cp = function(log) {
   if (cpg === 1) {
@@ -159,8 +165,10 @@ var Engine = (function(global) {
     game.allEnemies.forEach(function(enemy) {
       enemy.update(dt);
     });
-    game.boss.move(dt);
-    game.boss.update();
+    if (game.boss.active){
+      game.boss.move(dt);
+      game.boss.update();
+    }
 
     game.allCollectables.forEach(function(collectable) {
       collectable.update(dt);
@@ -198,7 +206,7 @@ var Engine = (function(global) {
    * they are just drawing the entire screen over and over.
    */
   function render() {
-    cl('engine render');
+    cr('engine render');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     game.renderStatusBar();
@@ -235,7 +243,7 @@ var Engine = (function(global) {
    * on your enemy and player entities within app.js
    */
   function renderEntities(row) {
-    cl(' render entities row:' + row);
+    cr(' render entities row:' + row);
 
     //        game.enemy.render(row);
     game.messageBugs.render(row);
@@ -289,7 +297,10 @@ The reset function resets the canvas to display the currentMap. It should first 
       collectable.init();
     });
     if (game.world.currentMap.hasOwnProperty('bossStartTile')) {
-      game.boss.init(game.world.currentMap.bossStartTile);
+        game.boss.init(game.world.currentMap.bossStartTile);
+      if(!game.player.active){
+        game.boss.active = false;
+      }
     }
 
 

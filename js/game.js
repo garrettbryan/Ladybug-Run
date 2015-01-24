@@ -30,6 +30,7 @@ Game.prototype.init = function(level, score) {
 
   //Collectables and Enemies are spawned when the game is started.
   this.allCollectables = [];
+
   this.allEnemies = [];
   this.messageBugs = new BugMessage();
 
@@ -46,6 +47,14 @@ Game.prototype.init = function(level, score) {
 Game.prototype.title = function() {
   cl('game title');
   this.world.currentMap = this.world.randomMap;
+}
+
+Game.prototype.nextLevel = function() {
+  if (!this.game.cutscene){
+      this.level++;
+  }
+  this.world.cutscene = !this.world.cutscene;
+  this.player.active = !this.player.active;
 }
 
 Game.prototype.startLevel = function(restart) {

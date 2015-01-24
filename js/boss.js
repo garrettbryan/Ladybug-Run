@@ -9,9 +9,9 @@ Boss.prototype.constructor = Boss;
 are set properly so that the collisionBoundaries are placed properly. */
 Boss.prototype.init = function(tile) {
   this.tile = tile;
-  this.lastDirection = 1;
+  this.lastDirection = -1;
   this.direction = {
-    x: 1,
+    x: -1,
     y: 0
   };
   this.scale = 2;

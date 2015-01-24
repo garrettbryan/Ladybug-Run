@@ -1,5 +1,6 @@
 var Player = function(character) {
   this.active = false;
+  this.draw = false;
   this.scale = 1;
 
   GamePiece.call(this);
@@ -43,7 +44,8 @@ Player.prototype.init = function(tile) {
     game.allEnemies.push(e);
     e.draw = true;
   }
-  this.draw = true;
+  this.draw = false;
+  this.active = false;
 }
 
 Player.prototype.update = function(dt) {
