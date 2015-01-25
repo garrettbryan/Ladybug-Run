@@ -28,7 +28,7 @@ Game.prototype.init = function(level, score) {
   //this.enemy = new Enemy();
   this.boss = new Boss();
 
-  this.goal = new Goal();
+  this.allGoals = [];
 
   //Collectables and Enemies are spawned when each level is started.
   this.allCollectables = [];

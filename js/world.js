@@ -202,10 +202,24 @@ var World = function() {
 
       enemyMessage : "A long time ago . . .",
 
-      goalTile: {
-        x: 5,
-        y: 5
+      goalTile: [
+      {
+        x: 2,
+        y: 1
       },
+      {
+        x: 3,
+        y: 1
+      },
+      {
+        x: 5,
+        y: 1
+      },
+      {
+        x: 6,
+        y: 1
+      }
+      ],
 
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w',
@@ -271,10 +285,24 @@ var World = function() {
 
       enemyMessage : "A cold wind blows from the east.",
 
-      goalTile: {
-        x: 5,
+      goalTile: [
+      {
+        x: 0,
+        y: 4
+      },
+      {
+        x: 0,
         y: 5
       },
+      {
+        x: 1,
+        y: 4
+      },
+      {
+        x: 1,
+        y: 5
+      }
+      ],
 
       textureMap: [
         's', 's', 'g', 's', 'w', 'w', 's', 's', 's', 's', 's',
@@ -345,6 +373,25 @@ var World = function() {
 
       enemyMessage : "We will find you.",
 
+      goalTile: [
+      {
+        x: 0,
+        y: 9
+      },
+      {
+        x: 0,
+        y: 9
+      },
+      {
+        x: 1,
+        y: 9
+      },
+      {
+        x: 1,
+        y: 9
+      }
+      ],
+
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'wb', 'w', 'w', 'w', 'w',
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 's', 'w', 'w',
@@ -411,10 +458,24 @@ var World = function() {
 
       enemyMessage : "All your base are belong to us!",
 
-      goalTile: {
-        x: 5,
-        y: 5
+      goalTile: [
+      {
+        x: 0,
+        y: 9
       },
+      {
+        x: 0,
+        y: 9
+      },
+      {
+        x: 1,
+        y: 9
+      },
+      {
+        x: 1,
+        y: 9
+      }
+      ],
 
       textureMap: [
         's', 'g', 's', 's', 's', 's', 's', 'g', 's', 's', 's', 's',
@@ -490,11 +551,6 @@ var World = function() {
       ],
 
       enemyMessage : "LADYBUGS ATTACK!",
-
-      goalTile: {
-        x: 5,
-        y: 5
-      },
 
       textureMap: [
         's', 's', 's', 's', 's', 's', 's', 's', 'g', 'gb', 's',
@@ -610,6 +666,7 @@ World.prototype.playLevel = function(LastStateDifferent){
   if (LastStateDifferent) {
     result = true;
     game.allCollectables = [];
+    game.allGoals = [];
     game.player.collectables = [];
     game.player.collectablesSpacing = 0;
     game.player.collectablesWidth = 0;

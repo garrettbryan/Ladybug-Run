@@ -156,7 +156,9 @@ var Engine = (function(global) {
   function updateEntities(dt) {
     cl(' update entities');
 
-    game.goal.update(dt);
+    game.allGoals.forEach(function(goal){
+      goal.update(dt);
+    });
 
     game.allCollectables.forEach(function(collectable) {
       collectable.update(dt);
@@ -249,7 +251,9 @@ var Engine = (function(global) {
   function renderEntities(row) {
     cr(' render entities row:' + row);
 
-    game.goal.renderColorPulse(row);
+    game.allGoals.forEach(function(goal){
+      goal.renderColorPulse(row);
+    });
 
     game.allCollectables.forEach(function(collectable) {
       collectable.render();
@@ -267,7 +271,9 @@ var Engine = (function(global) {
 
     game.boss.render(row);
 
-    game.goal.renderColorPulseForeground(row);
+    game.allGoals.forEach(function(goal){
+      goal.renderColorPulseForeground(row);
+    });
 
     /* Loop through all of the objects within the allEnemies array and call
      * the render function you have defined.
@@ -316,7 +322,11 @@ The reset function resets the canvas to display the currentMap. It should first 
     }
 
     if (game.world.currentMap.hasOwnProperty('goalTile')){
-      game.goal.init(game.world.currentMap.goalTile);
+      game.world.currentMap.goalTile.forEach(function (tile){
+        var g = new Goal;
+        g.init(tile);
+        game.allGoals.push(g);
+      });
     }
 
   }
