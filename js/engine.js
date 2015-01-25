@@ -321,6 +321,7 @@ The reset function resets the canvas to display the currentMap. It should first 
       game.boss.active = true
     }
 
+    console.log(game.world.currentMap);
     if (game.world.currentMap.hasOwnProperty('goalTile')){
       game.world.currentMap.goalTile.forEach(function (tile){
         var g = new Goal;

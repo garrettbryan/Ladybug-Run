@@ -50,11 +50,6 @@ var World = function() {
       y: -1
     },
 
-    goalTile: {
-      x: 5,
-      y: 5
-    },
-
     bossStartTile: {
       x: 10,
       y: 8
@@ -636,10 +631,20 @@ World.prototype.maximumBlockElevation = function() {
   return max;
 }
 
+World.prototype.victory = function(player){
+  result = false;
+  if (this.currentMap.hasOwnProperty('goalTile')){
+    if (this.currentMap.goalTile.indexOf(player.tile)){
+      result = true;
+      player.draw = false;
+    }
+  }
+}
+
 World.prototype.checkVictory = function() {
   var result = false;
   cl('world checkVictory');
-  if (this.worldTime > 20) {
+  if (this.victory(game.player)) {
     if (game.level < game.world.maps.length) {
       game.level++;
       game.score += 1000;
@@ -684,8 +689,8 @@ World.prototype.playLevel = function(LastStateDifferent){
         game.messageBugs.create(this.maps[game.level-1].enemyMessage);
       }
       //game.messageBugs.create("a");
-      //this.currentMap = this.randomMap;
-      this.currentMap = this.maps[game.level - 1];
+      this.currentMap = this.randomMap;
+      //this.currentMap = this.maps[game.level - 1];
     }
   }
 
