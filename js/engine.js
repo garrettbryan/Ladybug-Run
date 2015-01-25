@@ -63,8 +63,7 @@ var Engine = (function(global) {
     canvas = doc.createElement('canvas'),
     ctx = canvas.getContext('2d'),
 
-    lastTime,
-    lastPlayerState;
+    lastTime;
 
   canvas.width = 1010;
   canvas.height = 808;
@@ -107,7 +106,7 @@ var Engine = (function(global) {
     /* Use the browser's requestAnimationFrame function to call this
      * function again as soon as the browser is able to draw another frame.
      */
-    win.requestAnimationFrame(main);
+       win.requestAnimationFrame(main);
   };
 
   /* This function does some initial setup that should only occur once,
@@ -118,6 +117,7 @@ var Engine = (function(global) {
     cl('engine initilize');
     reset();
     lastTime = Date.now();
+    lastPlayerState = game.player.active;
     main();
   }
 
@@ -156,11 +156,18 @@ var Engine = (function(global) {
   function updateEntities(dt) {
     cl(' update entities');
 
+    game.goal.update(dt);
+
+    game.allCollectables.forEach(function(collectable) {
+      collectable.update(dt);
+    });
+
     game.messageBugs.update(dt);
 
     game.world.update(dt);
 
     game.player.update();
+
     //        game.enemy.update(dt);
     game.allEnemies.forEach(function(enemy) {
       enemy.update(dt);
@@ -170,9 +177,6 @@ var Engine = (function(global) {
       game.boss.update();
     }
 
-    game.allCollectables.forEach(function(collectable) {
-      collectable.update(dt);
-    });
     /*
             allCollectables.forEach(function(collectable) {
                 collectable.update(dt);
@@ -245,18 +249,26 @@ var Engine = (function(global) {
   function renderEntities(row) {
     cr(' render entities row:' + row);
 
-    //        game.enemy.render(row);
-    game.messageBugs.render(row);
-    game.allEnemies.forEach(function(enemy) {
-      enemy.render(row);
-    });
-    game.player.render(row);
+    game.goal.renderColorPulse(row);
 
-    game.boss.render(row);
     game.allCollectables.forEach(function(collectable) {
       collectable.render();
       //            console.log("render Collectable");
     });
+    //        game.enemy.render(row);
+
+    game.messageBugs.render(row);
+
+    game.allEnemies.forEach(function(enemy) {
+      enemy.render(row);
+    });
+
+    game.player.render(row);
+
+    game.boss.render(row);
+
+    game.goal.renderColorPulseForeground(row);
+
     /* Loop through all of the objects within the allEnemies array and call
      * the render function you have defined.
      */
@@ -297,12 +309,15 @@ The reset function resets the canvas to display the currentMap. It should first 
       collectable.init();
     });
     if (game.world.currentMap.hasOwnProperty('bossStartTile')) {
-        game.boss.init(game.world.currentMap.bossStartTile);
-      if(!game.player.active){
-        game.boss.active = false;
-      }
+      game.boss.cutscene(game.world.currentMap.bossStartTile);
+      console.log(game.boss.tile);
+      console.log(game.boss.position);
+      game.boss.active = true
     }
 
+    if (game.world.currentMap.hasOwnProperty('goalTile')){
+      game.goal.init(game.world.currentMap.goalTile);
+    }
 
   }
 

@@ -50,8 +50,8 @@ Player.prototype.init = function(tile) {
 
 Player.prototype.update = function(dt) {
   //cp('Player update');
-
-
+//  console.log(this.elementName + " " + this.tile.x + " " + this.tile.y)
+//  console.log("position x " + this.position.x);
   if (this.steed) {
     this.offset = {
       x: 0,

@@ -28,7 +28,9 @@ Game.prototype.init = function(level, score) {
   //this.enemy = new Enemy();
   this.boss = new Boss();
 
-  //Collectables and Enemies are spawned when the game is started.
+  this.goal = new Goal();
+
+  //Collectables and Enemies are spawned when each level is started.
   this.allCollectables = [];
 
   this.allEnemies = [];
@@ -37,8 +39,8 @@ Game.prototype.init = function(level, score) {
   this.allMenus = [];
   this.allMenus.push(new Menu("title"));
   for (var i = 0; i < titleMenu.length; i++){
-    console.log(titleMenu[i]);
-    console.log(this.allMenus[0]);
+//    console.log(titleMenu[i]);
+//    console.log(this.allMenus[0]);
     this.allMenus[0].add(titleMenu[i]); //TODO is this redering
   }
 

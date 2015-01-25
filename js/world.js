@@ -50,6 +50,11 @@ var World = function() {
       y: -1
     },
 
+    goalTile: {
+      x: 5,
+      y: 5
+    },
+
     bossStartTile: {
       x: 10,
       y: 8
@@ -197,6 +202,11 @@ var World = function() {
 
       enemyMessage : "A long time ago . . .",
 
+      goalTile: {
+        x: 5,
+        y: 5
+      },
+
       textureMap: [
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w',
         'w', 'w', 'g', 'g', 'w', 'g', 'g', 'w', 'w',
@@ -260,6 +270,11 @@ var World = function() {
       ],
 
       enemyMessage : "A cold wind blows from the east.",
+
+      goalTile: {
+        x: 5,
+        y: 5
+      },
 
       textureMap: [
         's', 's', 'g', 's', 'w', 'w', 's', 's', 's', 's', 's',
@@ -396,6 +411,10 @@ var World = function() {
 
       enemyMessage : "All your base are belong to us!",
 
+      goalTile: {
+        x: 5,
+        y: 5
+      },
 
       textureMap: [
         's', 'g', 's', 's', 's', 's', 's', 'g', 's', 's', 's', 's',
@@ -471,6 +490,11 @@ var World = function() {
       ],
 
       enemyMessage : "LADYBUGS ATTACK!",
+
+      goalTile: {
+        x: 5,
+        y: 5
+      },
 
       textureMap: [
         's', 's', 's', 's', 's', 's', 's', 's', 'g', 'gb', 's',
@@ -557,6 +581,7 @@ World.prototype.maximumBlockElevation = function() {
 }
 
 World.prototype.checkVictory = function() {
+  var result = false;
   cl('world checkVictory');
   if (this.worldTime > 20) {
     if (game.level < game.world.maps.length) {
@@ -568,15 +593,15 @@ World.prototype.checkVictory = function() {
       console.log(this.maps[game.level-1].enemyMessage);
 //      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
       this.currentMap = this.randomMap;
-      return true;
+      result = true;
     } else {
       cl("victory sequence");
       this.init();
       game.victory();
-      return true;
+      result = true;
     }
   }
-  return false;
+  return result;
 };
 
 World.prototype.playLevel = function(LastStateDifferent){
@@ -602,7 +627,8 @@ World.prototype.playLevel = function(LastStateDifferent){
         game.messageBugs.create(this.maps[game.level-1].enemyMessage);
       }
       //game.messageBugs.create("a");
-      this.currentMap = this.randomMap;
+      //this.currentMap = this.randomMap;
+      this.currentMap = this.maps[game.level - 1];
     }
   }
 

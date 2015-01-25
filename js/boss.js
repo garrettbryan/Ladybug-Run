@@ -21,9 +21,9 @@ Boss.prototype.init = function(tile) {
   this.moveInterval = 1;
   this.speed = 800;
   var e = new Enemy();
-  e.lastDirection = 1;
+  e.lastDirection = -1;
   e.direction = {
-    x: 1,
+    x: -1,
     y: 0
   };
   this.ride(e);
@@ -41,26 +41,8 @@ Boss.prototype.init = function(tile) {
 }
 
 Boss.prototype.cutscene = function(tile){
-  this.tile = tile;
-  this.lastDirection = 1;
-  this.direction = {
-    x: 1,
-    y: 0
-  };
-  this.name = "Boss";
-  this.collisionBoundary.primary.collidesWith = []; //this.moveAI = ['space'];
-  this.moveInterval = 1;
-  this.speed = 800;
-  var e = new Enemy();
-  e.lastDirection = 1;
-  e.direction = {
-    x: 1,
-    y: 0
-  };
-  this.ride(e);
-  game.allEnemies.push(e);
-  this.draw = true;
-  e.draw = true;
+  this.init(tile);
+  this.moveAI = ['space'];
 }
 
 GamePiece.prototype.target = function(player) {
@@ -93,7 +75,7 @@ Boss.prototype.move = function(dt) {
   this.target(game.player);
 
   if (this.moveInterval < 0) {
-    this.handleInput(this.moveAI[Math.floor(Math.random() * 5)])
+    this.handleInput(this.moveAI[Math.floor(Math.random() * this.moveAI.length)])
     this.moveInterval = Math.random();
   }
 }
