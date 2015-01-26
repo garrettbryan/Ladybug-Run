@@ -256,7 +256,7 @@ var Engine = (function(global) {
     });
 
     game.allCollectables.forEach(function(collectable) {
-      collectable.render();
+      collectable.render(row);
       //            console.log("render Collectable");
     });
     //        game.enemy.render(row);

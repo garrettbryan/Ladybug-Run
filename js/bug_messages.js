@@ -58,6 +58,12 @@ BugMessage.prototype.update = function(dt) {
   this.allbugs.forEach(function(enemy) {
     enemy.update(dt);
   });
+
+  console.log(this.allbugs.length);;
+
+  if (this.allbugs.length > 0 && game.player.active){
+    this.allbugs = [];
+  }
   //var lastBug = this.allbugs.length-1;
   //if (this.allbugs && this.allbugs[length - 1].position.x < -101) {
   //  this.erase();

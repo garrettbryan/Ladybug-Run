@@ -86,9 +86,17 @@ var World = function() {
         y: 4
       },
       playerStartTile: {
-        x: 2,
-        y: 3
+        x: 1,
+        y: 2
       },
+
+      goalTile: [
+        {
+          x: 3,
+          y: 2
+        }
+      ],
+
       textureMap: [
         't', 't', 't', 't', 't',
         's', 's', 's', 's', 's',
@@ -259,7 +267,7 @@ var World = function() {
       },
       playerStartTile: {
         x: 10,
-        y: 3
+        y: 0
       },
       enemyPaths: [
         [{
@@ -282,20 +290,8 @@ var World = function() {
 
       goalTile: [
       {
-        x: 0,
-        y: 4
-      },
-      {
-        x: 0,
-        y: 5
-      },
-      {
-        x: 1,
-        y: 4
-      },
-      {
-        x: 1,
-        y: 5
+        x: 2,
+        y: 9
       }
       ],
 
@@ -344,7 +340,7 @@ var World = function() {
 
       playerStartTile: {
         x: 5,
-        y: 7
+        y: 9
       },
 
       enemyPaths: [
@@ -641,7 +637,7 @@ World.prototype.checkVictory = function() {
     } else {
       cl("victory sequence");
       this.init();
-      //game.victory();
+      game.victory();
       result = true;
     }
   }
@@ -666,6 +662,7 @@ if (LastStateDifferent) {
       game.player.draw = false;
       game.player.active = false;
     } else {
+      game.messageBugs.erase();
       this.currentMap = this.maps[game.level-1];
       game.allCollectables = [];
       game.allGoals = [];

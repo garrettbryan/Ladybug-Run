@@ -54,11 +54,16 @@ Game.prototype.title = function() {
 Game.prototype.nextLevel = function() {
   if (this.level === 0){
     this.level++;
-    this.world.cutscene = false;
+    this.world.cutscene = false; // initialize cutscene to false do it becomes true line 65
   } else if (!this.world.cutscene){
       this.level++;
   }
-  this.world.cutscene = !this.world.cutscene
+  if (!this.world.currentMap.bossStartTile){
+    this.boss.draw = false;
+    this.boss.active = false;
+  }
+  this.world.cutscene = !this.world.cutscene;
+
   this.allCollectables = [];
   this.allGoals = [];
   this.allbugs = [];
