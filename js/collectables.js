@@ -53,6 +53,6 @@ Collectable.prototype.placeRandomly = function(currentMap) {
   if (currentMap.walkMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] === 0) {
     this.placeRandomly(currentMap);
   } else {
-    console.log(this.tile);
+    //console.log(this.tile);
   }
 }

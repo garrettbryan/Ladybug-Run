@@ -43,7 +43,7 @@ Goal.prototype.renderColorPulse = function(row){
     this.renderCount += this.renderFadeUp;
   if (this.renderCount === this.fadeMax || this.renderCount === this.fadeMin){
     this.renderFadeUp *= -1;
-    console.log(this.renderFadeUp);
+    //console.log(this.renderFadeUp);
   }
   //  console.log(this.renderCount * this.renderFadeIncrement);
 }

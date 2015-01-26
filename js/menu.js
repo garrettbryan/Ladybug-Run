@@ -108,3 +108,39 @@ Menu.prototype.render = function(){
     }
   }
 }
+
+
+//Game.prototype.renderTitle = function() {
+//  cl("game renderTitle");
+//  ctx.save();
+//  ctx.font = 'Bold 300px Sans-Serif';
+//  ctx.fillStyle = '#667AD9';
+//  ctx.shadowColor = '#000';
+//  ctx.shadowOffsetX = 5;
+//  ctx.shadowOffsetY = 5;
+//  ctx.shadowBlur = 5;
+//  ctx.textBaseline = 'Top';
+//  ctx.fillText('Ladybug Run', game.world.canvasSize.x * 0.025, game.world.canvasSize.y * 0.3);
+//  ctx.font = 'Italic 100px Sans-Serif';
+//  ctx.fillText('An Epic Five Levels', game.world.canvasSize.x * 0.025, game.world.canvasSize.y * 0.8);
+//  ctx.font = 'Italic 50px Sans-Serif';
+//  //ctx.fillText('By: Garrett Bryan', game.world.canvasSize.x * 0.025 , game.world.canvasSize.y * 0.9);
+//  ctx.fillText('Press the Spacebar to Play',game.world.canvasSize.x * 0.025 , game.world.canvasSize.y * 0.9);
+//  ctx.restore();
+//}
+//
+//Game.prototyp//e.renderDifficultyOption = function() {//
+//  cl("game re//nderDifficultyOption");//
+//  ctx.save();//
+//  ctx.font = 'Italic 8//0px// Sans-Serif';//
+//  ctx.fillStyle = '#ff//f';//
+//  ctx.shadowColor = '#//000//';//
+//  ctx.shadowOffsetX = //10;//
+//  ctx.shadowOffsetY = //10;//
+//  ctx.shadowBlur = 10;//
+//  ctx.textBaseline = 'Top';//
+//  ctx.font = 'Italic 30px Sans-Serif';//
+//  ctx.fillText('Difficulty', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50);//
+//  ctx.fillText('Press the Spacebar to Select', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 //+ 50 + 50);
+//  ctx.restore();
+//}

@@ -44,8 +44,8 @@ Player.prototype.init = function(tile) {
     game.allEnemies.push(e);
     e.draw = true;
   }
-  this.draw = false;
-  this.active = false;
+//  this.draw = true;
+//  this.active = true;
 }
 
 Player.prototype.update = function(dt) {
@@ -161,6 +161,7 @@ Player.prototype.handleInput = function(key) {
       console.log('select');
       this.active = true;
       game.active = true;
+      game.nextLevel();
         break;
       case 'dismount':
         break;
@@ -218,7 +219,7 @@ Player.prototype.death = function() {
 
 Player.prototype.ride = function(steed) {
   cp('Player ' + this.elementName + ' ride');
-  console.log('Player ' + this.elementName + ' ride');
+  //console.log('Player ' + this.elementName + ' ride');
 
   if (steed.rider) {
     steed.rider.dismount();

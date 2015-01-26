@@ -278,7 +278,7 @@ var World = function() {
 
       ],
 
-      enemyMessage : "A cold wind blows from the east.",
+      enemyMessage : "A cold wind blows.",
 
       goalTile: [
       {
@@ -370,20 +370,8 @@ var World = function() {
 
       goalTile: [
       {
-        x: 0,
-        y: 9
-      },
-      {
-        x: 0,
-        y: 9
-      },
-      {
-        x: 1,
-        y: 9
-      },
-      {
-        x: 1,
-        y: 9
+        x: 8,
+        y: 1
       }
       ],
 
@@ -455,20 +443,8 @@ var World = function() {
 
       goalTile: [
       {
-        x: 0,
-        y: 9
-      },
-      {
-        x: 0,
-        y: 9
-      },
-      {
         x: 1,
-        y: 9
-      },
-      {
-        x: 1,
-        y: 9
+        y: 0
       }
       ],
 
@@ -622,7 +598,7 @@ Calculates the screen space needed by each additional elevation unit
 */
 World.prototype.maximumBlockElevation = function() {
   cl('world maximumBlockElevation');
-  console.log(game.level);
+  //console.log("game level " + game.level);
   var max = this.currentMap.topoMap[0];
   for (var i = 1; i < this.currentMap.totalTiles.x; i++) {
     max = Math.max(max, this.currentMap.topoMap[i]);
@@ -632,13 +608,20 @@ World.prototype.maximumBlockElevation = function() {
 }
 
 World.prototype.victory = function(player){
-  result = false;
+  var result = false;
   if (this.currentMap.hasOwnProperty('goalTile')){
-    if (this.currentMap.goalTile.indexOf(player.tile)){
-      result = true;
-      player.draw = false;
+    for (var i = 0; i < this.currentMap.goalTile.length; i++){
+      console.log(this.currentMap.goalTile[i].x);
+      console.log(player.tile.x);
+      if ((this.currentMap.goalTile[i].x === player.tile.x) && (this.currentMap.goalTile[i].y === player.tile.y)){
+        result = true;
+        player.draw = false;
+        player.active = false;
+        break;
+      }
     }
   }
+  return result;
 }
 
 World.prototype.checkVictory = function() {
@@ -646,11 +629,11 @@ World.prototype.checkVictory = function() {
   cl('world checkVictory');
   if (this.victory(game.player)) {
     if (game.level < game.world.maps.length) {
-      game.level++;
+      game.nextLevel();
       game.score += 1000;
       this.worldTime = 0;
-      game.player.draw = false;
-      game.player.active = false;
+//      game.player.draw = false;
+//      game.player.active = false;
       console.log(this.maps[game.level-1].enemyMessage);
 //      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
       this.currentMap = this.randomMap;
@@ -658,7 +641,7 @@ World.prototype.checkVictory = function() {
     } else {
       cl("victory sequence");
       this.init();
-      game.victory();
+      //game.victory();
       result = true;
     }
   }
@@ -666,31 +649,34 @@ World.prototype.checkVictory = function() {
 };
 
 World.prototype.playLevel = function(LastStateDifferent){
-  cl('world playlevel');
+//  console.log('world playlevel');
+//  console.log("level " + game.level);
+//  console.log("player " + game.player.active + " " + game.player.draw);
   var result = false;
-  if (LastStateDifferent) {
-    result = true;
-    game.allCollectables = [];
-    game.allGoals = [];
-    game.player.collectables = [];
-    game.player.collectablesSpacing = 0;
-    game.player.collectablesWidth = 0;
-    if (game.player.active) {
+
+if (LastStateDifferent) {
+  result = true;
+    if (game.level === 0){
+      this.currentMap = this.randomMap;
+      game.player.draw = false;
+      game.player.active = false;
+    } else if (this.cutscene){
+      this.currentMap = this.randomMap;
+      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
+      game.player.draw = false;
+      game.player.active = false;
+    } else {
+      this.currentMap = this.maps[game.level-1];
+      game.allCollectables = [];
+      game.allGoals = [];
+      game.player.collectables = [];
+      game.player.collectablesSpacing = 0;
+      game.player.collectablesWidth = 0;
       game.player.draw = true;
       game.player.active = true;
-      this.currentMap = this.maps[game.level - 1];
       for (var i = 0; i < 7; i++){
         game.allCollectables.push(new Collectable(collectables[i]));
       }
-    }else{
-      game.player.draw = false;
-      game.player.active = false;
-      if (game.level !== 0){
-        game.messageBugs.create(this.maps[game.level-1].enemyMessage);
-      }
-      //game.messageBugs.create("a");
-      this.currentMap = this.randomMap;
-      //this.currentMap = this.maps[game.level - 1];
     }
   }
 

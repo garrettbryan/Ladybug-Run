@@ -316,12 +316,12 @@ The reset function resets the canvas to display the currentMap. It should first 
     });
     if (game.world.currentMap.hasOwnProperty('bossStartTile')) {
       game.boss.cutscene(game.world.currentMap.bossStartTile);
-      console.log(game.boss.tile);
-      console.log(game.boss.position);
+      //console.log(game.boss.tile);
+      //console.log(game.boss.position);
       game.boss.active = true
     }
 
-    console.log(game.world.currentMap);
+    //console.log(game.world.currentMap);
     if (game.world.currentMap.hasOwnProperty('goalTile')){
       game.world.currentMap.goalTile.forEach(function (tile){
         var g = new Goal;

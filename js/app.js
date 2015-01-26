@@ -129,7 +129,7 @@ var characters = [{
 
 cl('app.js');
 var game = new Game();
-game.init(1, 0);
+game.init(0, 0);
 game.startLevel(false);
 
 // This listens for key presses and sends the keys to your

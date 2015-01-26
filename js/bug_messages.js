@@ -15,11 +15,12 @@ position.x, position.y, speed, scale, time offset.
 BugMessage.prototype.create = function(message){
   cl('bugmessage create');
   this.bugProperties = [];
+  this.allbugs = [];
   var character;
   for (var i = 0, bugCols = 0; i < message.length; i++) { //i is the message index
     bugCols += 1; // this variable spaces out the columns of bugs
     character = this.bugCharacters(message[i]);
-    console.log(message[i]);
+    //console.log(message[i]);
     for (var j = 0; j < character[0].length; j++) { //j is the col index
       bugCols += 1;
       for (var k = 0; k < character.length; k++) {//k is the row index
