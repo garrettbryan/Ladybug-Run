@@ -143,7 +143,8 @@ var Engine = (function(global) {
       reset();
     }
 
-    if (game.world.activateComponents(lastPlayerState !== game.allPlayers[0].active)){
+    if (lastPlayerState !== game.allPlayers[0].active){
+      game.world.activateComponents(true);
       reset();
     }
 

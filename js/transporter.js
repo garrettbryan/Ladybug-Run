@@ -33,8 +33,8 @@ Transporter.prototype.constructor = Transporter;
 Transporter.prototype.init = function() {
   do {
     this.tile = {
-      x: Math.floor(Math.random() * game.world.currentMap.totalTiles.x),
-      y: Math.floor(Math.random() * game.world.currentMap.totalTiles.x)
+      x: Math.floor(Math.random() * (game.world.currentMap.totalTiles.x - 1)),
+      y: Math.floor(Math.random() * (game.world.currentMap.totalTiles.x - 1))
     }
   } while (this.tile.y === game.world.currentMap.playerStartTile.y ||
     this.tile.y === game.world.currentMap.goalTile[0].y);
@@ -45,4 +45,10 @@ Transporter.prototype.init = function() {
 
 Transporter.prototype.update = function() {
   this.calculatePosition();
+  for (var player in game.allPlayers){
+    this.collisionCheck(game.allPlayers[player], "primary", this.transport);
+  }
+  for (var enemy in game.allEnemies){
+    this.collisionCheck(game.allEnemies[enemy], "primary", this.transport);
+  }
 }

@@ -20,7 +20,6 @@ Boss.prototype.init = function(tile) {
   this.moveInterval = 1;
   this.speed = 800;
   var e = new Enemy(3);
-  game.allEnemies.push(e);
   console.log(e)
   this.ride(e);
   this.steed.direction = {
@@ -30,6 +29,7 @@ Boss.prototype.init = function(tile) {
   this.draw = true;
   this.steed.draw = true;
   this.steed.active = true;
+  game.allEnemies[game.numberOfEnemies] = e;
 }
 
 Boss.prototype.armaments = function(){
@@ -44,7 +44,11 @@ Boss.prototype.armaments = function(){
 
 Boss.prototype.cutscene = function(tile){
   this.init(tile);
-  this.moveAI = ['space'];
+  this.moveAI = [''];
+}
+
+Boss.prototype.bossFight = function(){
+  this.moveAI = ['left', 'right', 'up', 'down', 'space'];
 }
 
 Boss.prototype.target = function(player) {

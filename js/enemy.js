@@ -119,7 +119,7 @@ Enemy.prototype.simpleInit = function(){
     y: Math.floor(Math.random() * game.world.currentMap.totalTiles.y)
   };
   this.direction = {
-    x: 1,
+    x: -1,
     y: 0
   };
   this.speed = (Math.random() * 3 + 2) * 1 / this.scale;
@@ -201,8 +201,8 @@ Enemy.prototype.update = function(dt) {
     }
     this.reflectCollisionBoundaries();
     this.chooseSpriteDirection();
-    if (this.tile.x >  game.world.currentMap.totalTiles.x){
-      this.tile.x = -1;
+    if (this.tile.x <  -1){
+      this.tile.x = game.world.currentMap.totalTiles.x + 1;
       do {
         this.tile.y = Math.floor(Math.random() * game.world.currentMap.totalTiles.y);
       } while (this.tile.y === game.world.currentMap.playerStartTile.y);

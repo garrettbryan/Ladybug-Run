@@ -43,7 +43,7 @@ Game.prototype.init = function(level, score) {
   this.boss.cutscene();
   console.log(this.boss);
 
-  for (var j = this.allEnemies.length; j < this.numberOfEnemies; j++){
+  for (var j = 0; j < this.numberOfEnemies; j++){
     this.allEnemies[j] = (new Enemy(Math.random() * 2.5 + 0.5));
     console.log(this.allEnemies[j]);
   }

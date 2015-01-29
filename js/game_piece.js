@@ -106,8 +106,8 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
           var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
             (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
           if (distanceBetweenGamePieces < radiiSum) {
-            console.log("colllision");
-            console.log(result);
+            //console.log("collision");
+            //console.log(result);
             result.call(that, gamePiece);
             objectsCollide = true;
           }
@@ -126,6 +126,14 @@ GamePiece.prototype.activate = function(tile) {
     y: tile.y
   };
   this.calculatePosition();
+  if (this.steed){
+    this.steed.draw = true;
+    this.steed.active = true;
+    this.steed.direction = {
+      x: -1,
+      y: 0
+    };
+  }
 }
 
 GamePiece.prototype.noCollisions = function() {
@@ -260,25 +268,29 @@ GamePiece.prototype.drop = function() {
 };
 
 GamePiece.prototype.transport = function(p) {
-  console.log(p);
-  console.log(this);
+  console.log(p.tile);
+  console.log(this.tile);
 
   cg('GamePiece transport');
   for (var i = 0; i < game.allTransporters.length; i++) {
     if (game.allTransporters[i] === this) {
-      p.tile.x = game.allTransporters[0].tile.x;
-      p.tile.y = game.allTransporters[0].tile.y;
-
+//      p.tile.x = game.allTransporters[0].tile.x;
+//      p.tile.y = game.allTransporters[0].tile.y;
+      console.log(game.allTransporters[i].tile);
       game.allTransporters.splice(i, 1);
       game.allTransporters.push(this);
       p.tile = game.allTransporters[0].tile;
-      game.allTransporters[0].collisionBoundary.primary.collidesWith = [];
-      game.allTransporters[1].collisionBoundary.primary.collidesWith = [];
+      console.log(p.tile);
+      game.allTransporters[0].init();
+      game.allTransporters[1].init();
+    //  game.allTransporters[0].collisionBoundary.primary.collidesWith = [];
+    //  game.allTransporters[1].collisionBoundary.primary.collidesWith = [];
+    break;
     }
   }
-  game.allTransporters = [];
- for (var t = 0; t <  this.numberOfTransporters; t++){
-    this.allTransporters.push(new Transporter());
-    console.log(this.allTransporters[t]);
-  }
+//  game.allTransporters = [];
+// for (var t = 0; t <  this.numberOfTransporters; t++){
+//    this.allTransporters.push(new Transporter());
+//    console.log(this.allTransporters[t]);
+//  }
 }

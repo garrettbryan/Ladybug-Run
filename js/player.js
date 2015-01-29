@@ -408,7 +408,7 @@ Player.prototype.anyCollisions = function() {
     }
 
     for (var transporter in game.allTransporters){
-      this.collisionCheck(game.allTransporters[transporter], "primary", this.transport);
+    //  this.collisionCheck(game.allTransporters[transporter], "primary", this.transport);
     }
 
     for (var i = 1; i < game.allPlayers.length; i++) {

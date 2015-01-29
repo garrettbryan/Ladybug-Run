@@ -26,6 +26,11 @@ The init method places a collectable onto the level map on a walkable tile. Then
 Collectable.prototype.init = function() {
   this.placeRandomly(game.world.currentMap);
   this.draw = true;
+  this.active = true;
+  this.direction = {
+    x:0,
+    y:0
+  };
   this.calculatePosition();
 }
 

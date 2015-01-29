@@ -373,7 +373,7 @@ var World = function() {
         'w', 'w', 's', 's', 'g', 'g', 'g', 'g', 's', 'w', 'wb',
         'w', 'w', 's', 'g', 'g', 'g', 's', 'g', 's', 'w', 'w',
         'w', 'w', 'w', 's', 's', 's', 's', 's', 's', 's', 'w',
-        'w', 'w', 'w', 'w', 'sb', 's', 's', 's', 's', 'w', 'w',
+        'w', 'w', 'w', 'w', 'sb', 's', 's', 's', 's', 's', 'w',
         'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'
       ],
 
@@ -387,7 +387,7 @@ var World = function() {
         0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0,
         0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0,
         0, 0, 0, 2, 2, 2, 2, 2, 2, 1, 0,
-        0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
+        0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
       ],
 
@@ -401,7 +401,7 @@ var World = function() {
         0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0,
         0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0,
         0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0,
-        0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
+        0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
       ]
     }, {
@@ -635,6 +635,8 @@ if (LastStateDifferent) {
   result = true;
     if (game.level === 0 || this.cutscene){
       this.currentMap = this.randomMap;
+      this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+
       if (this.currentMap.bossStartTile){
         game.boss.activate({
           x: game.world.currentMap.bossStartTile.x,
@@ -646,6 +648,8 @@ if (LastStateDifferent) {
       }
     } else {
       this.currentMap = this.maps[game.level-1];
+      this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+
       if (this.currentMap.playerStartTile){
         var i = 0;
         game.allPlayers.forEach(function (player) {
@@ -662,7 +666,15 @@ if (LastStateDifferent) {
           x: game.world.currentMap.bossStartTile.x,
           y: game.world.currentMap.bossStartTile.y
         });
+        game.boss.bossFight();
       }
+
+      game.allCollectables.forEach(function(collectable){
+        if(!collectable.attachedTo){
+          collectable.init();
+        }
+      })
+
       if (this.currentMap.goalTile){
         for (var i = 0; i < this.currentMap.goalTile.length; i++){
           game.allGoals[i].activate(this.currentMap.goalTile[i]);
@@ -706,14 +718,16 @@ World.prototype.removeComponents = function() {
   game.allTransporters.forEach(function(transporter){
     transporter.noCollisions();
   });
+  game.allCollectables.forEach(function(collectable){
+    collectable.noCollisions();
+  });
 }
 
 /*
 This method is called for every new scene (level or cutscene) recalculated.
 */
 World.prototype.init = function() {
-  cl("world init");
-  this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+  console.log("world init");
   this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
   this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.maxElevation;
 };

@@ -69,13 +69,13 @@ var characters = [{
   elementName: 'Cat Girl',
   sprite: 'images/char-cat-girl.png',
 }, {
-  elementName: 'Goth Girl with Issues',
+  elementName: 'Goth Girl',
   sprite: 'images/char-horn-girl.png',
 }, {
   elementName: 'Pinky',
   sprite: 'images/char-pink-girl.png',
 }, {
-  elementName: 'Princess Lily',
+  elementName: 'Lily Pearl',
   sprite: 'images/char-princess-girl.png',
 }];
 
