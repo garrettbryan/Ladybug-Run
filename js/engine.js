@@ -101,7 +101,7 @@ var Engine = (function(global) {
     /*
     lastPlayerState can be compared to the current player.active property to determine if there has been a change. If there has been a change then to reset the canvas window.
     */
-    lastPlayerState = game.player.active;
+    lastPlayerState = game.allPlayers[0].active;
 
     /* Use the browser's requestAnimationFrame function to call this
      * function again as soon as the browser is able to draw another frame.
@@ -117,7 +117,8 @@ var Engine = (function(global) {
     cl('engine initilize');
     reset();
     lastTime = Date.now();
-    lastPlayerState = game.player.active;
+    lastPlayerState = game.allPlayers[0].active;
+    console.log("last player state = " + lastPlayerState);
     main();
   }
 
@@ -134,11 +135,15 @@ var Engine = (function(global) {
     cl('engine update')
     game.world.updateTime(dt);
 
+    if (game.world.checkDefeat()) {
+      reset();
+    }
+
     if (game.world.checkVictory()) {
       reset();
     }
 
-    if (game.world.playLevel(lastPlayerState !== game.player.active)){
+    if (game.world.activateComponents(lastPlayerState !== game.allPlayers[0].active)){
       reset();
     }
 
@@ -160,6 +165,10 @@ var Engine = (function(global) {
       goal.update(dt);
     });
 
+    game.allTransporters.forEach(function(transporter) {
+        transporter.update(dt);
+    });
+
     game.allCollectables.forEach(function(collectable) {
       collectable.update(dt);
     });
@@ -168,16 +177,13 @@ var Engine = (function(global) {
 
     game.world.update(dt);
 
-    game.player.update();
+    game.allPlayers[0].update();
 
-    //        game.enemy.update(dt);
     game.allEnemies.forEach(function(enemy) {
       enemy.update(dt);
     });
-    if (game.boss.active){
-      game.boss.move(dt);
-      game.boss.update();
-    }
+
+    game.boss.update(dt);
 
     /*
             allCollectables.forEach(function(collectable) {
@@ -255,6 +261,10 @@ var Engine = (function(global) {
       goal.renderColorPulse(row);
     });
 
+    game.allTransporters.forEach(function(transporter) {
+        transporter.render(row);
+    });
+
     game.allCollectables.forEach(function(collectable) {
       collectable.render(row);
       //            console.log("render Collectable");
@@ -267,7 +277,9 @@ var Engine = (function(global) {
       enemy.render(row);
     });
 
-    game.player.render(row);
+    game.allPlayers.forEach(function(player){
+      player.render(row);
+    })
 
     game.boss.render(row);
 
@@ -299,36 +311,51 @@ var Engine = (function(global) {
   }
 
 /*
-The reset function resets the canvas to display the currentMap. It should first display a title screen. Then
+The reset function resets the canvas to display the currentMap. It turns off all components so that game.world.activateComponents can initialize the exiting components to their new locations.
 */
   function reset() {
-    cl("engine reset");
-    game.world.init();
+    console.log("engine reset");
+    game.world.init();//determine canvas size.
 
-    game.allMenus[0].layout(game.world);
+    game.allMenus[0].layout(game.world);//measures canvas size for proportional placement of titles
 
     canvas.width = game.world.canvasSize.x;
     canvas.height = game.world.canvasSize.y;
 
-    game.player.init(game.world.currentMap.playerStartTile);
-    game.allCollectables.forEach(function(collectable) {
-      collectable.init();
-    });
-    if (game.world.currentMap.hasOwnProperty('bossStartTile')) {
-      game.boss.cutscene(game.world.currentMap.bossStartTile);
-      //console.log(game.boss.tile);
-      //console.log(game.boss.position);
-      game.boss.active = true
-    }
 
-    //console.log(game.world.currentMap);
-    if (game.world.currentMap.hasOwnProperty('goalTile')){
-      game.world.currentMap.goalTile.forEach(function (tile){
-        var g = new Goal;
-        g.init(tile);
-        game.allGoals.push(g);
-      });
-    }
+
+    //game.allPlayers.init(game.world.currentMap.playerStartTile);
+
+ //   game.allEnemies.forEach(function(enemy) {
+// //     //enemy.simpleInit();
+// //   });
+//
+// //   game.allCollectables.forEach(function(collectable) {
+// //   //  collectable.init();
+// //   });
+//
+// //   if (game.world.currentMap.hasOwnProperty('bossStartTile')) {
+// //     game.boss.cutscene(game.world.currentMap.bossStartTile);
+// //     //console.log(game.boss.tile);
+// //     //console.log(game.boss.position);
+// //     game.boss.active = true;
+// //   }
+//
+// //   //console.log(game.world.currentMap);
+// //   if (game.world.currentMap.hasOwnProperty('goalTile')){
+// //     game.allGoals.forEach(function(goal){
+// //       goal.notNeeded();
+// //     });
+// //     var i = 0;
+// //     game.world.currentMap.goalTile.forEach(function (tile){
+// //       game.allGoals[i].init(tile);
+// //       i++;
+// //     });
+//
+ //     for (var i = 0; i < 2; i++){
+ //         game.allTransporters[i].init();
+ //     }
+  //  }
 
   }
 

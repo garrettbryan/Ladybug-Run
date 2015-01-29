@@ -1,7 +1,7 @@
-var Player = function(character) {
+var Player = function(character, scale) {
   this.active = false;
   this.draw = false;
-  this.scale = 1;
+  this.scale = scale;
 
   GamePiece.call(this);
 
@@ -35,41 +35,48 @@ Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.init = function(tile) {
-  cp("Player " + this.elementName + " initialize");
-  this.speed = 700;
-  this.tile = tile;
-  if (!this.steed) {
-    var e = new Enemy();
-    this.ride(e);
-    game.allEnemies.push(e);
-    e.draw = true;
-  }
+  var i = 0;
+  game.allPlayers.forEach(function(player){
+    player.speed = 700;
+    player.tile = {
+      x: tile.x + i,
+      y: tile.y
+    };
+    i++;
+  console.log("Player: " + player.elementName + " initialize");
+  console.log(player.tile);
+  });
+  //if (!this.steed) {
+  //  var e = new Enemy();
+  //  this.ride(e);
+  //  game.allEnemies.push(e);
+  //  e.draw = true;
+  //}
 //  this.draw = true;
 //  this.active = true;
 }
 
 Player.prototype.update = function(dt) {
-  //cp('Player update');
-//  console.log(this.elementName + " " + this.tile.x + " " + this.tile.y)
-//  console.log("position x " + this.position.x);
-  if (this.steed) {
-    this.offset = {
-      x: 0,
-      y: 40 * this.steed.scale
-    };
-    this.steed.offset = {
-      x: -15 * this.steed.scale * this.steed.direction.x,
-      y: 0
-    };
-  } else {
-    this.offset = {
-      x: 0,
-      y: 0
-    };
+  if (this.active){
+    if (this.steed) {
+      this.offset = {
+        x: 0,
+        y: 40 * this.steed.scale
+      };
+      this.steed.offset = {
+        x: -15 * this.steed.scale * this.steed.direction.x,
+        y: 0
+      };
+    } else {
+      this.offset = {
+        x: 0,
+        y: 0
+      };
+    }
+    this.calculatePosition();
+    this.anyCollisions();
+    this.calculateCollectableSpacing();
   }
-  this.calculatePosition();
-  this.anyCollisions();
-  this.calculateCollectableSpacing();
 };
 
 Player.prototype.walkToTile = function() {
@@ -171,16 +178,17 @@ Player.prototype.handleInput = function(key) {
 
 Player.prototype.tag = function(p) {
   cp('Player tag');
+  //console.log(p);
   p.tile = {
     x: this.tile.x + 1 * this.direction.x,
     y: this.tile.y + 1 * this.direction.y
   }
 
-  if (p.tile.x < 0 || p.tile.x > world.tileSize.x) {
+  if (p.tile.x < 0 || p.tile.x > game.world.pixelsPerTileUnit.x) {
     p.tile.x = this.tile.x;
     p.tile.y = this.tile.y + 1;
   }
-  if (p.tile.y < 0 || p.tile.y > world.tileSize.y) {
+  if (p.tile.y < 0 || p.tile.y > game.world.pixelsPerTileUnit.y) {
     p.tile.y = this.tile.y;
     p.tile.x = this.tile.x + 1;
   }
@@ -212,6 +220,9 @@ Player.prototype.death = function() {
     this.drop();
     this.noCollisions();
   }
+
+  game.allPlayers.shift();
+
   console.log('Do the failure thing');
   //game.startLevel(true);
 };
@@ -379,23 +390,29 @@ The majority of interactions center around the player characters. The active pla
 */
 Player.prototype.anyCollisions = function() {
   //console.log("player collision checks");
-  for (var enemy in game.allEnemies) {
-    if (!this.steed) {
-      this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
-      if (game.allEnemies[enemy].scale >= this.scale) {
-        this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
+  if (this.active){
+    for (var enemy in game.allEnemies) {
+      if (!this.steed) {
+        this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
+        if (game.allEnemies[enemy].scale >= this.scale) {
+          this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
+        }
       }
     }
-  }
-  for (var collectable in game.allCollectables) {
-    if (game.allCollectables[collectable].projectile && this.collisionCheck(game.allCollectables[collectable], "primary", this.death)) {
-      game.allCollectables[collectable].noCollisions();
-    } else {
-      this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
+    for (var collectable in game.allCollectables) {
+      if (game.allCollectables[collectable].projectile && this.collisionCheck(game.allCollectables[collectable], "primary", this.death)) {
+        game.allCollectables[collectable].noCollisions();
+      } else {
+        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
+      }
     }
-  }
 
-  for (var i = 1; i < game.allPlayers.length; i++) {
-    this.collisionCheck(game.allPlayers[i], "primary", this.tag)
+    game.allTransporters.forEach(function(transporter){
+      //this.collisionCheck(transporter, "primary", this.transport);
+    });
+
+    for (var i = 1; i < game.allPlayers.length; i++) {
+      this.collisionCheck(game.allPlayers[i], "primary", this.tag)
+    }
   }
 }

@@ -22,12 +22,20 @@ var Goal = function(tile) {
   this.renderFadeUp = 1;
 }
 
+
 Goal.prototype = Object.create(GamePiece.prototype);
 Goal.prototype.constructor = Goal;
+
+Goal.prototype.notNeeded = function(){
+  this.draw = false;
+  this.active = false;
+}
 
 Goal.prototype.init = function(tile){
   this.tile = tile;
   this.draw = true;
+  this.active = true;
+
 }
 
 Goal.prototype.update = function(dt){
@@ -36,24 +44,28 @@ Goal.prototype.update = function(dt){
 }
 
 Goal.prototype.renderColorPulse = function(row){
-  ctx.save();
-  ctx.globalAlpha = this.renderCount * this.renderFadeIncrement;
-  this.render(row);
-  ctx.restore();
-    this.renderCount += this.renderFadeUp;
-  if (this.renderCount === this.fadeMax || this.renderCount === this.fadeMin){
-    this.renderFadeUp *= -1;
-    //console.log(this.renderFadeUp);
+  if (this.draw){
+    ctx.save();
+    ctx.globalAlpha = this.renderCount * this.renderFadeIncrement;
+    this.render(row);
+    ctx.restore();
+      this.renderCount += this.renderFadeUp;
+    if (this.renderCount === this.fadeMax || this.renderCount === this.fadeMin){
+      this.renderFadeUp *= -1;
+      //console.log(this.renderFadeUp);
+    }
+    //  console.log(this.renderCount * this.renderFadeIncrement);
   }
-  //  console.log(this.renderCount * this.renderFadeIncrement);
 }
 
 Goal.prototype.renderColorPulseForeground = function(row){
-  ctx.save();
-  ctx.globalAlpha = this.renderCount * this.renderFadeIncrement * 0.5;
-  this.renderForeground(row);
-  ctx.restore();
-  //  console.log(this.renderCount * this.renderFadeIncrement);
+  if (this.draw){
+    ctx.save();
+    ctx.globalAlpha = this.renderCount * this.renderFadeIncrement * 0.5;
+    this.renderForeground(row);
+    ctx.restore();
+    //  console.log(this.renderCount * this.renderFadeIncrement);
+  }
 }
 
 Goal.prototype.renderForeground = function(row) {

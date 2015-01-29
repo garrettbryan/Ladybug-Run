@@ -2,6 +2,7 @@ var GamePiece = function() {
   cg('GamePiece new');
 
   this.draw = false;
+  this.active = false;
 
   /*
   I modified some of the sprites to have a left and right facing image. This data represents the source dimensions of the sprites.
@@ -87,42 +88,53 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
   cg('GamePiece collisionCheck');
   var that = this,
     objectsCollide = false;
-  if (Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
-    gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
-      if (that instanceof collider) {
-        var distanceBetweenGamePieces =
-          (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-            that.position.x - that.collisionBoundary.primary.offset.x) *
-          (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-            that.position.x - that.collisionBoundary.primary.offset.x) +
-          (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
-            that.position.y - that.collisionBoundary.primary.offset.y) *
-          (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
-            that.position.y - that.collisionBoundary.primary.offset.y);
-        var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
-          (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
-        if (distanceBetweenGamePieces < radiiSum) {
-          console.log("colllision");
-          result.call(that, gamePiece);
-          objectsCollide = true;
+  if (gamePiece.active === true && that.active === true){
+    if (Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
+      gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
+        if (that instanceof collider) {
+          var distanceBetweenGamePieces =
+            (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+              that.position.x - that.collisionBoundary.primary.offset.x) *
+            (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+              that.position.x - that.collisionBoundary.primary.offset.x) +
+            (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
+              that.position.y - that.collisionBoundary.primary.offset.y) *
+            (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
+              that.position.y - that.collisionBoundary.primary.offset.y);
+          var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
+            (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
+          if (distanceBetweenGamePieces < radiiSum) {
+            console.log("colllision");
+            console.log(result);
+            result.call(that, gamePiece);
+            objectsCollide = true;
+          }
         }
-      }
-    });
+      });
+    }
   }
   return objectsCollide;
 }
 
+GamePiece.prototype.activate = function(tile) {
+  this.draw = true;
+  this.active = true;
+  this.tile = {
+    x: tile.x,
+    y: tile.y
+  };
+  this.calculatePosition();
+}
+
 GamePiece.prototype.noCollisions = function() {
   this.draw = false;
+  this.active = false;
 
   this.tile = {
-    x: 0,
-    y: 0
+    x: -1,
+    y: -1
   };
-  this.position = {
-    x: 0,
-    y: 0
-  };
+  this.calculatePosition();
   this.offset = { //only used during rendering
     x: 0,
     y: 0
@@ -134,9 +146,12 @@ GamePiece.prototype.noCollisions = function() {
   this.speed = 0;
   this.rotation = 0; //about the z axis
 
-  for (boundary in this.collisionBoundary) {
-    this.collisionBoundary[boundary].collidesWith = [];
-  }
+  //for (boundary in this.collisionBoundary) {
+  //  if (this.collisionBoundary[boundary].collidesWith.length){
+  //    this.collisionBoundary[boundary].savedCollidesWith = this.collisionBoundary[boundary].//collidesWith;//
+  //    this.collisionBoundary[boundary].collidesWith = [];//
+  //  }
+  //}
 }
 
 GamePiece.prototype.retarget = function(targetPt) {
@@ -186,7 +201,7 @@ GamePiece.prototype.render = function(row) {
 
 GamePiece.prototype.move = function(dt) {
   cg('GamePiece move ' + this.name);
-  if (this.draw) {
+  if (this.active) {
     this.tile = {
       x: this.tile.x + this.speed * dt * this.direction.x,
       y: this.tile.y + this.speed * dt * this.direction.y
@@ -244,22 +259,20 @@ GamePiece.prototype.drop = function() {
 
 GamePiece.prototype.transport = function(p) {
   cg('GamePiece transport');
-  for (var i = 0; i < transporters.length; i++) {
-    if (transporters[i] === this) {
-      p.tile.x = transporters[0].tile.x;
-      p.tile.y = transporters[0].tile.y;
+  for (var i = 0; i < game.transporters.length; i++) {
+    if (game.transporters[i] === this) {
+      p.tile.x = game.transporters[0].tile.x;
+      p.tile.y = game.transporters[0].tile.y;
 
-      transporters.splice(i, 1);
-      transporters.push(this);
-      p.tile = transporters[0].tile;
-      transporters[0].collisionBoundary.primary.collidesWith = [];
-      transporters[1].collisionBoundary.primary.collidesWith = [];
+      game.transporters.splice(i, 1);
+      game.transporters.push(this);
+      p.tile = game.transporters[0].tile;
+      game.transporters[0].collisionBoundary.primary.collidesWith = [];
+      game.transporters[1].collisionBoundary.primary.collidesWith = [];
     }
   }
-  transporters = [];
-  for (var i = 0; i < 2; i++) {
-    transporters.push(function() {
-      return new Transporter(Math.floor(Math.random() * 4 + 5 * i), Math.floor(Math.random() * 5 + 2));
-    }());
+  game.transporters = [];
+  for (var i = 0; i < 2; i++){
+      game.transporters.push(new Transporter());
   }
 }

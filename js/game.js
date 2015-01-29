@@ -1,20 +1,31 @@
+/*
+The game object acts as a container for all the game components.  game.js contains all the game settings such as number of enemies, collectables, characters, etc.
+*/
 var Game = function() {
   cl('game new');
-  this.lives = 0;
   this.menu = 0;
   this.level = 0;
   this.topScore = 0;
   this.score = 0;
-  this.numberOfEnemies = 0;
   this.active = false;
   this.world = {};
-  this.player = {};
-  this.allCharacters = {};
-  this.allEnemies = {};
-  this.allCollectables = {};
+  this.numberOfPlayerCharacters = 4;
+  this.allPlayers = [];
+  this.numberOfEnemies = 25;
+  this.allEnemies = [];
+  this.numberOfCollectables = 7;
+  this.allCollectables = [];
+  this.numberOfGoals = 4;
+  this.allGoals = [];
+  this.numberOfTransporters = 2;
+  this.allTransporters = [];
+  this.allMenus = [];
+  this.messageBugs = {};
 };
 
-
+/*
+The game init runs at the beginning of the game. It creates all the objects the game may need. No other objects are created or destroyed. Objects are active or inactive. Each object may be reused throughout the game.
+*/
 Game.prototype.init = function(level, score) {
   cl("game init");
   this.level = level;
@@ -22,73 +33,67 @@ Game.prototype.init = function(level, score) {
 
   this.world = new World();
 
-  this.allPlayers = [];
-  this.player = new Player(characters[1]);
+  for (var p = 0; p < this.numberOfPlayerCharacters; p++){
+    this.allPlayers[p] = new Player(characters[p+1],Math.random() * 1 + 0.5); //bugboy is element 1 of the characters array.
+    console.log(this.allPlayers[p]);
+  }
 
-  //this.enemy = new Enemy();
   this.boss = new Boss();
+  this.boss.armaments();
+  this.boss.cutscene();
+  console.log(this.boss);
 
-  this.allGoals = [];
+  for (var j = this.allEnemies.length; j < this.numberOfEnemies; j++){
+    this.allEnemies[j] = (new Enemy(Math.random() * 2.5 + 0.5));
+    console.log(this.allEnemies[j]);
+  }
 
-  //Collectables and Enemies are spawned when each level is started.
-  this.allCollectables = [];
+  for (var i = 0; i < this.numberOfCollectables; i++) {
+    this.allCollectables.push(new Collectable(collectables[i]));
+    console.log(this.allCollectables[i]);
+  }
 
-  this.allEnemies = [];
   this.messageBugs = new BugMessage();
+  console.log(this.messageBugs);
 
-  this.allMenus = [];
+  for (var t = 0; t <  this.numberOfTransporters; t++){
+    this.allTransporters.push(new Transporter());
+    console.log(this.allTransporters[t]);
+  }
+
+  for (var g = 0; g < this.numberOfGoals; g++){
+    this.allGoals.push(new Goal());
+    console.log(this.allGoals[g])
+  }
+
   this.allMenus.push(new Menu("title"));
-  for (var i = 0; i < titleMenu.length; i++){
-//    console.log(titleMenu[i]);
-//    console.log(this.allMenus[0]);
-    this.allMenus[0].add(titleMenu[i]); //TODO is this redering
-  }
-
+  console.log(this.allMenus);
 }
 
-Game.prototype.title = function() {
-  cl('game title');
-  this.world.currentMap = this.world.randomMap;
-}
-
-Game.prototype.nextLevel = function() {
-  if (this.level === 0){
-    this.level++;
-    this.world.cutscene = false; // initialize cutscene to false do it becomes true line 65
-  } else if (!this.world.cutscene){
-      this.level++;
-  }
-  if (!this.world.currentMap.bossStartTile){
-    this.boss.draw = false;
-    this.boss.active = false;
-  }
-  this.world.cutscene = !this.world.cutscene;
-
-  this.allCollectables = [];
-  this.allGoals = [];
-  this.allbugs = [];
-  //this.allEnemies = [];
-}
-
+/*
+startLevel does what it says and starts the current level or cutscene.
+*/
 Game.prototype.startLevel = function(restart) {
-  cl("game start Level " + this.level);
+  console.log("game start level " + this.level);
   if (restart) {
     this.level = 0;
     this.score = 0;
   }
-
-  this.world.playLevel(true);
-
+  this.world.activateComponents(true);
 }
 
-Game.prototype.victory = function() {
-  cl("game victory");
-  this.world.currentMap = this.world.victoryMap;
-}
-
-Game.prototype.failure = function() {
-  cl("game failure");
-  this.world.currentMap = this.world.failureMap;
+/*
+nextLevel increments the level and adjusts the cutscene boolean. All playable levels have a begining cutscene.
+*/
+Game.prototype.nextLevel = function() {
+  console.log("nextLevel");
+  if (this.level === 0){
+    this.level++;
+    this.world.cutscene = false;
+  } else if (!this.world.cutscene){
+      this.level++;
+  }
+  this.world.cutscene = !this.world.cutscene;
 }
 
 Game.prototype.renderStatusBar = function() {
@@ -97,9 +102,9 @@ Game.prototype.renderStatusBar = function() {
   ctx.fillStyle = '#000';
   ctx.font = 'Italic 30px Sans-Serif';
   ctx.textBaseline = 'Top';
+  ctx.fillText('Player: ' + this.allPlayers[0].elementName, 5, 30);
   ctx.fillText('Score: ' + this.score, game.world.canvasSize.x * 3 / 4, 30);
   ctx.fillText('Time: ' + this.world.worldTime.toFixed(2), game.world.canvasSize.x / 4, 30);
   ctx.fillText('Level: ' + this.level, game.world.canvasSize.x / 2, 30);
-
   ctx.restore();
 }

@@ -1,5 +1,5 @@
 var Boss = function() {
-  Player.call(this, characters[0]);
+  Player.call(this, characters[0], 2);
 }
 
 Boss.prototype = Object.create(Player.prototype);
@@ -9,7 +9,6 @@ Boss.prototype.constructor = Boss;
 are set properly so that the collisionBoundaries are placed properly. */
 Boss.prototype.init = function(tile) {
   this.tile = tile;
-  this.lastDirection = -1;
   this.direction = {
     x: -1,
     y: 0
@@ -20,17 +19,20 @@ Boss.prototype.init = function(tile) {
   this.collisionBoundary.primary.collidesWith = []; //this.moveAI = ['space'];
   this.moveInterval = 1;
   this.speed = 800;
-  var e = new Enemy();
-  e.lastDirection = -1;
-  e.direction = {
+  var e = new Enemy(3);
+  game.allEnemies.push(e);
+  console.log(e)
+  this.ride(e);
+  this.steed.direction = {
     x: -1,
     y: 0
   };
-  this.ride(e);
-  game.allEnemies.push(e);
   this.draw = true;
-  e.draw = true;
+  this.steed.draw = true;
+  this.steed.active = true;
+}
 
+Boss.prototype.armaments = function(){
   for (var i = 0; i < 7; i++) {
     var c = new Collectable(collectables[6]);
     c.speed = 600;
@@ -45,7 +47,7 @@ Boss.prototype.cutscene = function(tile){
   this.moveAI = ['space'];
 }
 
-GamePiece.prototype.target = function(player) {
+Boss.prototype.target = function(player) {
   ce('target');
 
   var vector = {},
@@ -72,7 +74,7 @@ GamePiece.prototype.target = function(player) {
 Boss.prototype.move = function(dt) {
 //  console.log("boss move");
   this.moveInterval -= dt;
-  this.target(game.player);
+  this.target(game.allPlayers[0]);
 
   if (this.moveInterval < 0) {
     this.handleInput(this.moveAI[Math.floor(Math.random() * this.moveAI.length)])
@@ -100,3 +102,28 @@ Boss.prototype.death = function() {
   console.log('Do the victory thing');
 
 };
+
+Boss.prototype.update = function(dt) {
+  if (this.active){
+    this.move(dt);
+    if (this.steed) {
+      this.offset = {
+        x: 0,
+        y: 40 * this.steed.scale
+      };
+      this.steed.offset = {
+        x: -15 * this.steed.scale * this.steed.direction.x,
+        y: 0
+      };
+    } else {
+      this.offset = {
+        x: 0,
+        y: 0
+      };
+    }
+    this.calculatePosition();
+    this.anyCollisions();
+    this.calculateCollectableSpacing();
+  }
+};
+

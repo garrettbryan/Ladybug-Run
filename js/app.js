@@ -1,52 +1,5 @@
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
 
-/*
-
-var world = new World();
-
-var allCollectables = [];
-for (var i = 0; i < 7; i++){
-    allCollectables.push(new Collectable( Math.floor(Math.random()*10), Math.floor(Math.random()*5+2), 500, 0.3, i));
-
-}
-
-var allEnemies = [];
-
-//for (var i = 1; i < 6; i++){
-//    allEnemies.push(function(){
-//        return new Enemy( -1, i+1, 3, 0.5*i, 1);
-//    }());
-
-//}
-allEnemies.push(new Enemy(-1, 4, 3, 1, 1));
-
-var allPlayers = [];
-for (var i = 0, p = 1; i < 2; i++){
-    for (var j = 0; j < 2; j++, p++){
-            allPlayers.push(function(){
-                return new Player( 4+i, 7+j, 300, 0.6+0.2* i, p);
-        }());
-    }
-
-}
-
-allPlayers.push(new Boss( 4,4,500, 0.75));
-
-
-var transporters = [];
-//for (var i = 0; i < 2; i++){
-//    transporters.push(function(){
-//        return new Transporter( Math.floor(Math.random()*4+5*i), Math.f//loor(Math.random()*5+2));//
-//    }());
-//}
-
-
-var mess = "";
-//var mess = createBugMessage("UDACITY ROCKS ! LADY BUG RUN !");
-
-*/var titleMenu = [
+var titleMenu = [
   {
     tag: 'h1',
     active: false,
@@ -77,7 +30,7 @@ var mess = "";
 //    y:  game.world.canvasSize.y * 0.9
     }
   }
-]
+];
 
 var collectables = [{
   elementName: 'Blue Gem',
@@ -99,7 +52,6 @@ var collectables = [{
   elementName: 'Key',
   sprite: 'images/Key.png',
   points: 200,
-
 }, {
   elementName: 'Star',
   sprite: 'images/Star.png',
@@ -145,5 +97,5 @@ document.addEventListener('keyup', function(e) {
 
   };
 
-  game.player.handleInput(allowedKeys[e.keyCode]);
+  game.allPlayers[0].handleInput(allowedKeys[e.keyCode]);
 });

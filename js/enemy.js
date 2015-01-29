@@ -1,7 +1,7 @@
-var Enemy = function() {
+var Enemy = function(scale) {
   cl('Enemy new');
   this.speed = 3;
-  this.scale = 2;
+  this.scale = scale || 2;
   GamePiece.call(this);
 
   this.pathNodes = [];
@@ -19,7 +19,6 @@ var Enemy = function() {
     'x': 1,
     'y': 0
   };
-  this.lastDirection = 0;
 
   this.tile = {
     x: 4,
@@ -113,6 +112,26 @@ Enemy.prototype.init = function() {
   this.assignPath(game.world.currentMap.enemyPaths);
 };
 
+Enemy.prototype.simpleInit = function(){
+  ce('enemy simple init');
+  this.tile = {
+    x: Math.floor(Math.random() * game.world.currentMap.totalTiles.x),
+    y: Math.floor(Math.random() * game.world.currentMap.totalTiles.y)
+  };
+  this.direction = {
+    x: 1,
+    y: 0
+  };
+  this.speed = (Math.random() * 3 + 2) * 1 / this.scale;
+  if (this.tile.y === game.world.currentMap.playerStartTile.y){
+    this.simpleInit();
+  }
+  this.calculatePosition();
+  //console.log(this.tile);
+  this.draw = true;
+  this.active = true;
+}
+
 Enemy.prototype.assignPath = function(enemyPaths) {
   ce('enemy assignPath');
 
@@ -147,7 +166,7 @@ Enemy.prototype.assignPath = function(enemyPaths) {
   this.navData.targetPoint = this.navData.navPoints[1];
 };
 
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.cutsceneUpdate = function(dt) {
   ce('enemy update');
   if (this.rider) {
     this.tile = this.rider.tile;
@@ -159,9 +178,37 @@ Enemy.prototype.update = function(dt) {
     //        ce(this.position);
     //        this.retarget(this.navData.targetPoint);
     this.move(dt);
+    //console.log(this.position.x);
   }
   this.reflectCollisionBoundaries();
   this.chooseSpriteDirection();
+};
+
+Enemy.prototype.update = function(dt) {
+  ce('enemy update');
+  if (this.active){
+    if (this.rider) {
+      this.tile = this.rider.tile;
+      //direction with a rider comes from the riders handleInput method.
+      this.calculatePosition();
+    } else {
+      //        this.navigate(this.navData, this.reachedTarget);
+      //        ce(this.navData.targetPoint);
+      //        ce(this.position);
+      //        this.retarget(this.navData.targetPoint);
+      this.move(dt);
+      //console.log(this.position.x);
+    }
+    this.reflectCollisionBoundaries();
+    this.chooseSpriteDirection();
+    if (this.tile.x >  game.world.currentMap.totalTiles.x){
+      this.tile.x = -1;
+      do {
+        this.tile.y = Math.floor(Math.random() * game.world.currentMap.totalTiles.y);
+      } while (this.tile.y === game.world.currentMap.playerStartTile.y);
+      this.speed = (Math.random() * 3 + 2) * 1 / this.scale;
+    }
+  }
 };
 
 
@@ -225,11 +272,6 @@ Enemy.prototype.death = function() {
         return new Enemy(-1, i + 1, 3, 0.5 * i, 1);
       }());
 
-    }
-    for (var i = 0; i < 2; i++) {
-      transporters.push(function() {
-        return new Transporter(Math.floor(Math.random() * 4 + 5 * i), Math.floor(Math.random() * 5 + 2));
-      }());
     }
   }
   //    this.character = Math.floor(Math.random()*5);

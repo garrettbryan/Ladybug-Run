@@ -49,6 +49,8 @@ BugMessage.prototype.update = function(dt) {
       var bugValues = this.bugProperties.shift(),
         e = new Enemy();
       e.initMessageBug(bugValues);
+      e.draw = true;
+      e.active = true;
       //console.log(e);
       this.allbugs.push(e);
     } else {
@@ -56,19 +58,23 @@ BugMessage.prototype.update = function(dt) {
     }
   }
   this.allbugs.forEach(function(enemy) {
-    enemy.update(dt);
+    enemy.cutsceneUpdate(dt);
   });
 
-  console.log(this.allbugs.length);;
+  //console.log(this.allbugs.length);;
 
-  if (this.allbugs.length > 0 && game.player.active){
+  if (this.allbugs.length > 0 && game.allPlayers[0].active){
     this.allbugs = [];
   }
-  //var lastBug = this.allbugs.length-1;
-  //if (this.allbugs && this.allbugs[length - 1].position.x < -101) {
-  //  this.erase();
-  //  game.player.active = true;
-  //}
+
+  if (this.allbugs && this.allbugs.length && this.allbugs[this.allbugs.length-1].position.x < -101) {
+    this.erase();
+    console.log("bug erase");
+//    game.allPlayers[0].active = true;
+//    game.active = true;
+//    game.nextLevel();
+//    game.startLevel(false);
+  }
 }
 
 BugMessage.prototype.render = function(row){
