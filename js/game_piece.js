@@ -88,6 +88,8 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
   cg('GamePiece collisionCheck');
   var that = this,
     objectsCollide = false;
+//    console.log(gamePiece);
+//    console.log(that);
   if (gamePiece.active === true && that.active === true){
     if (Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
       gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
@@ -258,21 +260,25 @@ GamePiece.prototype.drop = function() {
 };
 
 GamePiece.prototype.transport = function(p) {
-  cg('GamePiece transport');
-  for (var i = 0; i < game.transporters.length; i++) {
-    if (game.transporters[i] === this) {
-      p.tile.x = game.transporters[0].tile.x;
-      p.tile.y = game.transporters[0].tile.y;
+  console.log(p);
+  console.log(this);
 
-      game.transporters.splice(i, 1);
-      game.transporters.push(this);
-      p.tile = game.transporters[0].tile;
-      game.transporters[0].collisionBoundary.primary.collidesWith = [];
-      game.transporters[1].collisionBoundary.primary.collidesWith = [];
+  cg('GamePiece transport');
+  for (var i = 0; i < game.allTransporters.length; i++) {
+    if (game.allTransporters[i] === this) {
+      p.tile.x = game.allTransporters[0].tile.x;
+      p.tile.y = game.allTransporters[0].tile.y;
+
+      game.allTransporters.splice(i, 1);
+      game.allTransporters.push(this);
+      p.tile = game.allTransporters[0].tile;
+      game.allTransporters[0].collisionBoundary.primary.collidesWith = [];
+      game.allTransporters[1].collisionBoundary.primary.collidesWith = [];
     }
   }
-  game.transporters = [];
-  for (var i = 0; i < 2; i++){
-      game.transporters.push(new Transporter());
+  game.allTransporters = [];
+ for (var t = 0; t <  this.numberOfTransporters; t++){
+    this.allTransporters.push(new Transporter());
+    console.log(this.allTransporters[t]);
   }
 }

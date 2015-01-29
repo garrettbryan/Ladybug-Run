@@ -653,6 +653,7 @@ if (LastStateDifferent) {
             x: game.world.currentMap.playerStartTile.x + i,
             y: game.world.currentMap.playerStartTile.y
           });
+          player.calculatePosition(player.tile);
           i++;
         });
       }
