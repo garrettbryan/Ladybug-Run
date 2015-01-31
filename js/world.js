@@ -594,15 +594,6 @@ World.prototype.characterVictory = function(player){
   return result;
 }
 
-World.prototype.checkDefeat = function() {
-  if(game.allDead()){
-    this.init();
-    game.world.failure();
-    return true;
-  }
-}
-
-
 World.prototype.checkVictory = function() {
   var result = false;
   //console.log('world checkVictory');
@@ -636,7 +627,6 @@ World.prototype.checkVictory = function() {
 World.prototype.activateComponents = function(LastStateDifferent){
 var result = false;
 if (LastStateDifferent) {
-  this.removeComponents();
   console.log('World activateComponents');
 
   result = true;
@@ -748,7 +738,7 @@ updates the running game time.
 */
 World.prototype.updateTime = function(dt) {
   cl('world updateTime');
-  if (game.active){
+  if (game.active && !game.world.cutscene){
     this.worldTime += dt;
   }
 }

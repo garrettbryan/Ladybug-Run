@@ -135,15 +135,12 @@ var Engine = (function(global) {
     cl('engine update')
     game.world.updateTime(dt);
 
-    //if (game.world.checkDefeat()) {
-    //  reset();
-    //}
-
     if (game.world.checkVictory()) {
       reset();
     }
 
     if (lastPlayerState !== game.controlling.active){
+      game.world.removeComponents();
       game.world.activateComponents(true);
       reset();
     }
@@ -181,8 +178,10 @@ var Engine = (function(global) {
     game.controlling.update();
 
     game.allPlayers.forEach(function(player){
-      player.catchIt();
-      //player.wait();
+      if (game.notControlling(player)){
+        player.catchIt();
+        //player.wait();
+      }
     });
 
     game.allEnemies.forEach(function(enemy) {
@@ -253,7 +252,7 @@ var Engine = (function(global) {
       renderEntities(row);
     }
       //game.renderTitle();
-      game.allMenus[0].render();
+      //game.allMenus[0].render();
 
     //        game.enemy.renderNavPoints();
   }
@@ -295,6 +294,12 @@ var Engine = (function(global) {
       goal.renderColorPulseForeground(row);
     });
 
+    //console.log(game.active);
+    game.allMenus.forEach(function(menu){
+      //console.log(menu);
+      menu.render();
+    });
+
     /* Loop through all of the objects within the allEnemies array and call
      * the render function you have defined.
      */
@@ -323,6 +328,7 @@ The reset function resets the canvas to display the currentMap. It turns off all
 */
   function reset() {
     console.log("engine reset");
+
     game.world.init();//determine canvas size.
 
     game.allMenus[0].layout(game.world);//measures canvas size for proportional placement of titles

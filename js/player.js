@@ -191,35 +191,6 @@ Player.prototype.tag = function(p) {
   game.controlling = p;
 }
 
-//Player.prototype.tag = function(p) {
-//  cp('Player tag');
-//  //console.log(p);
-//  p.tile = {
-//    x: this.tile.x + 1 * this.direction.x,
-//    y: this.tile.y + 1 * this.direction.y
-//  }
-//
-//  if (p.tile.x < 0 || p.tile.x > game.world.pixelsPerTileUnit.x) {
-//    p.tile.x = this.tile.x;
-//    p.tile.y = this.tile.y + 1;
-//  }
-//  if (p.tile.y < 0 || p.tile.y > game.world.pixelsPerTileUnit.y) {
-//    p.tile.y = this.tile.y;
-//    p.tile.x = this.tile.x + 1;
-//  }
-//
-//  p.direction = this.direction;
-//
-//  for (var i = 1; i < game.allPlayers.length; i++) {
-//    if (game.allPlayers[i] === p) {
-//
-//      game.allPlayers.splice(i, 1, game.controlling);
-//      game.controlling = p;
-//    }
-//  }
-//};
-
-
 Player.prototype.passedLevel = function() {
   this.passed = true;
   game.passedPlayers++;
@@ -247,11 +218,6 @@ Player.prototype.death = function() {
   this.dead = true;
   console.log(game.deadPlayers++);
   this.noCollisions();
-  game.nextAvailablePlayer();
-
-
-  console.log('Do the failure thing');
-  //game.startLevel(true);
 };
 
 

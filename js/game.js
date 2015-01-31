@@ -41,8 +41,7 @@ Game.prototype.init = function(level, score) {
     this.allPlayers[p] = new Player(characters[p+1],Math.random() * 1 + 0.5); //bugboy is element 1 of the characters array.
     console.log(this.allPlayers[p]);
   }
-this.controlling = this.allPlayers[0];
-
+  this.controlling = this.allPlayers[0];
 
   this.boss = new Boss();
   this.boss.armaments();
@@ -85,10 +84,12 @@ Game.prototype.startLevel = function(restart) {
     this.level = 0;
     this.score = 0;
   }
+  this.world.removeComponents();
   this.world.activateComponents(true);
 }
 
 Game.prototype.update = function() {
+  this.nextAvailablePlayer();
   this.playerName = this.allPlayers.length ? this.controlling.elementName : "";
 }
 /*
@@ -107,10 +108,12 @@ Game.prototype.nextLevel = function() {
 }
 
 Game.prototype.nextAvailablePlayer = function(){
-  for (var i = 0; i < this.allPlayers.length; i++){
-    if (!this.allPlayers[i].dead && !this.allPlayers[i].passed) {
-      this.controlling = this.allPlayers[i];
-      break;
+  if (this.controlling.dead){
+    for (var i = 0; i < this.allPlayers.length; i++){
+      if (!this.allPlayers[i].dead && !this.allPlayers[i].passed) {
+        this.controlling = this.allPlayers[i];
+        break;
+      }
     }
   }
 }
@@ -133,6 +136,18 @@ Game.prototype.renderStatusBar = function() {
   ctx.fillText('Time: ' + this.world.worldTime.toFixed(2), game.world.canvasSize.x / 4, 30);
   ctx.fillText('Level: ' + this.level, game.world.canvasSize.x / 2, 30);
   ctx.restore();
+}
+
+Game.prototype.notControlling = function(player) {
+  return this.controlling !== player;
+}
+
+Game.prototype.checkDefeat = function() {
+  if(this.allDead()){
+    this.world.init();
+    this.world.failure();
+    return true;
+  }
 }
 
 Game.prototype.allDead = function() {
