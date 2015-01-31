@@ -45,7 +45,7 @@ var Enemy = function(scale) {
       'collidesWith': [
         Player,
         Enemy,
-        Collectable
+        Collectable,
       ],
       'r': 20 * this.scale,
       'offset': {
@@ -56,6 +56,7 @@ var Enemy = function(scale) {
     secondary: {
       'collidesWith': [
         Player,
+        Transporter,
       ],
       'r': 20 * this.scale,
       'offset': {
@@ -201,12 +202,22 @@ Enemy.prototype.update = function(dt) {
     }
     this.reflectCollisionBoundaries();
     this.chooseSpriteDirection();
-    if (this.tile.x <  -1){
+    if (this.tile.x < -1 || this.tile.x > game.world.currentMap.totalTiles.x + 1){
       this.tile.x = game.world.currentMap.totalTiles.x + 1;
+      this.direction = {
+        x: -1,
+        y: 0
+      };
       do {
         this.tile.y = Math.floor(Math.random() * game.world.currentMap.totalTiles.y);
       } while (this.tile.y === game.world.currentMap.playerStartTile.y);
       this.speed = (Math.random() * 3 + 2) * 1 / this.scale;
+    }
+  }
+  for (var collectable in game.allCollectables) {
+    if (game.allCollectables[collectable].projectile && this.collisionCheck(game.allCollectables[collectable], "primary", this.death)) {
+      game.allCollectables[collectable].noCollisions();
+      game.allCollectables[collectable].init();
     }
   }
 };
@@ -260,23 +271,7 @@ Enemy.prototype.reachedTarget = function() {
 
 Enemy.prototype.death = function() {
   ce('enemy death');
-  for (var i = 0; i < allEnemies.length; i++) {
-    if (this === allEnemies[i]) {
-      allEnemies.splice(i, 1);
-    }
-  }
-
-  if (allEnemies.length === 0) {
-    for (var i = 1; i < 6; i++) {
-      allEnemies.push(function() {
-        return new Enemy(-1, i + 1, 3, 0.5 * i, 1);
-      }());
-
-    }
-  }
-  //    this.character = Math.floor(Math.random()*5);
-  //    this.tileX = 4;
-  //    this.tileY = 7;
+  this.noCollisions();
 };
 
 Enemy.prototype.renderNavPoints = function() {

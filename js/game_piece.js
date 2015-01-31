@@ -45,7 +45,7 @@ var GamePiece = function() {
   };
   this.direction = { //This value is set by the direction buttons for player,
     x: 0,
-    y: 0
+    y: 1
   };
   this.speed = 0;
   this.rotation = 0; //about the z axis
@@ -88,31 +88,31 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
   cg('GamePiece collisionCheck');
   var that = this,
     objectsCollide = false;
-//    console.log(gamePiece);
-//    console.log(that);
-  if (gamePiece.active === true && that.active === true){
-    if (Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
-      gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
-        if (that instanceof collider) {
-          var distanceBetweenGamePieces =
-            (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-              that.position.x - that.collisionBoundary.primary.offset.x) *
-            (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
-              that.position.x - that.collisionBoundary.primary.offset.x) +
-            (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
-              that.position.y - that.collisionBoundary.primary.offset.y) *
-            (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
-              that.position.y - that.collisionBoundary.primary.offset.y);
-          var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
-            (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
-          if (distanceBetweenGamePieces < radiiSum) {
-            //console.log("collision");
-            //console.log(result);
-            result.call(that, gamePiece);
-            objectsCollide = true;
+  if (that !== gamePiece){
+    if (gamePiece.active === true && that.active === true){
+      if (Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
+        gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
+          if (that instanceof collider) {
+            var distanceBetweenGamePieces =
+              (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+                that.position.x - that.collisionBoundary.primary.offset.x) *
+              (gamePiece.position.x + gamePiece.collisionBoundary[boundary].offset.x -
+                that.position.x - that.collisionBoundary.primary.offset.x) +
+              (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
+                that.position.y - that.collisionBoundary.primary.offset.y) *
+              (gamePiece.position.y + gamePiece.collisionBoundary[boundary].offset.y -
+                that.position.y - that.collisionBoundary.primary.offset.y);
+            var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
+              (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
+            if (distanceBetweenGamePieces < radiiSum) {
+              //console.log("collision");
+              //console.log(result);
+              result.call(that, gamePiece);
+              objectsCollide = true;
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
   return objectsCollide;
@@ -190,6 +190,7 @@ GamePiece.prototype.retarget = function(targetPt) {
 GamePiece.prototype.render = function(row) {
   cg('GamePiece ' + this.name + ' render' + row);
   if (this.draw) {
+    if (this.steed) this.steed.render(row);
     if (!row) {
       row = Math.ceil(this.tile.y);
     }
@@ -268,19 +269,19 @@ GamePiece.prototype.drop = function() {
 };
 
 GamePiece.prototype.transport = function(p) {
-  console.log(p.tile);
-  console.log(this.tile);
+  //console.log(p.tile);
+  //console.log(this.tile);
 
   cg('GamePiece transport');
   for (var i = 0; i < game.allTransporters.length; i++) {
     if (game.allTransporters[i] === this) {
 //      p.tile.x = game.allTransporters[0].tile.x;
 //      p.tile.y = game.allTransporters[0].tile.y;
-      console.log(game.allTransporters[i].tile);
+//      console.log(game.allTransporters[i].tile);
       game.allTransporters.splice(i, 1);
       game.allTransporters.push(this);
       p.tile = game.allTransporters[0].tile;
-      console.log(p.tile);
+ //     console.log(p.tile);
       game.allTransporters[0].init();
       game.allTransporters[1].init();
     //  game.allTransporters[0].collisionBoundary.primary.collidesWith = [];

@@ -2,6 +2,8 @@ var Player = function(character, scale) {
   this.active = false;
   this.draw = false;
   this.scale = scale;
+  this.passed = false;
+  this.dead = false;
 
   GamePiece.call(this);
 
@@ -37,23 +39,20 @@ Player.prototype.constructor = Player;
 Player.prototype.init = function(tile) {
   var i = 0;
   game.allPlayers.forEach(function(player){
-    player.speed = 700;
-    player.tile = {
-      x: tile.x + i,
-      y: tile.y
-    };
-    i++;
-  console.log("Player: " + player.elementName + " initialize");
-  console.log(player.tile);
+    if (!player.dead){
+      player.speed = 700;
+      player.tile = {
+        x: tile.x + i,
+        y: tile.y
+      };
+      i++;
+      console.log("Player: " + player.elementName + " initialize");
+      console.log(player.tile);
+    }else{
+      player.noCollisions();
+      i++;
+    }
   });
-  //if (!this.steed) {
-  //  var e = new Enemy();
-  //  this.ride(e);
-  //  game.allEnemies.push(e);
-  //  e.draw = true;
-  //}
-//  this.draw = true;
-//  this.active = true;
 }
 
 Player.prototype.update = function(dt) {
@@ -177,32 +176,56 @@ Player.prototype.handleInput = function(key) {
 };
 
 Player.prototype.tag = function(p) {
-  cp('Player tag');
-  //console.log(p);
-  p.tile = {
-    x: this.tile.x + 1 * this.direction.x,
-    y: this.tile.y + 1 * this.direction.y
-  }
+  console.log("tag");
+  var tempTile = {
+    x: this.tile.x - this.direction.x,
+    y: this.tile.y - this.direction.y
+  };
+  this.tile = p.tile;
+  p.tile = tempTile;
 
-  if (p.tile.x < 0 || p.tile.x > game.world.pixelsPerTileUnit.x) {
-    p.tile.x = this.tile.x;
-    p.tile.y = this.tile.y + 1;
-  }
-  if (p.tile.y < 0 || p.tile.y > game.world.pixelsPerTileUnit.y) {
-    p.tile.y = this.tile.y;
-    p.tile.x = this.tile.x + 1;
-  }
+  p.direction = {
+    x: this.direction.x * -1,
+    y: this.direction.y * -1
+  };
+  game.controlling = p;
+}
 
-  p.direction = this.direction;
+//Player.prototype.tag = function(p) {
+//  cp('Player tag');
+//  //console.log(p);
+//  p.tile = {
+//    x: this.tile.x + 1 * this.direction.x,
+//    y: this.tile.y + 1 * this.direction.y
+//  }
+//
+//  if (p.tile.x < 0 || p.tile.x > game.world.pixelsPerTileUnit.x) {
+//    p.tile.x = this.tile.x;
+//    p.tile.y = this.tile.y + 1;
+//  }
+//  if (p.tile.y < 0 || p.tile.y > game.world.pixelsPerTileUnit.y) {
+//    p.tile.y = this.tile.y;
+//    p.tile.x = this.tile.x + 1;
+//  }
+//
+//  p.direction = this.direction;
+//
+//  for (var i = 1; i < game.allPlayers.length; i++) {
+//    if (game.allPlayers[i] === p) {
+//
+//      game.allPlayers.splice(i, 1, game.controlling);
+//      game.controlling = p;
+//    }
+//  }
+//};
 
-  for (var i = 1; i < game.allPlayers.length; i++) {
-    if (game.allPlayers[i] === p) {
 
-      game.allPlayers.splice(i, 1, game.allPlayers[0]);
-      game.allPlayers[0] = p;
-    }
-  }
-};
+Player.prototype.passedLevel = function() {
+  this.passed = true;
+  game.passedPlayers++;
+  this.noCollisions();
+  game.nextAvailablePlayer();
+}
 
 Player.prototype.death = function() {
   cp('Player death');
@@ -221,7 +244,11 @@ Player.prototype.death = function() {
     this.noCollisions();
   }
 
-  game.allPlayers.shift();
+  this.dead = true;
+  console.log(game.deadPlayers++);
+  this.noCollisions();
+  game.nextAvailablePlayer();
+
 
   console.log('Do the failure thing');
   //game.startLevel(true);
@@ -238,9 +265,11 @@ Player.prototype.ride = function(steed) {
 
   steed.rider = this;
   this.steed = steed;
+  this.steed.collisionBoundary.primary.collidesWith = [];
+  this.steed.collisionBoundary.secondary.collidesWith = [];
 
-  steed.speed = 0;
-  steed.direction = this.direction;
+  this.steed.speed = 0;
+  this.steed.direction = this.direction;
 }
 
 /*
@@ -261,7 +290,7 @@ Player.prototype.dismount = function() {
 
   this.steed.speed = 3;
   this.steed.direction = {
-    x: this.direction.x || 1,
+    x: this.direction.x,
     y: 0
   };
   this.steed.tile.y = this.tile.y;
@@ -269,13 +298,13 @@ Player.prototype.dismount = function() {
   this.steed.rider = '';
   this.steed = '';
 
+  this.nextWalkableTile();
+}
 
-//  console.log(this.tile);
+Player.prototype.nextWalkableTile = function() {
   for (var i = this.tile.x - 1; i < this.tile.x + 2; i++) {
-//    console.log(i);
     for (var j = this.tile.y - 1; j < this.tile.y + 2; j++) {
-//      console.log(j);
-      if (i >= 0 && i < game.world.currentMap.totalTiles.x && j >= 0 && j < game.world.currentMap.totalTiles.y && !(j === this.tile.y)) {
+      if (i >= 0 && i < game.world.currentMap.totalTiles.x && j >= 0 && j < game.world.currentMap.totalTiles.y && !(i === this.tile.x && j === this.tile.y)) {
 //        console.log(game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i]);
         if (game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i] === 1) {
           this.tile = {
@@ -328,6 +357,11 @@ When a collectable is picked up by a player or boss, the collectable is added to
 Player.prototype.pickup = function(collectable) {
   cp('Player ' + this.elementName + ' pickup');
   collectable.projectile = false;
+  collectable.speed = 0;
+  collectable.direction = {
+    x: 0,
+    y: 0
+  };
   collectable.collisionBoundary.primary.collidesWith = [];
   collectable.carriedBy = this;
   game.score += collectable.points;
@@ -359,7 +393,7 @@ Player.prototype.catchIt = function(collectable) {
 When a collectable is thrown the collectable is removed from the players collectables array and held in a temporary "projectile" variable. The collidesWith array populated with the correct game entities. The projectile offset is returned to zero. The projectile direction, speed, and position is set with appropriate values. Then the projectile's carriedBy property is set to the empty string severing any relationship. The position of the projectile is then updated in the collectable update method.
 */
 Player.prototype.throw = function() {
-  cp('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
+  console.log('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
   if (this.collectables.length > 0) {
     var projectile = this.collectables.pop();
     projectile.projectile = true;
@@ -371,7 +405,9 @@ Player.prototype.throw = function() {
       Transporter
     ];
     projectile.direction = this.direction;
-    projectile.speed = this.speed;
+    projectile.speed = 700//this.speed;
+    console.log(this.direction);
+    console.log(this.speed);
     projectile.offset = {
       x: 0,
       y: 0
@@ -411,7 +447,7 @@ Player.prototype.anyCollisions = function() {
     //  this.collisionCheck(game.allTransporters[transporter], "primary", this.transport);
     }
 
-    for (var i = 1; i < game.allPlayers.length; i++) {
+    for (var i = 0; i < game.allPlayers.length; i++) {
       this.collisionCheck(game.allPlayers[i], "primary", this.tag)
     }
   }

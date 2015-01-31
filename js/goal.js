@@ -35,11 +35,10 @@ Goal.prototype.init = function(tile){
   this.tile = tile;
   this.draw = true;
   this.active = true;
-
+  this.calculatePosition();
 }
 
 Goal.prototype.update = function(dt){
-  this.calculatePosition();
 
 }
 

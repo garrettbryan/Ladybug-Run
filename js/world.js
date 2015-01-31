@@ -5,6 +5,8 @@ var World = function() {
   cl('World new');
   this.loadLevel = false;
   this.worldTime = 0;
+  this.playersPassed = 0;
+  this.deadPlayers = 0;
   this.canvasSize = {};
   this.currentMap = {};
   this.offset = {
@@ -36,16 +38,16 @@ var World = function() {
       y: 0
     },
     totalTiles: {
-      x: 20,
-      y: 11,
+      x: 11,
+      y: 12
     },
     playerStartTile: {
       x: -1,
       y: -1
     },
     bossStartTile: {
-      x: 10,
-      y: 8
+      x: 5,
+      y: 10
     },
     enemyPaths: [],
     textureMap: [],
@@ -569,24 +571,22 @@ Game.prototype.title = function() {
 
 World.prototype.victory1 = function() {
   cl("game victory");
-  this.world.currentMap = this.world.victoryMap;
+  this.currentMap = this.victoryMap;
 }
 
 World.prototype.failure = function() {
   cl("game failure");
-  this.world.currentMap = this.world.failureMap;
+  this.currentMap = this.failureMap;
 }
 
-World.prototype.victory = function(player){
+World.prototype.characterVictory = function(player){
   var result = false;
   if (this.currentMap.hasOwnProperty('goalTile')){
     for (var i = 0; i < this.currentMap.goalTile.length; i++){
-//      console.log(this.currentMap.goalTile[i].x);
-//      console.log(player.tile.x);
-      if ((this.currentMap.goalTile[i].x === player.tile.x) && (this.currentMap.goalTile[i].y === player.tile.y)){
+      if (this.currentMap.goalTile[i].x === player.tile.x && this.currentMap.goalTile[i].y === player.tile.y){
+        console.log('character ' + player.elementName + ' victory');
         result = true;
-        player.draw = false;
-        player.active = false;
+        //player.noCollisions();
         break;
       }
     }
@@ -595,23 +595,29 @@ World.prototype.victory = function(player){
 }
 
 World.prototype.checkDefeat = function() {
-  if(game.allPlayers.length < 1){
+  if(game.allDead()){
     this.init();
-    game.failure();
+    game.world.failure();
     return true;
   }
 }
 
+
 World.prototype.checkVictory = function() {
   var result = false;
-  cl('world checkVictory');
-  if (this.victory(game.allPlayers[0])) {
+  //console.log('world checkVictory');
+  if (game.world.characterVictory(game.controlling)) {
+    game.controlling.passedLevel();
+  }
+  if (game.playersPassed()) {
     if (game.level < game.world.maps.length) {
+      this.removeComponents();
+      game.playerPassedReset();
       game.nextLevel();
       game.score += 1000;
       this.worldTime = 0;
-//      game.allPlayers[0].draw = false;
-//      game.allPlayers[0].active = false;
+//      game.controlling.draw = false;
+//      game.controlling.active = false;
       console.log(this.maps[game.level-1].enemyMessage);
 //      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
       this.currentMap = this.randomMap;
@@ -619,10 +625,11 @@ World.prototype.checkVictory = function() {
     } else {
       cl("victory sequence");
       this.init();
-      game.victory();
+      game.world.characterVictory();
       result = true;
     }
   }
+
   return result;
 };
 
@@ -653,11 +660,15 @@ if (LastStateDifferent) {
       if (this.currentMap.playerStartTile){
         var i = 0;
         game.allPlayers.forEach(function (player) {
-          player.activate({
-            x: game.world.currentMap.playerStartTile.x + i,
-            y: game.world.currentMap.playerStartTile.y
-          });
-          player.calculatePosition(player.tile);
+          if (!player.dead){
+            player.activate({
+              x: game.world.currentMap.playerStartTile.x + i,
+              y: game.world.currentMap.playerStartTile.y
+            });
+            player.calculatePosition(player.tile);
+          }else{
+            game.allPlayers.push(game.allPlayers.shift());
+          }
           i++;
         });
       }
@@ -845,8 +856,8 @@ World.prototype.update = function(dt) {
 World.prototype.checkVictory = function()  {
     if (game.running === 1) {
         var collisionZone = 50;
-        if ((Math.abs(game.princess.x - game.allPlayers[0].x) < collisionZone) &&
-                (Math.abs(game.princess.y - game.allPlayers[0].y) < collisionZone)) {
+        if ((Math.abs(game.princess.x - game.controlling.x) < collisionZone) &&
+                (Math.abs(game.princess.y - game.controlling.y) < collisionZone)) {
                     cl(game.level);
                     game.level++;
                     if (game.level <= game.world.maps.length) {

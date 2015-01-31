@@ -97,5 +97,5 @@ document.addEventListener('keyup', function(e) {
 
   };
 
-  game.allPlayers[0].handleInput(allowedKeys[e.keyCode]);
+  game.controlling.handleInput(allowedKeys[e.keyCode]);
 });

@@ -101,7 +101,7 @@ var Engine = (function(global) {
     /*
     lastPlayerState can be compared to the current player.active property to determine if there has been a change. If there has been a change then to reset the canvas window.
     */
-    lastPlayerState = game.allPlayers[0].active;
+    lastPlayerState = game.controlling.active;
 
     /* Use the browser's requestAnimationFrame function to call this
      * function again as soon as the browser is able to draw another frame.
@@ -117,7 +117,7 @@ var Engine = (function(global) {
     cl('engine initilize');
     reset();
     lastTime = Date.now();
-    lastPlayerState = game.allPlayers[0].active;
+    lastPlayerState = game.controlling.active;
     console.log("last player state = " + lastPlayerState);
     main();
   }
@@ -135,15 +135,15 @@ var Engine = (function(global) {
     cl('engine update')
     game.world.updateTime(dt);
 
-    if (game.world.checkDefeat()) {
-      reset();
-    }
+    //if (game.world.checkDefeat()) {
+    //  reset();
+    //}
 
     if (game.world.checkVictory()) {
       reset();
     }
 
-    if (lastPlayerState !== game.allPlayers[0].active){
+    if (lastPlayerState !== game.controlling.active){
       game.world.activateComponents(true);
       reset();
     }
@@ -178,13 +178,20 @@ var Engine = (function(global) {
 
     game.world.update(dt);
 
-    game.allPlayers[0].update();
+    game.controlling.update();
+
+    game.allPlayers.forEach(function(player){
+      player.catchIt();
+      //player.wait();
+    });
 
     game.allEnemies.forEach(function(enemy) {
       enemy.update(dt);
     });
 
     game.boss.update(dt);
+
+    game.update();
 
     /*
             allCollectables.forEach(function(collectable) {
@@ -202,7 +209,7 @@ var Engine = (function(global) {
             });
 
             if (allPlayers.length > 0){
-                allPlayers[0].update(dt);
+                controlling.update(dt);
             }
 
             allPlayers.forEach(function(player){

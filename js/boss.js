@@ -78,7 +78,7 @@ Boss.prototype.target = function(player) {
 Boss.prototype.move = function(dt) {
 //  console.log("boss move");
   this.moveInterval -= dt;
-  this.target(game.allPlayers[0]);
+  this.target(game.controlling);
 
   if (this.moveInterval < 0) {
     this.handleInput(this.moveAI[Math.floor(Math.random() * this.moveAI.length)])

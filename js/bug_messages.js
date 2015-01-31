@@ -63,14 +63,14 @@ BugMessage.prototype.update = function(dt) {
 
   //console.log(this.allbugs.length);;
 
-  if (this.allbugs.length > 0 && game.allPlayers[0].active){
+  if (this.allbugs.length > 0 && game.controlling.active){
     this.allbugs = [];
   }
 
   if (this.allbugs && this.allbugs.length && this.allbugs[this.allbugs.length-1].position.x < -101) {
     this.erase();
     console.log("bug erase");
-//    game.allPlayers[0].active = true;
+//    game.controlling.active = true;
 //    game.active = true;
 //    game.nextLevel();
 //    game.startLevel(false);

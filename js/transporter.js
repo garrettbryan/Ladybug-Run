@@ -40,15 +40,18 @@ Transporter.prototype.init = function() {
     this.tile.y === game.world.currentMap.goalTile[0].y);
   this.draw = true;
   this.active = true;
+  this.calculatePosition();
 }
 
 
 Transporter.prototype.update = function() {
-  this.calculatePosition();
   for (var player in game.allPlayers){
     this.collisionCheck(game.allPlayers[player], "primary", this.transport);
   }
   for (var enemy in game.allEnemies){
-    this.collisionCheck(game.allEnemies[enemy], "primary", this.transport);
+    this.collisionCheck(game.allEnemies[enemy], "secondary", this.transport);
+  }
+  for (var collectable in game.allCollectables){
+    this.collisionCheck(game.allCollectables[collectable], "primary", this.transport);
   }
 }

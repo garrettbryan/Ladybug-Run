@@ -4,6 +4,7 @@ Collectables have a number of characteristics. They have a certain amount of poi
 var Collectable = function(collectable) {
   this.scale = 0.25;
   this.speed = 0;
+  this.distance = 0;
   GamePiece.call(this);
 
   this.sprite = collectable.sprite;
@@ -27,10 +28,18 @@ Collectable.prototype.init = function() {
   this.placeRandomly(game.world.currentMap);
   this.draw = true;
   this.active = true;
+  this.offset = {
+    x: 0,
+    y: 0
+  };
   this.direction = {
     x:0,
     y:0
   };
+  this.projectile = false;
+  this.collisionBoundary.primary.collidesWith = [
+    Player
+  ];
   this.calculatePosition();
 }
 
@@ -38,6 +47,7 @@ Collectable.prototype.init = function() {
 If a collectable has been picked up then the update function uses the carriers tile data. If the collectable is not attached then the position is determined by the previous position and any position change due to a speed and direction value. If the speed or direction is 0 then the collectable will be in its default state motionless on a tile.
 */
 Collectable.prototype.update = function(dt) {
+  this.distance += this.speed*dt;
   if (this.carriedBy) {
     this.tile = this.carriedBy.tile;
     this.calculatePosition();
@@ -45,12 +55,17 @@ Collectable.prototype.update = function(dt) {
     this.position.x = this.position.x + this.speed * dt * this.direction.x;
     this.position.y = this.position.y + this.speed * dt * this.direction.y;
   }
+  if (this.speed && this.distance > 500 ){
+    this.init();
+  }
 };
 
 /*
 Randomly places the collectables onto a walkable tile for any map.
 */
 Collectable.prototype.placeRandomly = function(currentMap) {
+  this.distance = 0;
+  this.speed = 0;
   this.tile = {
     x: Math.floor(Math.random() * (currentMap.totalTiles.x)),
     y: Math.floor(Math.random() * (currentMap.totalTiles.y)),
