@@ -56,6 +56,8 @@ Collectable.prototype.update = function(dt) {
     this.position.y = this.position.y + this.speed * dt * this.direction.y;
   }
   if (this.speed && this.distance > 500 ){
+    this.calculateTile();
+    //console.log(this.tile);
     this.init();
   }
 };
@@ -73,6 +75,6 @@ Collectable.prototype.placeRandomly = function(currentMap) {
   if (currentMap.walkMap[Math.floor(this.tile.y) * game.world.currentMap.totalTiles.x + Math.floor(this.tile.x)] === 0) {
     this.placeRandomly(currentMap);
   } else {
-    //console.log(this.tile);
+    ////console.log(this.tile);
   }
 }

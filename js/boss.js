@@ -20,7 +20,7 @@ Boss.prototype.init = function(tile) {
   this.moveInterval = 1;
   this.speed = 800;
   var e = new Enemy(3);
-  console.log(e)
+  //console.log(e)
   this.ride(e);
   this.steed.direction = {
     x: -1,
@@ -76,7 +76,7 @@ Boss.prototype.target = function(player) {
 };
 
 Boss.prototype.move = function(dt) {
-//  console.log("boss move");
+//  //console.log("boss move");
   this.moveInterval -= dt;
   this.target(game.controlling);
 
@@ -89,22 +89,20 @@ Boss.prototype.move = function(dt) {
 Boss.prototype.death = function() {
   cp('Player death');
   this.collectables.forEach(function(collectable) {
-    console.log(collectable);
+    //console.log(collectable);
     collectable.placeRandomly(game.world.currentMap);
   });
 
   if (this.steed) {
     this.dismount();
-    console.log("dismount");
+    //console.log("dismount");
 
   } else {
-    console.log("I died");
+    //console.log("Boss died");
     this.drop();
     this.noCollisions();
+    this.dead = true;
   }
-
-  console.log('Do the victory thing');
-
 };
 
 Boss.prototype.update = function(dt) {

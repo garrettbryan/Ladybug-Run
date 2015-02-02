@@ -94,9 +94,9 @@ Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.initMessageBug = function(bugValues){
-  //console.log(bugValues);
+  ////console.log(bugValues);
   this.draw = true;
-  this.tile.x = 21;
+  this.tile.x = bugValues[0];
   this.tile.y = bugValues[1];
   this.calculatePosition();
   this.direction = {
@@ -128,7 +128,7 @@ Enemy.prototype.simpleInit = function(){
     this.simpleInit();
   }
   this.calculatePosition();
-  //console.log(this.tile);
+  ////console.log(this.tile);
   this.draw = true;
   this.active = true;
 }
@@ -179,7 +179,7 @@ Enemy.prototype.cutsceneUpdate = function(dt) {
     //        ce(this.position);
     //        this.retarget(this.navData.targetPoint);
     this.move(dt);
-    //console.log(this.position.x);
+    ////console.log(this.position.x);
   }
   this.reflectCollisionBoundaries();
   this.chooseSpriteDirection();
@@ -198,7 +198,7 @@ Enemy.prototype.update = function(dt) {
       //        ce(this.position);
       //        this.retarget(this.navData.targetPoint);
       this.move(dt);
-      //console.log(this.position.x);
+      ////console.log(this.position.x);
     }
     this.reflectCollisionBoundaries();
     this.chooseSpriteDirection();
@@ -215,7 +215,7 @@ Enemy.prototype.update = function(dt) {
     }
   }
   for (var collectable in game.allCollectables) {
-    if (game.allCollectables[collectable].projectile && this.collisionCheck(game.allCollectables[collectable], "primary", this.death)) {
+    if (!this.rider && game.allCollectables[collectable].projectile && this.collisionCheck(game.allCollectables[collectable], "primary", this.death)) {
       game.allCollectables[collectable].noCollisions();
       game.allCollectables[collectable].init();
     }

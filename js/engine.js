@@ -140,7 +140,7 @@ var Engine = (function(global) {
     }
 
     if (lastPlayerState !== game.controlling.active){
-      game.world.removeComponents();
+      //  game.world.removeComponents();
       game.world.activateComponents(true);
       reset();
     }
@@ -251,10 +251,14 @@ var Engine = (function(global) {
       game.world.render(row, numCols);
       renderEntities(row);
     }
-      //game.renderTitle();
-      //game.allMenus[0].render();
 
-    //        game.enemy.renderNavPoints();
+    game.allCollectables.forEach(function(collectable) {
+      if (collectable.projectile){
+        collectable.render();
+      }
+    });
+
+    //game.enemy.renderNavPoints();
   }
 
   /* This function is called by the render function and is called on each game
@@ -274,9 +278,7 @@ var Engine = (function(global) {
 
     game.allCollectables.forEach(function(collectable) {
       collectable.render(row);
-      //            console.log("render Collectable");
     });
-    //        game.enemy.render(row);
 
     game.messageBugs.render(row);
 
@@ -294,11 +296,10 @@ var Engine = (function(global) {
       goal.renderColorPulseForeground(row);
     });
 
-    //console.log(game.active);
-    game.allMenus.forEach(function(menu){
-      //console.log(menu);
-      menu.render();
-    });
+    //console.log(game.currentMenu);
+    if (game.world.cutscene || game.level === 0){
+        game.currentMenu.render(); // TODO dang it why are the titles not rendering right?
+    }
 
     /* Loop through all of the objects within the allEnemies array and call
      * the render function you have defined.
@@ -327,11 +328,12 @@ var Engine = (function(global) {
 The reset function resets the canvas to display the currentMap. It turns off all components so that game.world.activateComponents can initialize the exiting components to their new locations.
 */
   function reset() {
-    console.log("engine reset");
+//    console.log("engine reset");
 
     game.world.init();//determine canvas size.
 
-    game.allMenus[0].layout(game.world);//measures canvas size for proportional placement of titles
+    game.allMenus[0].layout(game.world);
+    game.allMenus[1].layout(game.world);//measures canvas size for proportional placement of titles
 
     canvas.width = game.world.canvasSize.x;
     canvas.height = game.world.canvasSize.y;

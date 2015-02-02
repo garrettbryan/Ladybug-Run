@@ -86,11 +86,12 @@ CollisionCheck determines if an object has collided with this. Then runs a resul
 */
 GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
   cg('GamePiece collisionCheck');
+  console.log(this.elementName + " acts on " + gamePiece.elementName);
   var that = this,
     objectsCollide = false;
   if (that !== gamePiece){
     if (gamePiece.active === true && that.active === true){
-      if (Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
+      if (gamePiece.projectile || Math.floor(that.position.y) === Math.floor(gamePiece.position.y)){
         gamePiece.collisionBoundary[boundary].collidesWith.forEach(function(collider) {
           if (that instanceof collider) {
             var distanceBetweenGamePieces =
@@ -105,8 +106,8 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
             var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
               (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
             if (distanceBetweenGamePieces < radiiSum) {
-              //console.log("collision");
-              //console.log(result);
+              ////console.log("collision");
+              ////console.log(result);
               result.call(that, gamePiece);
               objectsCollide = true;
             }
@@ -145,10 +146,6 @@ GamePiece.prototype.noCollisions = function() {
     y: -1
   };
   this.calculatePosition();
-  this.offset = { //only used during rendering
-    x: 0,
-    y: 0
-  };
   this.direction = { //This value is set by the direction buttons for player,
     x: 0,
     y: 0
@@ -201,7 +198,7 @@ GamePiece.prototype.render = function(row) {
         this.position.y - this.center.y - this.offset.y,
         this.spriteDimensions.x, this.spriteDimensions.y);
       for (boundary in this.collisionBoundary) {
-        //      console.log(this);
+        //      //console.log(this);
         ctx.beginPath();
         ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x + this.offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
         ctx.stroke();
@@ -269,19 +266,19 @@ GamePiece.prototype.drop = function() {
 };
 
 GamePiece.prototype.transport = function(p) {
-  //console.log(p.tile);
-  //console.log(this.tile);
+  ////console.log(p.tile);
+  ////console.log(this.tile);
 
   cg('GamePiece transport');
   for (var i = 0; i < game.allTransporters.length; i++) {
     if (game.allTransporters[i] === this) {
 //      p.tile.x = game.allTransporters[0].tile.x;
 //      p.tile.y = game.allTransporters[0].tile.y;
-//      console.log(game.allTransporters[i].tile);
+//      //console.log(game.allTransporters[i].tile);
       game.allTransporters.splice(i, 1);
       game.allTransporters.push(this);
       p.tile = game.allTransporters[0].tile;
- //     console.log(p.tile);
+ //     //console.log(p.tile);
       game.allTransporters[0].init();
       game.allTransporters[1].init();
     //  game.allTransporters[0].collisionBoundary.primary.collidesWith = [];
@@ -292,6 +289,6 @@ GamePiece.prototype.transport = function(p) {
 //  game.allTransporters = [];
 // for (var t = 0; t <  this.numberOfTransporters; t++){
 //    this.allTransporters.push(new Transporter());
-//    console.log(this.allTransporters[t]);
+//    //console.log(this.allTransporters[t]);
 //  }
 }

@@ -2,7 +2,7 @@ var Player = function(character, scale) {
   this.active = false;
   this.draw = false;
   this.scale = scale;
-  this.passed = false;
+  this.passed = true;
   this.dead = false;
 
   GamePiece.call(this);
@@ -46,8 +46,8 @@ Player.prototype.init = function(tile) {
         y: tile.y
       };
       i++;
-      console.log("Player: " + player.elementName + " initialize");
-      console.log(player.tile);
+      //console.log("Player: " + player.elementName + " initialize");
+      //console.log(player.tile);
     }else{
       player.noCollisions();
       i++;
@@ -152,19 +152,19 @@ Player.prototype.handleInput = function(key) {
   }else{
     switch (key) {
       case 'left':
-      console.log('previous Option');
+      //console.log('previous Option');
         break;
       case 'right':
-      console.log('next Option');
+      //console.log('next Option');
         break;
       case 'up':
-      console.log('previous Option');
+      //console.log('previous Option');
         break;
       case 'down':
-      console.log('next Option');
+      //console.log('next Option');
         break;
       case 'space':
-      console.log('select');
+      //console.log('select');
       this.active = true;
       game.active = true;
       game.nextLevel();
@@ -176,7 +176,7 @@ Player.prototype.handleInput = function(key) {
 };
 
 Player.prototype.tag = function(p) {
-  console.log("tag");
+  //console.log("tag");
   var tempTile = {
     x: this.tile.x - this.direction.x,
     y: this.tile.y - this.direction.y
@@ -199,43 +199,42 @@ Player.prototype.passedLevel = function() {
 }
 
 Player.prototype.death = function() {
-  cp('Player death');
+  //console.log("Player death");
   this.collectables.forEach(function(collectable) {
-    console.log(collectable);
+    //console.log(collectable);
     collectable.placeRandomly(game.world.currentMap);
   });
 
   if (this.steed) {
     this.dismount();
-    console.log("dismount");
+    //console.log("dismount");
 
   } else {
-    console.log("I died");
+    //console.log("I died");
     this.drop();
     this.noCollisions();
+    this.dead = true;
+    game.deadPlayers++;
+    //console.log("deadPlayers: " + game.deadPlayers);
+    this.active = !this.active;
   }
 
-  this.dead = true;
-  console.log(game.deadPlayers++);
-  this.noCollisions();
 };
 
 
 Player.prototype.ride = function(steed) {
   cp('Player ' + this.elementName + ' ride');
-  //console.log('Player ' + this.elementName + ' ride');
+  ////console.log('Player ' + this.elementName + ' ride');
 
-  if (steed.rider) {
-    steed.rider.dismount();
+  if (!steed.rider) {
+    steed.rider = this;
+    this.steed = steed;
+    this.steed.collisionBoundary.primary.collidesWith = [];
+    this.steed.collisionBoundary.secondary.collidesWith = [];
+
+    this.steed.speed = 0;
+    this.steed.direction = this.direction;
   }
-
-  steed.rider = this;
-  this.steed = steed;
-  this.steed.collisionBoundary.primary.collidesWith = [];
-  this.steed.collisionBoundary.secondary.collidesWith = [];
-
-  this.steed.speed = 0;
-  this.steed.direction = this.direction;
 }
 
 /*
@@ -271,18 +270,18 @@ Player.prototype.nextWalkableTile = function() {
   for (var i = this.tile.x - 1; i < this.tile.x + 2; i++) {
     for (var j = this.tile.y - 1; j < this.tile.y + 2; j++) {
       if (i >= 0 && i < game.world.currentMap.totalTiles.x && j >= 0 && j < game.world.currentMap.totalTiles.y && !(i === this.tile.x && j === this.tile.y)) {
-//        console.log(game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i]);
+//        //console.log(game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i]);
         if (game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i] === 1) {
           this.tile = {
             x: i,
             y: j
           };
-//          console.log(this.tile);
+//          //console.log(this.tile);
           i = game.world.currentMap.totalTiles.x;
           j = game.world.currentMap.totalTiles.y;
         }
       } else if (i === this.tile.x && j === this.tile.y + 1) {
-        console.log("no walkable tile");
+        //console.log("no walkable tile");
         this.death();
       }
     }
@@ -359,7 +358,7 @@ Player.prototype.catchIt = function(collectable) {
 When a collectable is thrown the collectable is removed from the players collectables array and held in a temporary "projectile" variable. The collidesWith array populated with the correct game entities. The projectile offset is returned to zero. The projectile direction, speed, and position is set with appropriate values. Then the projectile's carriedBy property is set to the empty string severing any relationship. The position of the projectile is then updated in the collectable update method.
 */
 Player.prototype.throw = function() {
-  console.log('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
+  //console.log('Player ' + this.elementName + ' throw ' + this.direction.x + " " + this.direction.y);
   if (this.collectables.length > 0) {
     var projectile = this.collectables.pop();
     projectile.projectile = true;
@@ -372,8 +371,8 @@ Player.prototype.throw = function() {
     ];
     projectile.direction = this.direction;
     projectile.speed = 700//this.speed;
-    console.log(this.direction);
-    console.log(this.speed);
+    //console.log(this.direction);
+    //console.log(this.speed);
     projectile.offset = {
       x: 0,
       y: 0
@@ -391,7 +390,7 @@ Player.prototype.throw = function() {
 The majority of interactions center around the player characters. The active player collisions happen here.
 */
 Player.prototype.anyCollisions = function() {
-  //console.log("player collision checks");
+  ////console.log("player collision checks");
   if (this.active){
     for (var enemy in game.allEnemies) {
       if (!this.steed) {

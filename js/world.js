@@ -7,6 +7,7 @@ var World = function() {
   this.worldTime = 0;
   this.playersPassed = 0;
   this.deadPlayers = 0;
+  this.cutscene = false;
   this.canvasSize = {};
   this.currentMap = {};
   this.offset = {
@@ -46,7 +47,7 @@ var World = function() {
       y: -1
     },
     bossStartTile: {
-      x: 5,
+      x: 8,
       y: 10
     },
     enemyPaths: [],
@@ -565,28 +566,32 @@ var World = function() {
 The next three methods set the appropritate values for the different special levels.
 */
 Game.prototype.title = function() {
-  cl('game title');
-  this.world.currentMap = this.world.randomMap;
+  //console.log('game title');
+  this.currentMap = this.world.randomMap;
+  this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
 }
 
-World.prototype.victory1 = function() {
-  cl("game victory");
+World.prototype.victory = function() {
+  //console.log("game victory");
   this.currentMap = this.victoryMap;
+  this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
 }
 
 World.prototype.failure = function() {
-  cl("game failure");
+  //console.log("game failure");
   this.currentMap = this.failureMap;
+  this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
 }
 
 World.prototype.characterVictory = function(player){
+  //console.log('world characterVictory');
   var result = false;
   if (this.currentMap.hasOwnProperty('goalTile')){
     for (var i = 0; i < this.currentMap.goalTile.length; i++){
       if (this.currentMap.goalTile[i].x === player.tile.x && this.currentMap.goalTile[i].y === player.tile.y){
-        console.log('character ' + player.elementName + ' victory');
+        //console.log('character ' + player.elementName + ' victory');
         result = true;
-        //player.noCollisions();
+        player.noCollisions();
         break;
       }
     }
@@ -600,17 +605,18 @@ World.prototype.checkVictory = function() {
   if (game.world.characterVictory(game.controlling)) {
     game.controlling.passedLevel();
   }
-  if (game.playersPassed()) {
+  if (game.allDead()){
+    this.removeComponents();
+    this.failure();
+    this.worldtime = 0;
+    result = true;
+  } else if (game.playersPassed()) {
     if (game.level < game.world.maps.length) {
       this.removeComponents();
-      game.playerPassedReset();
       game.nextLevel();
       game.score += 1000;
       this.worldTime = 0;
-//      game.controlling.draw = false;
-//      game.controlling.active = false;
-      console.log(this.maps[game.level-1].enemyMessage);
-//      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
+      //console.log(this.maps[game.level-1].enemyMessage);
       this.currentMap = this.randomMap;
       result = true;
     } else {
@@ -619,6 +625,12 @@ World.prototype.checkVictory = function() {
       game.world.characterVictory();
       result = true;
     }
+  }else if (game.boss.dead){
+    this.removeComponents();
+    this.victory();
+    game.score += 1000;
+    this.worldtime = 0;
+    result = true;
   }
 
   return result;
@@ -627,8 +639,17 @@ World.prototype.checkVictory = function() {
 World.prototype.activateComponents = function(LastStateDifferent){
 var result = false;
 if (LastStateDifferent) {
-  console.log('World activateComponents');
+  this.removeComponents();
+  //console.log('World activateComponents');
 
+  if (game.level > 0){
+    if (this.cutscene){
+        game.currentMenu = game.allMenus[1];
+    } else {
+        //console.log('found current menu');
+        game.currentMenu = {};
+    }
+  }
   result = true;
     if (game.level === 0 || this.cutscene){
       this.currentMap = this.randomMap;
@@ -650,14 +671,15 @@ if (LastStateDifferent) {
       if (this.currentMap.playerStartTile){
         var i = 0;
         game.allPlayers.forEach(function (player) {
-          if (!player.dead){
+          if (player.passed && !player.dead){
             player.activate({
               x: game.world.currentMap.playerStartTile.x + i,
               y: game.world.currentMap.playerStartTile.y
             });
+            player.passed = false;
             player.calculatePosition(player.tile);
           }else{
-            game.allPlayers.push(game.allPlayers.shift());
+            //game.allPlayers.push(game.allPlayers.shift());
           }
           i++;
         });
@@ -701,11 +723,12 @@ if (LastStateDifferent) {
 //      }
     }
   }
+
   return result;
 }
 
 World.prototype.removeComponents = function() {
-  console.log('world removeComponents');
+  //console.log('world removeComponents');
   game.boss.noCollisions();
   game.allPlayers.forEach(function(player){
     player.noCollisions();
@@ -728,7 +751,7 @@ World.prototype.removeComponents = function() {
 This method is called for every new scene (level or cutscene) recalculated.
 */
 World.prototype.init = function() {
-  console.log("world init");
+  //console.log("world init");
   this.canvasSize.x = this.currentMap.totalTiles.x * this.pixelsPerTileUnit.x;
   this.canvasSize.y = this.currentMap.totalTiles.y * this.pixelsPerTileUnit.y + this.pixelsPerBlockImg.y - this.pixelsPerTileUnit.y + this.maxElevation;
 };
@@ -755,12 +778,12 @@ Calculates the screen space needed by each additional elevation unit. It is requ
 */
 World.prototype.maximumBlockElevation = function() {
   cl('world maximumBlockElevation');
-  //console.log("game level " + game.level);
+  ////console.log("game level " + game.level);
   var max = this.currentMap.topoMap[0];
   for (var i = 1; i < this.currentMap.totalTiles.x; i++) {
     max = Math.max(max, this.currentMap.topoMap[i]);
   }
-  //console.log(max);
+  ////console.log(max);
   return max;
 }
 

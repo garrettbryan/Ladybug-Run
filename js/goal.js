@@ -51,9 +51,9 @@ Goal.prototype.renderColorPulse = function(row){
       this.renderCount += this.renderFadeUp;
     if (this.renderCount === this.fadeMax || this.renderCount === this.fadeMin){
       this.renderFadeUp *= -1;
-      //console.log(this.renderFadeUp);
+      ////console.log(this.renderFadeUp);
     }
-    //  console.log(this.renderCount * this.renderFadeIncrement);
+    //  //console.log(this.renderCount * this.renderFadeIncrement);
   }
 }
 
@@ -63,7 +63,7 @@ Goal.prototype.renderColorPulseForeground = function(row){
     ctx.globalAlpha = this.renderCount * this.renderFadeIncrement * 0.5;
     this.renderForeground(row);
     ctx.restore();
-    //  console.log(this.renderCount * this.renderFadeIncrement);
+    //  //console.log(this.renderCount * this.renderFadeIncrement);
   }
 }
 
