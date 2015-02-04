@@ -167,7 +167,6 @@ Player.prototype.handleInput = function(key) {
       case 'space':
       //console.log('select');
       this.active = true;
-      game.active = true;
       game.nextLevel();
       game.refresh = true;
         break;

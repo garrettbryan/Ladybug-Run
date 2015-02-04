@@ -158,15 +158,17 @@ Game.prototype.playerPassedReset = function() {
 
 Game.prototype.renderStatusBar = function() {
   //console.log("game renderStatusBar");
-  ctx.save();
-  ctx.fillStyle = '#000';
-  ctx.font = 'Italic 30px Sans-Serif';
-  ctx.textBaseline = 'Top';
-  ctx.fillText('Player: ' + this.playerName, 5, 30);
-  ctx.fillText('Score: ' + this.score, game.world.canvasSize.x * 3 / 4, 30);
-  ctx.fillText('Time: ' + this.world.worldTime.toFixed(2), game.world.canvasSize.x / 4, 30);
-  ctx.fillText('Level: ' + this.level, game.world.canvasSize.x / 2, 30);
-  ctx.restore();
+  if (!this.world.cutscene && this.level !== 0){
+    ctx.save();
+    ctx.fillStyle = '#000';
+    ctx.font = 'Italic 30px Sans-Serif';
+    ctx.textBaseline = 'Top';
+    ctx.fillText('Player: ' + this.playerName, 5, 30);
+    ctx.fillText('Score: ' + this.score, game.world.canvasSize.x * 3 / 4, 30);
+    ctx.fillText('Time: ' + this.world.worldTime.toFixed(2), game.world.canvasSize.x / 4, 30);
+    ctx.fillText('Level: ' + this.level, game.world.canvasSize.x / 2, 30);
+    ctx.restore();
+  }
 }
 
 Game.prototype.notControlling = function(player) {

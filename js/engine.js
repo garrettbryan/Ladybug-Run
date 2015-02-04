@@ -237,7 +237,7 @@ var Engine = (function(global) {
    */
   function render() {
     cr('engine render');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    game.world.renderBackground(canvas);
 
     game.renderStatusBar();
 
@@ -411,7 +411,8 @@ The reset function resets the canvas to display the currentMap. It turns off all
     'images/Star.png',
     'images/stone-block.png',
     'images/water-block.png',
-    'images/white-block.png'
+    'images/white-block.png',
+    'images/Polarlicht_2.png'
   ]);
   cl('resources');
   Resources.onReady(init);

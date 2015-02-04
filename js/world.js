@@ -608,6 +608,7 @@ World.prototype.checkVictory = function() {
     game.level = game.world.maps.length + 1;
     this.failure();
     game.defeat = true;
+    game.active = false;
     this.worldtime = 0;
     result = true;
   } else if (game.playersPassed()) {
@@ -842,6 +843,13 @@ World.prototype.render = function(row, numCols) {
         break;
     }
 
+  }
+}
+
+World.prototype.renderBackground = function(canvas) {
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  if (game.victory || game.defeat) {
+    ctx.drawImage(Resources.get(background),0,0);
   }
 }
 

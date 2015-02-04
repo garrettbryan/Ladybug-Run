@@ -129,6 +129,8 @@ var collectables = [{
   points: -100,
 }, ];
 
+var background = 'images/Polarlicht_2.png';
+
 var characters = [{
   elementName: 'Bug Boy',
   sprite: 'images/char-boy.png',
@@ -148,7 +150,7 @@ var characters = [{
 
 
 var game = new Game();
-game.init(0, 0);
+game.init(4, 0);
 game.startLevel(false);
 
 // This listens for key presses and sends the keys to your
