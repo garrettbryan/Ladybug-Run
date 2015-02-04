@@ -150,7 +150,7 @@ var characters = [{
 
 
 var game = new Game();
-game.init(4, 0);
+game.init(0, 0);
 game.startLevel(false);
 
 // This listens for key presses and sends the keys to your
