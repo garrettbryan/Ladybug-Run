@@ -3,8 +3,11 @@ The game object acts as a container for all the game components.  game.js contai
 */
 var Game = function() {
   cl('game new');
+  this.refresh = true;
   this.menu = 0;
   this.playerName;
+  this.victory = false;
+  this.defeat = false;
   this.level = 0;
   this.topScore = 0;
   this.score = 0;
@@ -75,6 +78,8 @@ Game.prototype.init = function(level, score) {
 
   this.allMenus.push(new Menu("title"));
   this.allMenus.push(new Menu("cutscene"));
+  this.allMenus.push(new Menu("defeat"));
+  this.allMenus.push(new Menu("victory"));
   //console.log(this.allMenus);
 
   for (var i = 0; i < titleMenu.length; i++){
@@ -82,6 +87,12 @@ Game.prototype.init = function(level, score) {
   }
   for (var i = 0; i < cutsceneMenu.length; i++){
     this.allMenus[1].add(cutsceneMenu[i]);
+  }
+  for (var i = 0; i < defeatMenu.length; i++){
+    this.allMenus[2].add(defeatMenu[i]);
+  }
+  for (var i = 0; i < victoryMenu.length; i++){
+    this.allMenus[3].add(victoryMenu[i]);
   }
   this.currentMenu = this.allMenus[0];
 }
@@ -95,9 +106,7 @@ Game.prototype.startLevel = function(restart) {
     this.level = 0;
     this.score = 0;
   }
-  this.currentMenu = this.allMenus[0];
-  this.world.removeComponents();
-  this.world.activateComponents(true);
+  this.world.activateComponents(game.refresh);
 }
 
 Game.prototype.update = function() {
@@ -109,7 +118,7 @@ Game.prototype.update = function() {
 nextLevel increments the level and adjusts the cutscene boolean. All playable levels have a begining cutscene.
 */
 Game.prototype.nextLevel = function() {
-  //console.log("game nextLevel");
+  console.log("game nextLevel");
   if (this.level === 0){
     this.level++;
     this.world.cutscene = false;
@@ -123,9 +132,7 @@ Game.prototype.nextLevel = function() {
 Game.prototype.updateMenu = function(){
   //console.log('game updateMenu');
   if (this.world.cutscene){
-    this.currentMenu = this.allMenus[1];
-  } else {
-    this.currentMenu = {};
+//    this.currentMenu = this.allMenus[1];
   }
 }
 
@@ -172,6 +179,7 @@ Game.prototype.checkDefeat = function() {
   if(this.allDead()){
     this.world.init();
     this.world.failure();
+    this.currentMenu = this.allMenus[2];
     return true;
   }
 }
@@ -181,6 +189,10 @@ Game.prototype.allDead = function() {
   var result = false;
   if (this.deadPlayers === game.allPlayers.length) {
     result = true;
+    this.deadPlayers = 0;
+    this.allPlayers.forEach(function(player){
+      player.dead = false;
+    });
   }
   return result;
 }
@@ -192,6 +204,14 @@ Game.prototype.playersPassed = function() {
   ////console.log(this.passedPlayers);
   if (this.deadPlayers + this.passedPlayers === game.allPlayers.length){
     result = true;
+    this.currentMenu = this.allMenus[1];
   }
   return result;
+}
+
+Game.prototype.resurectPlayers = function(){
+  this.deadPlayers = 0;
+  this.allPlayers.forEach(function(player){
+    player.dead = false;
+  });
 }

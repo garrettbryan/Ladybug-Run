@@ -71,7 +71,6 @@ Menu.prototype.layout = function(world, context){
     verticalOffset = 0;
   for(var i = 0; i < this.menuContent.length; i++){
     metrics = this.style[this.menuContent[i].tag].height;
-//    //console.log(metrics);
     verticalOffset += metrics + 0.4 * metrics * i;
     this.menuContent[i].position.x = world.canvasSize.x * 0.025;
     this.menuContent[i].position.y =  ((i === 0) ? world.canvasSize.y/4 : (world.canvasSize.y / 3)) + verticalOffset;
@@ -88,7 +87,6 @@ Menu.prototype.layoutStatusBar = function(world, context){
 }
 
 Menu.prototype.render = function(){
-cl("Menu render");
   for (var i = 0 ; i < this.menuContent.length; i++){
     ctx.save();
     ctx.font = this.style[this.menuContent[i].tag].font;

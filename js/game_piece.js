@@ -71,9 +71,9 @@ var GamePiece = function() {
 
 GamePiece.prototype.update = function(dt) {
   cg('GamePiece update');
-  if (this.attachedTo) {
-    this.x = this.attachedTo.x + 20;
-    this.y = this.attachedTo.y + 30;
+  if (this.carriedBy) {
+    this.x = this.carriedBy.x + 20;
+    this.y = this.carriedBy.y + 30;
   }
   for (boundary in this.collisionBoundary) {
     this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].offset.x;
@@ -86,7 +86,6 @@ CollisionCheck determines if an object has collided with this. Then runs a resul
 */
 GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
   cg('GamePiece collisionCheck');
-  console.log(this.elementName + " acts on " + gamePiece.elementName);
   var that = this,
     objectsCollide = false;
   if (that !== gamePiece){
@@ -108,6 +107,7 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
             if (distanceBetweenGamePieces < radiiSum) {
               ////console.log("collision");
               ////console.log(result);
+              console.log(that.elementName + " acts on " + gamePiece.elementName);
               result.call(that, gamePiece);
               objectsCollide = true;
             }
@@ -117,6 +117,12 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
     }
   }
   return objectsCollide;
+}
+
+GamePiece.prototype.collidesWithNothing = function(){
+  for (boundary in this.collisionBoundary){
+    this.collisionBoundary[boundary].collidesWith = [];
+  }
 }
 
 GamePiece.prototype.activate = function(tile) {
@@ -135,6 +141,12 @@ GamePiece.prototype.activate = function(tile) {
       y: 0
     };
   }
+//  for (boundary in this.collisionBoundary) {
+//    if (this.collisionBoundary[boundary].savedCollidesWith){
+//      this.collisionBoundary[boundary].collidesWith = this.collisionBoundary[boundary].savedCollidesWith;
+//      this.collisionBoundary[boundary].savedCollidesWith = [];//
+//    }
+//  }
 }
 
 GamePiece.prototype.noCollisions = function() {
@@ -147,18 +159,18 @@ GamePiece.prototype.noCollisions = function() {
   };
   this.calculatePosition();
   this.direction = { //This value is set by the direction buttons for player,
-    x: 0,
+    x: 1,
     y: 0
   };
   this.speed = 0;
   this.rotation = 0; //about the z axis
 
-  //for (boundary in this.collisionBoundary) {
-  //  if (this.collisionBoundary[boundary].collidesWith.length){
-  //    this.collisionBoundary[boundary].savedCollidesWith = this.collisionBoundary[boundary].//collidesWith;//
-  //    this.collisionBoundary[boundary].collidesWith = [];//
-  //  }
-  //}
+//  for (boundary in this.collisionBoundary) {
+//    if (this.collisionBoundary[boundary].collidesWith.length){
+//      this.collisionBoundary[boundary].savedCollidesWith = this.collisionBoundary[boundary].collidesWith;//
+//      this.collisionBoundary[boundary].collidesWith = [];//
+//    }
+//  }
 }
 
 GamePiece.prototype.retarget = function(targetPt) {
@@ -248,9 +260,7 @@ GamePiece.prototype.drop = function() {
       var dropped = this.collectables.pop();
       dropped.projectile = false;
       dropped.collisionBoundary.primary.collidesWith = [
-        Player,
-        Enemy,
-        Transporter
+        Player
       ];
       dropped.direction = this.direction;
       dropped.speed = 0;

@@ -1,34 +1,29 @@
 
+/*
+Variables to hold menu and sprite data.
+See below for game initialization.
+*/
 var titleMenu = [
   {
     tag: 'h1',
     active: false,
     content: 'Ladybug Run',
     gameVariable: '',
-    position: {
-//      x:  game.world.canvasSize.x * 0.025,
-//      y:  game.world.canvasSize.y * 0.3
-    }
+    position: {}
   },
   {
     tag: 'h2',
     active: false,
     content: 'An Epic Five Levels',
     gameVariable: '',
-    position: {
-//      x: game.world.canvasSize.x * 0.025,
-//      y:  game.world.canvasSize.y * 0.8
-    }
+    position: {}
   },
   {
     tag: 'h3',
     active: true,
     content: 'Press the Spacebar to Play',
     gameVariable: '',
-    position: {
-//    x:  game.world.canvasSize.x * 0.025,
-//    y:  game.world.canvasSize.y * 0.9
-    }
+    position: {}
   }
 ];
 
@@ -38,30 +33,69 @@ var cutsceneMenu = [
     active: false,
     content: '',
     gameVariable: '',
-    position: {
-//      x:  game.world.canvasSize.x * 0.025,
-//      y:  game.world.canvasSize.y * 0.3
-    }
+    position: {}
   },
   {
     tag: 'h2',
     active: false,
     content: '',
     gameVariable: '',
-    position: {
-//      x: game.world.canvasSize.x * 0.025,
-//      y:  game.world.canvasSize.y * 0.8
-    }
+    position: {}
   },
   {
     tag: 'h3',
     active: true,
     content: 'Press the Spacebar to Play',
     gameVariable: '',
-    position: {
-//    x:  game.world.canvasSize.x * 0.025,
-//    y:  game.world.canvasSize.y * 0.9
-    }
+    position: {}
+  }
+];
+
+var victoryMenu = [
+  {
+    tag: 'h1',
+    active: false,
+    content: 'Victory!',
+    gameVariable: '',
+    position: {}
+  },
+  {
+    tag: 'h2',
+    active: false,
+    content: '',
+    gameVariable: '',
+    position: {}
+  },
+  {
+    tag: 'h3',
+    active: true,
+    content: '',
+    gameVariable: '',
+    position: {}
+  }
+];
+
+var defeatMenu = [
+  {
+    tag: 'h1',
+    active: false,
+    content: 'Darn',
+    gameVariable: '',
+    position: {}
+  },
+  {
+    tag: 'h2',
+    active: false,
+    content: '',
+    gameVariable: '',
+    position: {}
+  },
+  {
+    tag: 'h3',
+    active: true,
+    content: '',
+    gameVariable: '',
+    position: {}
   }
 ];
 
@@ -112,7 +146,7 @@ var characters = [{
   sprite: 'images/char-princess-girl.png',
 }];
 
-cl('app.js');
+
 var game = new Game();
 game.init(0, 0);
 game.startLevel(false);

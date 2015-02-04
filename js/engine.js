@@ -96,12 +96,16 @@ var Engine = (function(global) {
     /* Set our lastTime variable which is used to determine the time delta
      * for the next time this function is called.
      */
+ //    console.log(cycle);
+ //    game.allCollectables.forEach(function(thing){
+ //     console.log(thing.offset.x + " " + thing.offset.y);
+ //    });
     lastTime = now;
 
     /*
     lastPlayerState can be compared to the current player.active property to determine if there has been a change. If there has been a change then to reset the canvas window.
     */
-    lastPlayerState = game.controlling.active;
+    //lastPlayerState = game.controlling.active;
 
     /* Use the browser's requestAnimationFrame function to call this
      * function again as soon as the browser is able to draw another frame.
@@ -117,8 +121,8 @@ var Engine = (function(global) {
     cl('engine initilize');
     reset();
     lastTime = Date.now();
-    lastPlayerState = game.controlling.active;
-    console.log("last player state = " + lastPlayerState);
+    //lastPlayerState = game.controlling.active;
+    //console.log("last player state = " + lastPlayerState);
     main();
   }
 
@@ -135,13 +139,19 @@ var Engine = (function(global) {
     cl('engine update')
     game.world.updateTime(dt);
 
+    if ((game.defeat || game.victory) && game.playersPassed()){
+      console.log("restart Game");
+    }
+
     if (game.world.checkVictory()) {
       reset();
     }
 
-    if (lastPlayerState !== game.controlling.active){
-      //  game.world.removeComponents();
-      game.world.activateComponents(true);
+    //if (lastPlayerState !== game.controlling.active){
+    if (game.refresh){
+      console.log("refresh");
+      game.world.activateComponents(game.refresh);
+      game.refresh = false;
       reset();
     }
 
@@ -192,6 +202,7 @@ var Engine = (function(global) {
 
     game.update();
 
+    if (game.refresh) update(dt);
     /*
             allCollectables.forEach(function(collectable) {
                 collectable.update(dt);
@@ -297,7 +308,7 @@ var Engine = (function(global) {
     });
 
     //console.log(game.currentMenu);
-    if (game.world.cutscene || game.level === 0){
+    if (game.world.cutscene || game.level === 0 || game.victory || game.defeat){
         game.currentMenu.render(); // TODO dang it why are the titles not rendering right?
     }
 
@@ -333,7 +344,9 @@ The reset function resets the canvas to display the currentMap. It turns off all
     game.world.init();//determine canvas size.
 
     game.allMenus[0].layout(game.world);
-    game.allMenus[1].layout(game.world);//measures canvas size for proportional placement of titles
+    game.allMenus[1].layout(game.world);
+    game.allMenus[2].layout(game.world);
+    game.allMenus[3].layout(game.world);//measures canvas size for proportional placement of titles
 
     canvas.width = game.world.canvasSize.x;
     canvas.height = game.world.canvasSize.y;

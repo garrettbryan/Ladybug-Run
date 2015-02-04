@@ -12,6 +12,7 @@ var Player = function(character, scale) {
 
   this.center.y = 125 * this.scale;
 
+
   this.collectables = [];
   this.collectablesWidth = 0;
   this.collectablesSpacing = 0;
@@ -168,6 +169,7 @@ Player.prototype.handleInput = function(key) {
       this.active = true;
       game.active = true;
       game.nextLevel();
+      game.refresh = true;
         break;
       case 'dismount':
         break;
@@ -199,24 +201,19 @@ Player.prototype.passedLevel = function() {
 }
 
 Player.prototype.death = function() {
-  //console.log("Player death");
-  this.collectables.forEach(function(collectable) {
-    //console.log(collectable);
-    collectable.placeRandomly(game.world.currentMap);
-  });
-
+  //console.log("Player death")
   if (this.steed) {
     this.dismount();
     //console.log("dismount");
 
   } else {
     //console.log("I died");
-    this.drop();
     this.noCollisions();
+    this.drop();
     this.dead = true;
     game.deadPlayers++;
-    //console.log("deadPlayers: " + game.deadPlayers);
-    this.active = !this.active;
+    console.log("deadPlayers: " + game.deadPlayers);
+   // game.refresh = true;
   }
 
 };
@@ -254,10 +251,18 @@ Player.prototype.dismount = function() {
   ];
 
   this.steed.speed = 3;
+
+if (this.steed.direction.x >= 0){
   this.steed.direction = {
-    x: this.direction.x,
+    x: 1,
     y: 0
   };
+}else{
+  this.steed.direction = {
+    x: -1,
+    y: 0
+  };
+}
   this.steed.tile.y = this.tile.y;
   this.steed.calculatePosition();
   this.steed.rider = '';
@@ -394,9 +399,10 @@ Player.prototype.anyCollisions = function() {
   if (this.active){
     for (var enemy in game.allEnemies) {
       if (!this.steed) {
-        this.collisionCheck(game.allEnemies[enemy], "primary", this.death);
-        if (game.allEnemies[enemy].scale >= this.scale) {
-          this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride);
+        if (this.collisionCheck(game.allEnemies[enemy], "primary", this.death)){
+        }
+        if (game.allEnemies[enemy].scale >= this.scale && this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride)) {
+            game.allEnemies[enemy].collidesWithNothing();
         }
       }
     }
@@ -409,11 +415,13 @@ Player.prototype.anyCollisions = function() {
     }
 
     for (var transporter in game.allTransporters){
-    //  this.collisionCheck(game.allTransporters[transporter], "primary", this.transport);
+      this.collisionCheck(game.allTransporters[transporter], "primary", this.transport);
     }
 
     for (var i = 0; i < game.allPlayers.length; i++) {
-      this.collisionCheck(game.allPlayers[i], "primary", this.tag)
+      if(this.collisionCheck(game.allPlayers[i], "primary", this.tag)){
+        console.log("tagged");
+      }
     }
   }
 }

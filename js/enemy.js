@@ -33,6 +33,8 @@ var Enemy = function(scale) {
   };
 
   this.name = 'Lady Bug';
+  this.elementName = "bug";
+
   this.sprite = 'images/enemy-bug_sprite_sheet.png';
   this.spriteFore = 'images/enemy-bug-front_sprite_sheet.png';
   this.sx = 0;
@@ -44,9 +46,7 @@ var Enemy = function(scale) {
     primary: {
       'collidesWith': [
         Player,
-        Enemy,
-        Collectable,
-      ],
+        Enemy      ],
       'r': 20 * this.scale,
       'offset': {
         'x': 25 * this.scale,
@@ -131,6 +131,12 @@ Enemy.prototype.simpleInit = function(){
   ////console.log(this.tile);
   this.draw = true;
   this.active = true;
+  this.collisionBoundary.primary.collidesWith = [
+    Player
+  ];
+  this.collisionBoundary.secondary.collidesWith = [
+    Player
+  ];
 }
 
 Enemy.prototype.assignPath = function(enemyPaths) {

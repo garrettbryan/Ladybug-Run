@@ -30,7 +30,7 @@ Boss.prototype.init = function(tile) {
   this.steed.draw = true;
   this.steed.active = true;
   game.allEnemies[game.numberOfEnemies] = e;
-}
+};
 
 Boss.prototype.armaments = function(){
   for (var i = 0; i < 7; i++) {
@@ -40,16 +40,16 @@ Boss.prototype.armaments = function(){
     game.allCollectables.push(c);
     this.pickup(c);
   }
-}
+};
 
 Boss.prototype.cutscene = function(tile){
   this.init(tile);
   this.moveAI = [''];
-}
+};
 
 Boss.prototype.bossFight = function(){
   this.moveAI = ['left', 'right', 'up', 'down', 'space'];
-}
+};
 
 Boss.prototype.target = function(player) {
   ce('target');
@@ -72,11 +72,9 @@ Boss.prototype.target = function(player) {
   };
 
   ce(this.direction);
-
 };
 
 Boss.prototype.move = function(dt) {
-//  //console.log("boss move");
   this.moveInterval -= dt;
   this.target(game.controlling);
 
@@ -84,7 +82,7 @@ Boss.prototype.move = function(dt) {
     this.handleInput(this.moveAI[Math.floor(Math.random() * this.moveAI.length)])
     this.moveInterval = Math.random();
   }
-}
+};
 
 Boss.prototype.death = function() {
   cp('Player death');
@@ -129,3 +127,34 @@ Boss.prototype.update = function(dt) {
   }
 };
 
+Boss.prototype.anyCollisions = function() {
+  ////console.log("player collision checks");
+  if (this.active){
+    for (var enemy in game.allEnemies) {
+      if (!this.steed) {
+        if (this.collisionCheck(game.allEnemies[enemy], "primary", this.ride)){
+        }
+        if (game.allEnemies[enemy].scale >= this.scale && this.collisionCheck(game.allEnemies[enemy], "secondary", this.ride)) {
+            game.allEnemies[enemy].collidesWithNothing();
+        }
+      }
+    }
+    for (var collectable in game.allCollectables) {
+      if (game.allCollectables[collectable].projectile && this.collisionCheck(game.allCollectables[collectable], "primary", this.death)) {
+        game.allCollectables[collectable].noCollisions();
+      } else {
+        this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
+      }
+    }
+
+//    for (var transporter in game.allTransporters){
+//    //  this.collisionCheck(game.allTransporters[transporter], "primary", this.transport);
+//    }
+
+//    for (var i = 0; i < game.allPlayers.length; i++) {
+//      if(this.collisionCheck(game.allPlayers[i], "primary", this.tag)){
+//        console.log("tagged");
+//      }
+//    }
+  }
+}

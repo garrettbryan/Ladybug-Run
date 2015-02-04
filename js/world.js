@@ -82,12 +82,6 @@ var World = function() {
       x: 1,
       y: 2
     },
-    goalTile: [
-      {
-        x: 0,
-        y: 2
-      }
-    ],
     textureMap: [
       't', 't', 't', 't', 't',
       's', 's', 's', 's', 's',
@@ -575,12 +569,14 @@ World.prototype.victory = function() {
   //console.log("game victory");
   this.currentMap = this.victoryMap;
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+  game.currentMenu = game.allMenus[3];
 }
 
 World.prototype.failure = function() {
   //console.log("game failure");
   this.currentMap = this.failureMap;
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
+  game.currentMenu = game.allMenus[2];
 }
 
 World.prototype.characterVictory = function(player){
@@ -606,13 +602,19 @@ World.prototype.checkVictory = function() {
     game.controlling.passedLevel();
   }
   if (game.allDead()){
-    this.removeComponents();
+    console.log("all Dead");
+    //this.removeComponents();
+    game.refresh = true;
+    game.level = game.world.maps.length + 1;
     this.failure();
+    game.defeat = true;
     this.worldtime = 0;
     result = true;
   } else if (game.playersPassed()) {
+    console.log('players passed');
     if (game.level < game.world.maps.length) {
-      this.removeComponents();
+      //this.removeComponents();
+      game.refresh = true;
       game.nextLevel();
       game.score += 1000;
       this.worldTime = 0;
@@ -626,109 +628,120 @@ World.prototype.checkVictory = function() {
       result = true;
     }
   }else if (game.boss.dead){
-    this.removeComponents();
+    //this.removeComponents();
+    console.log('Boss dead');
+    game.refresh = true;
     this.victory();
+    game.victory = true;
+    //this.currentMap = this.victoryMap;
+    //this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
     game.score += 1000;
+    game.active = false;
     this.worldtime = 0;
     result = true;
+    game.level = game.world.maps.length + 1;
+    game.boss.dead = false;
   }
 
   return result;
 };
 
-World.prototype.activateComponents = function(LastStateDifferent){
+World.prototype.activateComponents = function(refresh){
 var result = false;
-if (LastStateDifferent) {
+if (refresh) {
   this.removeComponents();
-  //console.log('World activateComponents');
+  console.log('World activateComponents');
 
-  if (game.level > 0){
-    if (this.cutscene){
-        game.currentMenu = game.allMenus[1];
-    } else {
-        //console.log('found current menu');
-        game.currentMenu = {};
-    }
-  }
   result = true;
-    if (game.level === 0 || this.cutscene){
-      this.currentMap = this.randomMap;
-      this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-
-      if (this.currentMap.bossStartTile){
-        game.boss.activate({
-          x: game.world.currentMap.bossStartTile.x,
-          y: game.world.currentMap.bossStartTile.y
-        });
-      }
-      if (this.cutscene){
-        game.messageBugs.create(this.maps[game.level-1].enemyMessage);
-      }
-    } else {
-      this.currentMap = this.maps[game.level-1];
-      this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-
-      if (this.currentMap.playerStartTile){
-        var i = 0;
-        game.allPlayers.forEach(function (player) {
-          if (player.passed && !player.dead){
-            player.activate({
-              x: game.world.currentMap.playerStartTile.x + i,
-              y: game.world.currentMap.playerStartTile.y
-            });
-            player.passed = false;
-            player.calculatePosition(player.tile);
-          }else{
-            //game.allPlayers.push(game.allPlayers.shift());
-          }
-          i++;
-        });
-      }
-      if (this.currentMap.bossStartTile){
-        game.boss.activate({
-          x: game.world.currentMap.bossStartTile.x,
-          y: game.world.currentMap.bossStartTile.y
-        });
-        game.boss.bossFight();
-      }
-
-      game.allCollectables.forEach(function(collectable){
-        if(!collectable.attachedTo){
-          collectable.init();
+  if (game.victory || game.defeat) {
+    if (this.currentMap.playerStartTile){
+      var i = 0;
+      game.allPlayers.forEach(function (player) {
+        if (!player.dead){
+          player.activate({
+            x: game.world.currentMap.playerStartTile.x + i,
+            y: game.world.currentMap.playerStartTile.y
+          });
+          player.passed = false;
+          player.calculatePosition(player.tile);
+        }else{
+          //game.allPlayers.push(game.allPlayers.shift());
         }
-      })
-
-      if (this.currentMap.goalTile){
-        for (var i = 0; i < this.currentMap.goalTile.length; i++){
-          game.allGoals[i].activate(this.currentMap.goalTile[i]);
-        }
-      }
-      for (var i = 1; i < 5 * game.level; i++){
-        game.allEnemies[i].simpleInit();
-      }
-
-      game.allTransporters.forEach(function(transporter){
-        transporter.init();
+        i++;
       });
+    }
+    if (this.currentMap.goalTile){
+      for (var i = 0; i < this.currentMap.goalTile.length; i++){
+        game.allGoals[i].activate(this.currentMap.goalTile[i]);
+      }
+    }
 
+  }else if (game.level === 0 || this.cutscene){
+    this.currentMap = this.randomMap;
+    this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
 
+    if (this.currentMap.bossStartTile){
+      game.boss.activate({
+        x: game.world.currentMap.bossStartTile.x,
+        y: game.world.currentMap.bossStartTile.y
+      });
+    }
+    if (this.cutscene){
+      game.messageBugs.create(this.maps[game.level-1].enemyMessage);
+    }
+  } else if (game.level <= this.maps.length) {
+    this.currentMap = this.maps[game.level-1];
+    this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
 
-//      for (var i = 0; i < 7; i++){
-//        game.allCollectables.push(new Collectable(collectables[i]));
-//      }
-//      for (var e = 0, j; e < 5 * game.level; e++){
-//        j = Math.floor(Math.random() * game.numberOfEnemies - 1);
-//        game.allEnemies[j].draw = true;
-//        game.allEnemies[j].active = true;
-//      }
+    if (this.currentMap.playerStartTile){
+      var i = 0;
+      game.allPlayers.forEach(function (player) {
+        if (player.passed && !player.dead){
+          player.activate({
+            x: game.world.currentMap.playerStartTile.x + i,
+            y: game.world.currentMap.playerStartTile.y
+          });
+          player.passed = false;
+          player.calculatePosition(player.tile);
+        }else{
+          //game.allPlayers.push(game.allPlayers.shift());
+        }
+        i++;
+      });
+    }
+    if (this.currentMap.bossStartTile){
+      game.boss.activate({
+        x: game.world.currentMap.bossStartTile.x,
+        y: game.world.currentMap.bossStartTile.y
+      });
+      game.boss.bossFight();
+    }
+
+    game.allCollectables.forEach(function(collectable){
+      if(!collectable.carriedBy){
+        collectable.init();
+      }
+    })
+
+    if (this.currentMap.goalTile){
+      for (var i = 0; i < this.currentMap.goalTile.length; i++){
+        game.allGoals[i].activate(this.currentMap.goalTile[i]);
+      }
+    }
+    for (var i = 1; i < 5 * game.level; i++){
+      game.allEnemies[i].simpleInit();
+    }
+
+    game.allTransporters.forEach(function(transporter){
+      transporter.init();
+    });
     }
   }
-
   return result;
 }
 
 World.prototype.removeComponents = function() {
-  //console.log('world removeComponents');
+  console.log('world removeComponents');
   game.boss.noCollisions();
   game.allPlayers.forEach(function(player){
     player.noCollisions();
