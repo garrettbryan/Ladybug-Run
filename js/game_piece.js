@@ -141,6 +141,13 @@ GamePiece.prototype.activate = function(tile) {
       y: 0
     };
   }
+  if (this.collectables){
+    this.collectables.forEach(function(collectable){
+      collectable.draw = true;
+      collectable.active = true;
+      collectable.tile = this.tile;
+    });
+  }
 //  for (boundary in this.collisionBoundary) {
 //    if (this.collisionBoundary[boundary].savedCollidesWith){
 //      this.collisionBoundary[boundary].collidesWith = this.collisionBoundary[boundary].savedCollidesWith;
@@ -211,9 +218,9 @@ GamePiece.prototype.render = function(row) {
         this.spriteDimensions.x, this.spriteDimensions.y);
       for (boundary in this.collisionBoundary) {
         //      //console.log(this);
-        ctx.beginPath();
-        ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x + this.offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-        ctx.stroke();
+//        ctx.beginPath();
+//        ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x + this.offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
+//        ctx.stroke();
       }
     }
   }

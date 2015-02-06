@@ -33,7 +33,7 @@ var Game = function() {
 };
 
 /*
-The game init runs at the beginning of the game. It creates all the objects the game may need. No other objects are created or destroyed. Objects are active or inactive. Each object may be reused throughout the game.
+The game init runs at the beginning of the game. It creates all the objects the game may need. No other objects are created or destroyed. Objects are active or inactive. If an object is no longer used and its active and draw property is set to false.
 */
 Game.prototype.init = function(level, score) {
   cl("game init");
@@ -123,10 +123,11 @@ Game.prototype.nextLevel = function() {
     this.level++;
     this.world.cutscene = false;
   } else if (!this.world.cutscene){
-      this.level++;
+    this.level++;
   }
-  this.world.cutscene = !this.world.cutscene;
+  this.world.cutscene = !this.world.cutscene
   this.passedPlayers = 0;
+
 }
 
 Game.prototype.updateMenu = function(){

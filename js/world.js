@@ -692,6 +692,7 @@ if (refresh) {
     }
   } else if (game.level <= this.maps.length) {
     this.currentMap = this.maps[game.level-1];
+    game.active = true;
     this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
 
     if (this.currentMap.playerStartTile){

@@ -79,7 +79,7 @@ var defeatMenu = [
   {
     tag: 'h1',
     active: false,
-    content: 'Darn',
+    content: 'Dang!',
     gameVariable: '',
     position: {}
   },
