@@ -291,11 +291,11 @@ BugMessage.prototype.bugCharacters = function(character) {
       break;
     case "i":
       bugArray = [
-        [ 1, 0, 0],
-        [ 0, 0, 0],
-        [ 1, 0, 0],
-        [ 1, 0, 0],
-        [ 0, 1, 0]
+        [1, 0, 0],
+        [0, 0, 0],
+        [1, 0, 0],
+        [1, 0, 0],
+        [0, 1, 0]
       ];
       break;
     case "J":
@@ -309,11 +309,11 @@ BugMessage.prototype.bugCharacters = function(character) {
       break;
     case "j":
       bugArray = [
-        [ 0, 1, 0],
-        [ 0, 0, 0],
-        [ 0, 1, 0],
-        [ 0, 1, 0],
-        [ 1, 0, 0]
+        [0, 1, 0],
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+        [1, 0, 0]
       ];
       break;
     case "K":
@@ -345,11 +345,11 @@ BugMessage.prototype.bugCharacters = function(character) {
       break;
     case "l":
       bugArray = [
-        [ 1, 1, 0, 0],
-        [ 0, 1, 0, 0],
-        [ 0, 1, 0, 0],
-        [ 0, 1, 0, 0],
-        [ 0, 0, 1, 0]
+        [1, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0]
       ];
       break;
     case "M":
@@ -438,13 +438,13 @@ BugMessage.prototype.bugCharacters = function(character) {
       break;
     case "q":
       bugArray = [
-        [ 0, 0, 0, 0, 0],
-        [ 0, 1, 1, 0, 0],
-        [ 1, 0, 0, 1, 0],
-        [ 1, 0, 0, 1, 0],
-        [ 0, 1, 1, 1, 0],
-        [ 0, 0, 0, 1, 0],
-        [ 0, 1, 1, 1, 0]
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0],
+        [1, 0, 0, 1, 0],
+        [1, 0, 0, 1, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 1, 0],
+        [0, 1, 1, 1, 0]
       ];
       break;
     case "R":
@@ -476,11 +476,11 @@ BugMessage.prototype.bugCharacters = function(character) {
       break;
     case "s":
       bugArray = [
-        [ 0, 0, 0, 0],
-        [ 0, 1, 1, 0],
-        [ 1, 1, 0, 0],
-        [ 0, 1, 1, 0],
-        [ 1, 1, 0, 0]
+        [0, 0, 0, 0],
+        [0, 1, 1, 0],
+        [1, 1, 0, 0],
+        [0, 1, 1, 0],
+        [1, 1, 0, 0]
       ];
       break;
     case "T":

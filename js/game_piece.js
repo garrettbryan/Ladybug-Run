@@ -34,15 +34,15 @@ var GamePiece = function() {
     x: 0,
     y: 0
   };
-  this.offset = { //only used during rendering
+  this.offset = {//only used during rendering
     x: 0,
     y: 0
   };
-  this.center = { //This value will change based on the sprite
+  this.center = {//This value will change based on the sprite
     x: this.spriteDimensions.x / 2,
     y: 120 * this.scale
   };
-  this.direction = { //This value is set by the direction buttons for player,
+  this.direction = {//This value is set by the direction buttons for player,
     x: 0,
     y: 1
   };
@@ -159,7 +159,7 @@ GamePiece.prototype.noCollisions = function() {
     y: -1
   };
   this.calculatePosition();
-  this.direction = { //This value is set by the direction buttons for player,
+  this.direction = {//This value is set by the direction buttons for player,
     x: 1,
     y: 0
   };

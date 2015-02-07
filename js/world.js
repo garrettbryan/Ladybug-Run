@@ -146,7 +146,7 @@ var World = function() {
         y: 8
       },
       enemyPaths: [
-        [{  x: 2,  y: 7}, {  x: 9,  y: 7}, {  x: 9,  y: 2}, {  x: 2,  y: 2}]
+        [{x: 2,  y: 7}, {x: 9,  y: 7}, {x: 9,  y: 2}, {x: 2,  y: 2}]
         ],
 
       enemyMessage : "A long time ago . . .",
@@ -217,7 +217,7 @@ var World = function() {
         y: 0
       },
       enemyPaths: [
-        [{ x: 0, y: 1 }, { x: 3, y: 0 }, { x: 5, y: 3 }, { x: 0, y: 2 }]],
+        [{x: 0, y: 1 }, {x: 3, y: 0 }, {x: 5, y: 3 }, {x: 0, y: 2 }]],
 
       enemyMessage : "A cold wind blows.",
 
