@@ -2,7 +2,6 @@
 BugMessage creates a 2D array of bugs with initiatioon values and a time offset value. sendBugMessage loops through each bug element and decrements index 4 until it is less than zero then the bug is created and sent on it's way. Hopefully in a recognizable pattern!  The values stored in the 2D array are:
 position.x, position.y, speed, scale, time offset.
 */
-
 var BugMessage = function() {
   this.bugProperties = [];
   this.allbugs = [];
@@ -17,22 +16,23 @@ BugMessage.prototype.create = function(message){
   this.bugProperties = [];
   this.allbugs = [];
   var character;
-  for (var i = 0, bugCols = 0; i < message.length; i++) { //i is the message index
-    bugCols += 1; // this variable spaces out the columns of bugs
+  for (var i = 0, bugCols = 0; i < message.length; i++) {
+    bugCols += 1;
     character = this.bugCharacters(message[i]);
-    ////console.log(message[i]);
-    for (var j = 0; j < character[0].length; j++) { //j is the col index
+    for (var j = 0; j < character[0].length; j++) {
       bugCols += 1;
-      for (var k = 0; k < character.length; k++) {//k is the row index
+      for (var k = 0; k < character.length; k++) {
         if (character[k][j] >= 1) {
-          this.bugProperties.push([game.world.currentMap.totalTiles.x + 1, k + 3, -1 * character[k][j] * 2, character[k][j], bugCols + j/4 - 2 ]); //
+          this.bugProperties.push([game.world.currentMap.totalTiles.x + 1, k + 3, -1 * character[k][j] * 2, character[k][j], bugCols + j/4 - 2 ]);
         }
       }
     }
   }
-  ////console.log(this.bugProperties);
 };
 
+/*
+erase clears out the the variables that control the ladybug marquee.
+*/
 BugMessage.prototype.erase = function(){
   this.bugProperties = [];
   this.allbugs = [];
@@ -43,15 +43,12 @@ sendBugMessage decrements the time offset value until it reaches zero, then it c
 */
 BugMessage.prototype.update = function(dt) {
   for (var i = 0; i < this.bugProperties.length; i++) {
-    ////console.log(this.bugProperties[i][4]);
-    ////console.log(dt);
-    if (this.bugProperties[i][4] <= 0) {  //if the time offset is less than 0
+    if (this.bugProperties[i][4] <= 0) {
       var bugValues = this.bugProperties.shift(),
         e = new Enemy();
       e.initMessageBug(bugValues);
       e.draw = true;
       e.active = true;
-      ////console.log(e);
       this.allbugs.push(e);
     } else {
       this.bugProperties[i][4] -= 10 * dt;
@@ -60,33 +57,26 @@ BugMessage.prototype.update = function(dt) {
   this.allbugs.forEach(function(enemy) {
     enemy.cutsceneUpdate(dt);
   });
-
-  ////console.log(this.allbugs.length);;
-
   if (this.allbugs.length > 0 && game.controlling.active){
     this.allbugs = [];
   }
-
   if (this.allbugs && this.allbugs.length && this.allbugs[this.allbugs.length-1].position.x < -101) {
     this.erase();
-    //console.log("bug erase");
-//    game.controlling.active = true;
-//    game.active = true;
-//    game.nextLevel();
-//    game.startLevel(false);
   }
 }
 
+/*
+Render renders all the bugs in a marquee.
+*/
 BugMessage.prototype.render = function(row){
   for (var i = 0; i < this.allbugs.length; i++) {
     this.allbugs[i].render(row);
   }
-
-//  this.allbugs.forEach(function(enemy){
-//    enemy.render(row);
-//  });
 }
 
+/*
+All currently possible characters are encoded here.
+*/
 BugMessage.prototype.bugCharacters = function(character) {
   var bugArray = [];
   switch (character) {

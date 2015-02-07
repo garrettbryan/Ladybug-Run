@@ -14,46 +14,7 @@
  * a little simpler to work with.
  */
 
-var clg = 0,
-  cgg = 0,
-  ceg = 0,
-  cpg = 0,
-  crg = 0,
-  cycle = 0;
-
-cr = function(log) {
-  if (crg === 1) {
-    console.log(log);
-  }
-};
-
-cp = function(log) {
-  if (cpg === 1) {
-    console.log(log);
-  }
-};
-
-cl = function(log) {
-  if (clg === 1) {
-    console.log(log);
-  }
-};
-
-cg = function(log) {
-  if (cgg === 1) {
-    console.log(log);
-  }
-};
-
-ce = function(log) {
-  if (ceg === 1) {
-    console.log(log);
-  }
-};
-
-
 var Engine = (function(global) {
-  cl('engine');
   /* Predefine the variables we'll be using within this scope,
    * create the canvas element, grab the 2D context for that canvas
    * set the canvas elements height/width and add it to the DOM.
@@ -73,7 +34,6 @@ var Engine = (function(global) {
    * and handles properly calling the update and render methods.
    */
   function main() {
-    cl('engine main ' + cycle);
     cycle++;
     /* Get our time delta information which is required if your game
      * requires smooth animation. Because everyone's computer processes
@@ -118,7 +78,6 @@ var Engine = (function(global) {
    * game loop.
    */
   function init() {
-    cl('engine initilize');
     reset();
     lastTime = Date.now();
     //lastPlayerState = game.controlling.active;
@@ -136,7 +95,6 @@ var Engine = (function(global) {
    * on the entities themselves within your app.js file).
    */
   function update(dt) {
-    cl('engine update')
     game.world.updateTime(dt);
 
     if ((game.defeat || game.victory) && game.playersPassed()){
@@ -167,7 +125,6 @@ var Engine = (function(global) {
    * render methods.
    */
   function updateEntities(dt) {
-    cl(' update entities');
 
     game.allGoals.forEach(function(goal){
       goal.update(dt);
@@ -414,7 +371,6 @@ The reset function resets the canvas to display the currentMap. It turns off all
     'images/white-block.png',
     'images/Polarlicht_2.png'
   ]);
-  cl('resources');
   Resources.onReady(init);
 
   /* Assign the canvas' context object to the global variable (the window

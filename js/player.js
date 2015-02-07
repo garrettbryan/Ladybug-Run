@@ -12,7 +12,6 @@ var Player = function(character, scale) {
 
   this.center.y = 125 * this.scale;
 
-
   this.collectables = [];
   this.collectablesWidth = 0;
   this.collectablesSpacing = 0;
@@ -47,8 +46,6 @@ Player.prototype.init = function(tile) {
         y: tile.y
       };
       i++;
-      //console.log("Player: " + player.elementName + " initialize");
-      //console.log(player.tile);
     }else{
       player.noCollisions();
       i++;
@@ -79,6 +76,9 @@ Player.prototype.update = function(dt) {
   }
 };
 
+/*
+walkToTile determines if the character can move to the next tile if not return a falsey value.
+*/
 Player.prototype.walkToTile = function() {
   cp('Player walkToTile');
   var result = 0;
@@ -153,19 +153,14 @@ Player.prototype.handleInput = function(key) {
   }else{
     switch (key) {
       case 'left':
-      //console.log('previous Option');
         break;
       case 'right':
-      //console.log('next Option');
         break;
       case 'up':
-      //console.log('previous Option');
         break;
       case 'down':
-      //console.log('next Option');
         break;
       case 'space':
-      //console.log('select');
       this.active = true;
       game.nextLevel();
       game.refresh = true;
@@ -176,8 +171,10 @@ Player.prototype.handleInput = function(key) {
   }
 };
 
+/*
+this is the method to transfer control to another player character.
+*/
 Player.prototype.tag = function(p) {
-  //console.log("tag");
   var tempTile = {
     x: this.tile.x - this.direction.x,
     y: this.tile.y - this.direction.y
@@ -192,6 +189,9 @@ Player.prototype.tag = function(p) {
   game.controlling = p;
 }
 
+/*
+update a player character when level is passed.
+*/
 Player.prototype.passedLevel = function() {
   this.passed = true;
   game.passedPlayers++;
@@ -199,28 +199,23 @@ Player.prototype.passedLevel = function() {
   game.nextAvailablePlayer();
 }
 
+/*
+
+*/
 Player.prototype.death = function() {
-  //console.log("Player death")
   if (this.steed) {
     this.dismount();
-    //console.log("dismount");
-
   } else {
-    //console.log("I died");
     this.noCollisions();
     this.drop();
     this.dead = true;
     game.deadPlayers++;
     console.log("deadPlayers: " + game.deadPlayers);
-   // game.refresh = true;
   }
-
 };
 
 
 Player.prototype.ride = function(steed) {
-  cp('Player ' + this.elementName + ' ride');
-  ////console.log('Player ' + this.elementName + ' ride');
 
   if (!steed.rider) {
     steed.rider = this;
@@ -270,22 +265,22 @@ if (this.steed.direction.x >= 0){
   this.nextWalkableTile();
 }
 
+/*
+nextWalkableTile allows a player to dismount from a ladybug onto a walkable tile.
+*/
 Player.prototype.nextWalkableTile = function() {
   for (var i = this.tile.x - 1; i < this.tile.x + 2; i++) {
     for (var j = this.tile.y - 1; j < this.tile.y + 2; j++) {
       if (i >= 0 && i < game.world.currentMap.totalTiles.x && j >= 0 && j < game.world.currentMap.totalTiles.y && !(i === this.tile.x && j === this.tile.y)) {
-//        //console.log(game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i]);
         if (game.world.currentMap.walkMap[j * game.world.currentMap.totalTiles.x + i] === 1) {
           this.tile = {
             x: i,
             y: j
           };
-//          //console.log(this.tile);
           i = game.world.currentMap.totalTiles.x;
           j = game.world.currentMap.totalTiles.y;
         }
       } else if (i === this.tile.x && j === this.tile.y + 1) {
-        //console.log("no walkable tile");
         this.death();
       }
     }
@@ -318,13 +313,10 @@ Player.prototype.wait = function() {
   }
 };
 
-
-
 /*
 When a collectable is picked up by a player or boss, the collectable is added to the character's collectables array. The collectables collidesWith array is set to empty, the offset positioning object for the sprite is modified by the pickup and calculateCollectableSpacing methods.  See the collectable update function fo r more.
 */
 Player.prototype.pickup = function(collectable) {
-  cp('Player ' + this.elementName + ' pickup');
   collectable.projectile = false;
   collectable.speed = 0;
   collectable.direction = {
@@ -375,8 +367,6 @@ Player.prototype.throw = function() {
     ];
     projectile.direction = this.direction;
     projectile.speed = 700//this.speed;
-    //console.log(this.direction);
-    //console.log(this.speed);
     projectile.offset = {
       x: 0,
       y: 0

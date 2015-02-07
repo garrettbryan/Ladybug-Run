@@ -2,7 +2,6 @@
 World handles all the setup for each level. It calls the map to use, and all the necessary objects. Then Game acutually pulls the trigger;
 */
 var World = function() {
-  cl('World new');
   this.loadLevel = false;
   this.worldTime = 0;
   this.playersPassed = 0;
@@ -560,32 +559,30 @@ var World = function() {
 The next three methods set the appropritate values for the different special levels.
 */
 Game.prototype.title = function() {
-  //console.log('game title');
   this.currentMap = this.world.randomMap;
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
 }
 
 World.prototype.victory = function() {
-  //console.log("game victory");
   this.currentMap = this.victoryMap;
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
   game.currentMenu = game.allMenus[3];
 }
 
 World.prototype.failure = function() {
-  //console.log("game failure");
   this.currentMap = this.failureMap;
   this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
   game.currentMenu = game.allMenus[2];
 }
 
+/*
+Determines if the current player has landed on a goal tile. If so remove player from play.
+*/
 World.prototype.characterVictory = function(player){
-  //console.log('world characterVictory');
   var result = false;
   if (this.currentMap.hasOwnProperty('goalTile')){
     for (var i = 0; i < this.currentMap.goalTile.length; i++){
       if (this.currentMap.goalTile[i].x === player.tile.x && this.currentMap.goalTile[i].y === player.tile.y){
-        //console.log('character ' + player.elementName + ' victory');
         result = true;
         player.noCollisions();
         break;
@@ -595,15 +592,16 @@ World.prototype.characterVictory = function(player){
   return result;
 }
 
+/*
+checkVictory controls most of the interlevel changes. allDead, playersPassed, boss.dead are the three possible outcomes for each level.
+*/
 World.prototype.checkVictory = function() {
   var result = false;
-  //console.log('world checkVictory');
   if (game.world.characterVictory(game.controlling)) {
     game.controlling.passedLevel();
   }
   if (game.allDead()){
     console.log("all Dead");
-    //this.removeComponents();
     game.refresh = true;
     game.level = game.world.maps.length + 1;
     this.failure();
@@ -614,12 +612,10 @@ World.prototype.checkVictory = function() {
   } else if (game.playersPassed()) {
     console.log('players passed');
     if (game.level < game.world.maps.length) {
-      //this.removeComponents();
       game.refresh = true;
       game.nextLevel();
       game.score += 1000;
       this.worldTime = 0;
-      //console.log(this.maps[game.level-1].enemyMessage);
       this.currentMap = this.randomMap;
       result = true;
     } else {
@@ -629,13 +625,10 @@ World.prototype.checkVictory = function() {
       result = true;
     }
   }else if (game.boss.dead){
-    //this.removeComponents();
     console.log('Boss dead');
     game.refresh = true;
     this.victory();
     game.victory = true;
-    //this.currentMap = this.victoryMap;
-    //this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
     game.score += 1000;
     game.active = false;
     this.worldtime = 0;
@@ -643,16 +636,16 @@ World.prototype.checkVictory = function() {
     game.level = game.world.maps.length + 1;
     game.boss.dead = false;
   }
-
   return result;
 };
 
+/*
+activateComponents loads the correct gamePieces depending on the level.
+*/
 World.prototype.activateComponents = function(refresh){
 var result = false;
 if (refresh) {
   this.removeComponents();
-  console.log('World activateComponents');
-
   result = true;
   if (game.victory || game.defeat) {
     if (this.currentMap.playerStartTile){
@@ -665,8 +658,6 @@ if (refresh) {
           });
           player.passed = false;
           player.calculatePosition(player.tile);
-        }else{
-          //game.allPlayers.push(game.allPlayers.shift());
         }
         i++;
       });
@@ -676,11 +667,9 @@ if (refresh) {
         game.allGoals[i].activate(this.currentMap.goalTile[i]);
       }
     }
-
   }else if (game.level === 0 || this.cutscene){
     this.currentMap = this.randomMap;
     this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-
     if (this.currentMap.bossStartTile){
       game.boss.activate({
         x: game.world.currentMap.bossStartTile.x,
@@ -694,7 +683,6 @@ if (refresh) {
     this.currentMap = this.maps[game.level-1];
     game.active = true;
     this.maxElevation = this.maximumBlockElevation() * this.pixelsPerElevationUnit.y;
-
     if (this.currentMap.playerStartTile){
       var i = 0;
       game.allPlayers.forEach(function (player) {
@@ -705,8 +693,6 @@ if (refresh) {
           });
           player.passed = false;
           player.calculatePosition(player.tile);
-        }else{
-          //game.allPlayers.push(game.allPlayers.shift());
         }
         i++;
       });
@@ -718,13 +704,11 @@ if (refresh) {
       });
       game.boss.bossFight();
     }
-
     game.allCollectables.forEach(function(collectable){
       if(!collectable.carriedBy){
         collectable.init();
       }
     })
-
     if (this.currentMap.goalTile){
       for (var i = 0; i < this.currentMap.goalTile.length; i++){
         game.allGoals[i].activate(this.currentMap.goalTile[i]);
@@ -733,7 +717,6 @@ if (refresh) {
     for (var i = 1; i < 5 * game.level; i++){
       game.allEnemies[i].simpleInit();
     }
-
     game.allTransporters.forEach(function(transporter){
       transporter.init();
     });
@@ -742,6 +725,9 @@ if (refresh) {
   return result;
 }
 
+/*
+removeComponents clears the canvas of all gamepieces
+*/
 World.prototype.removeComponents = function() {
   console.log('world removeComponents');
   game.boss.noCollisions();
@@ -847,6 +833,9 @@ World.prototype.render = function(row, numCols) {
   }
 }
 
+/*
+Render a special background for the defeat and victory maps.
+*/
 World.prototype.renderBackground = function(canvas) {
   ctx.clearRect(0,0, canvas.width, canvas.height);
   if (game.victory || game.defeat) {
@@ -855,7 +844,7 @@ World.prototype.renderBackground = function(canvas) {
 }
 
 /*
-As the randomMap scrolls new tiles are generated before they enter the canvas as old ones are deleated when they leave the canvas.
+As the randomMap scrolls new tiles are generated before they enter the canvas as old ones are deleted when they leave the canvas.
 */
 World.prototype.createRandomMapColumn = function(currentMap) {
   var numRows = this.randomMap.totalTiles.y;
@@ -884,78 +873,3 @@ World.prototype.update = function(dt) {
     this.offset.x = 0;
   }
 }
-
-
-
-/*
-World.prototype.checkVictory = function()  {
-    if (game.running === 1) {
-        var collisionZone = 50;
-        if ((Math.abs(game.princess.x - game.controlling.x) < collisionZone) &&
-                (Math.abs(game.princess.y - game.controlling.y) < collisionZone)) {
-                    cl(game.level);
-                    game.level++;
-                    if (game.level <= game.world.maps.length) {
-                        game.princess.draw = false;
-                        game.score += 1000;
-                        game.startLevel(false);
-                        return true;
-                    } else {
-                        game.victorySequence();
-                    }
-                }
-
-    }
-    return false;
-}
-
-
-World.prototype.init = function(sizeInPixels, tileSize) {
-    cl(this);
-    this.sizeInPixels = sizeInPixels;
-    this.tileSize = tileSize;
-    cl(this);
-}
-
-//Check if player can walk on tile, in which case the tile type is listed
-//in the array walkableTiles
-World.prototype.isTileWalkable = function(tileX, tileY) {
-    var result = false;
-
-    var tileType = this.currentMap.map[tileX + tileY*this.currentMap.totalTiles.x];
-
-    if (tileType &&  (this.walkableTiles.indexOf(tileType) > -1)){
-        //If tile exists and it is walkable returns true
-        result = true;
-    }
-    return result;
-}
-
-
-//Returns an array with the indexes of the rows on which enemies can be spawned
-World.prototype.enemyRows= function() {
-    var result = [];
-    for (var rowIndex = 0; rowIndex < this.currentMap.totalTiles.y; rowIndex++){
-        //Reads only the first tile of each row, it is enough since
-        //enemy rows must be omogenous
-        var tileType = this.currentMap.map[rowIndex*this.currentMap.totalTiles.x];
-        if (tileType &&  (this.enemyTiles.indexOf(tileType) > -1)){
-            result.push(rowIndex);
-        }
-    }
-    return result;
-}
-//Returns an array with the tiles coordinates of a specific type
-World.prototype.getTilesOfType= function(type) {
-    var result = [];
-    for (var tileMapIndex = 0; tileMapIndex < this.currentMap.map.length; tileMapIndex ++) {
-        if (this.currentMap.map[tileMapIndex] === type) {
-            result.push({
-                x: Math.floor(tileMapIndex % this.currentMap.totalTiles.x),
-                y: Math.floor(tileMapIndex / this.currentMap.totalTiles.x)
-            });
-        }
-    }
-    return result;
-}
-*/

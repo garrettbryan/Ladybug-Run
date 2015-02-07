@@ -1,5 +1,4 @@
 var Menu = function(menuName) {
-  cl('game menu');
   this.currentMenu = '';
   this.menuName = menuName;
 

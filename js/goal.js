@@ -1,13 +1,11 @@
+/*
+Goal is the game tile that allows a player character to continue to next level
+*/
 var Goal = function(tile) {
   this.scale = 1;
   GamePiece.call(this);
 
-//  this.center = { //This value will change based on the sprite
-//    x: this.spriteDimensions.x / 2,
-//    y: 125 * this.scale
-//  };
-
-  this.center = { //This value will change based on the sprite
+  this.center = {
     x: 101/2,
     y: 125
   };
@@ -21,7 +19,6 @@ var Goal = function(tile) {
   this.renderFadeIncrement = 1/this.fadeMax;
   this.renderFadeUp = 1;
 }
-
 
 Goal.prototype = Object.create(GamePiece.prototype);
 Goal.prototype.constructor = Goal;
@@ -38,10 +35,9 @@ Goal.prototype.init = function(tile){
   this.calculatePosition();
 }
 
-Goal.prototype.update = function(dt){
-
-}
-
+/*
+rendering accepts a row argument to render the gamepiece in the proper order so the sprites maintain the illusion of depth. Also the goals pulsate their opacity.
+*/
 Goal.prototype.renderColorPulse = function(row){
   if (this.draw){
     ctx.save();
@@ -51,9 +47,7 @@ Goal.prototype.renderColorPulse = function(row){
       this.renderCount += this.renderFadeUp;
     if (this.renderCount === this.fadeMax || this.renderCount === this.fadeMin){
       this.renderFadeUp *= -1;
-      ////console.log(this.renderFadeUp);
     }
-    //  //console.log(this.renderCount * this.renderFadeIncrement);
   }
 }
 
@@ -63,7 +57,6 @@ Goal.prototype.renderColorPulseForeground = function(row){
     ctx.globalAlpha = this.renderCount * this.renderFadeIncrement * 0.5;
     this.renderForeground(row);
     ctx.restore();
-    //  //console.log(this.renderCount * this.renderFadeIncrement);
   }
 }
 

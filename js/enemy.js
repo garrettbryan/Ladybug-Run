@@ -1,5 +1,4 @@
 var Enemy = function(scale) {
-  cl('Enemy new');
   this.speed = 3;
   this.scale = scale || 2;
   GamePiece.call(this);

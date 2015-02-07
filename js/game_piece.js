@@ -1,5 +1,4 @@
 var GamePiece = function() {
-  cg('GamePiece new');
 
   this.draw = false;
   this.active = false;
