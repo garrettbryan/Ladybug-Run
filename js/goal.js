@@ -61,7 +61,6 @@ Goal.prototype.renderColorPulseForeground = function(row){
 }
 
 Goal.prototype.renderForeground = function(row) {
-  cg('GamePiece ' + this.name + ' render' + row);
   if (this.draw) {
     if (!row) {
       row = Math.ceil(this.tile.y);

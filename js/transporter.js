@@ -30,6 +30,9 @@ var Transporter = function() {
 Transporter.prototype = Object.create(GamePiece.prototype);
 Transporter.prototype.constructor = Transporter;
 
+/*
+randomly place a transproter tile anywhere on the map.
+*/
 Transporter.prototype.init = function() {
   do {
     this.tile = {
@@ -43,15 +46,11 @@ Transporter.prototype.init = function() {
   this.calculatePosition();
 }
 
-
+/*
+If a player character lands on the transporter tile move to the other transporter.
+*/
 Transporter.prototype.update = function() {
   for (var player in game.allPlayers){
     this.collisionCheck(game.allPlayers[player], "primary", this.transport);
-  }
-  for (var enemy in game.allEnemies){
-    this.collisionCheck(game.allEnemies[enemy], "secondary", this.transport);
-  }
-  for (var collectable in game.allCollectables){
-    this.collisionCheck(game.allCollectables[collectable], "primary", this.transport);
   }
 }

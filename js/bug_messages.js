@@ -12,7 +12,7 @@ createBugMessage creates a 2D array of bugs with initiatioon values and a time o
 tile.x, tile.y, speed, scale, time offset.
 */
 BugMessage.prototype.create = function(message){
-  cl('bugmessage create');
+
   this.bugProperties = [];
   this.allbugs = [];
   var character;

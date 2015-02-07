@@ -36,6 +36,9 @@ var Player = function(character, scale) {
 Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = Player;
 
+/*
+initialize player on level. If player character is not dead then add character to map.
+*/
 Player.prototype.init = function(tile) {
   var i = 0;
   game.allPlayers.forEach(function(player){
@@ -53,6 +56,9 @@ Player.prototype.init = function(tile) {
   });
 }
 
+/*
+update character if active property is true.
+*/
 Player.prototype.update = function(dt) {
   if (this.active){
     if (this.steed) {
@@ -80,11 +86,11 @@ Player.prototype.update = function(dt) {
 walkToTile determines if the character can move to the next tile if not return a falsey value.
 */
 Player.prototype.walkToTile = function() {
-  cp('Player walkToTile');
+
   var result = 0;
   if (this.tile.x >= 0 && this.tile.x < game.world.currentMap.totalTiles.x &&
     this.tile.y >= 0 && this.tile.y < game.world.currentMap.totalTiles.y) {
-    cp(game.world.currentMap.walkMap);
+
     if (this.steed && this.steed.scale >= 2) {
       result = 1;
     } else {
@@ -95,10 +101,10 @@ Player.prototype.walkToTile = function() {
 }
 
 /*
-HandleInput changes input meaning based on status of player. If the player.active is true then the player can move the character on the game board. If player.active is false then the player may choose an option from a menu. specific key up events and updates player properties. If an inaccesable tile is sttempted than the player does not move.
+HandleInput changes input meaning based on status of player. If the player.active is true then the player can move the character on the game board. If player.active is false then the player may choose an option from a menu. specific key up events and updates player properties. If an inaccesable tile is attempted than the player does not move.
 */
 Player.prototype.handleInput = function(key) {
-  cp('Player handleInput');
+
   if (this.active){
     var tile0 = {
         x: this.tile.x,
@@ -200,7 +206,7 @@ Player.prototype.passedLevel = function() {
 }
 
 /*
-
+If a player character is riding a bug then dismount on a call to the death method, else drop collectables, and increment game.deadPlayers.
 */
 Player.prototype.death = function() {
   if (this.steed) {
@@ -214,9 +220,10 @@ Player.prototype.death = function() {
   }
 };
 
-
+/*
+adjusts enemies property to allow the player character to ride an enemy.
+*/
 Player.prototype.ride = function(steed) {
-
   if (!steed.rider) {
     steed.rider = this;
     this.steed = steed;
@@ -232,9 +239,6 @@ Player.prototype.ride = function(steed) {
 The Dismount method populates the collidesWith array, and transfers player properties to the bug, then removes any connection to the bug returning it to it's default enemy state.
 */
 Player.prototype.dismount = function() {
-  cp('Player dismount');
-
-
   this.steed.collisionBoundary.primary.collidesWith = [
     Player,
     Transporter,
@@ -291,7 +295,7 @@ Player.prototype.nextWalkableTile = function() {
 TODO: verify wait function works, if not fix it
 */
 Player.prototype.wait = function() {
-  cp('Player wait');
+
 
   this.position.x = this.tile.x * 101 + 101 / 2 - this.center.x;
   this.position.y = this.tile.y * 83 - this.center.y;
@@ -344,7 +348,7 @@ Player.prototype.calculateCollectableSpacing = function() {
 When a player character is not currently active (the player is not directly controlling the character) then the engine puts the nonactive characters into a wait state where they can still catch objects.
 */
 Player.prototype.catchIt = function(collectable) {
-  cp('Player catchIt');
+
   for (var collectable in game.allCollectables) {
     this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
   }
@@ -366,7 +370,7 @@ Player.prototype.throw = function() {
       Transporter
     ];
     projectile.direction = this.direction;
-    projectile.speed = 700//this.speed;
+    projectile.speed = 700;
     projectile.offset = {
       x: 0,
       y: 0
@@ -384,7 +388,6 @@ Player.prototype.throw = function() {
 The majority of interactions center around the player characters. The active player collisions happen here.
 */
 Player.prototype.anyCollisions = function() {
-  ////console.log("player collision checks");
   if (this.active){
     for (var enemy in game.allEnemies) {
       if (!this.steed) {

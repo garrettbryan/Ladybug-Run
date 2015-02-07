@@ -34,7 +34,6 @@ var Engine = (function(global) {
    * and handles properly calling the update and render methods.
    */
   function main() {
-    cycle++;
     /* Get our time delta information which is required if your game
      * requires smooth animation. Because everyone's computer processes
      * instructions at different speeds we need a constant value that
@@ -47,25 +46,13 @@ var Engine = (function(global) {
     /* Call our update/render functions, pass along the time delta to
      * our update function since it may be used for smooth animation.
      */
-  //  console.log(game.world.bugMessage);
-    //sendbugMessage(dt, game.world.bugMessage);
-    //console.log(game.allEnemies.length);
     update(dt);
     render();
-    //game.world.renderTitleScreenMap(dt);
+
     /* Set our lastTime variable which is used to determine the time delta
      * for the next time this function is called.
      */
- //    console.log(cycle);
- //    game.allCollectables.forEach(function(thing){
- //     console.log(thing.offset.x + " " + thing.offset.y);
- //    });
     lastTime = now;
-
-    /*
-    lastPlayerState can be compared to the current player.active property to determine if there has been a change. If there has been a change then to reset the canvas window.
-    */
-    //lastPlayerState = game.controlling.active;
 
     /* Use the browser's requestAnimationFrame function to call this
      * function again as soon as the browser is able to draw another frame.
@@ -80,8 +67,6 @@ var Engine = (function(global) {
   function init() {
     reset();
     lastTime = Date.now();
-    //lastPlayerState = game.controlling.active;
-    //console.log("last player state = " + lastPlayerState);
     main();
   }
 
@@ -94,18 +79,18 @@ var Engine = (function(global) {
    * functionality this way (you could just implement collision detection
    * on the entities themselves within your app.js file).
    */
+
+   /*
+  update first increments time in the game, then checks for either a gameover
+  or victory condition.
+   */
   function update(dt) {
     game.world.updateTime(dt);
 
-    if ((game.defeat || game.victory) && game.playersPassed()){
-      console.log("restart Game");
-    }
-
-    if (game.world.checkVictory()) {
+    if (game.world.levelCompleteCondition()) {
       reset();
     }
 
-    //if (lastPlayerState !== game.controlling.active){
     if (game.refresh){
       console.log("refresh");
       game.world.activateComponents(game.refresh);
@@ -114,7 +99,6 @@ var Engine = (function(global) {
     }
 
     updateEntities(dt);
-    // checkCollisions();
   }
 
   /* This is called by the update function  and loops through all of the
@@ -123,6 +107,10 @@ var Engine = (function(global) {
    * player object. These update methods should focus purely on updating
    * the data/properties related to  the object. Do your drawing in your
    * render methods.
+   */
+   /*
+  If the game.refresh condition is set to true during the update, then a major
+  game event has taken place, and the current level will be replaced.
    */
   function updateEntities(dt) {
 
@@ -147,7 +135,6 @@ var Engine = (function(global) {
     game.allPlayers.forEach(function(player){
       if (game.notControlling(player)){
         player.catchIt();
-        //player.wait();
       }
     });
 
@@ -159,31 +146,9 @@ var Engine = (function(global) {
 
     game.update();
 
-    if (game.refresh) update(dt);
-    /*
-            allCollectables.forEach(function(collectable) {
-                collectable.update(dt);
-            });
-
-            allEnemies.forEach(function(enemy) {
-                enemy.update(dt);
-            });
-            //cl(dt);
-            allPlayers[4].move(dt);
-
-            transporters.forEach(function(transporter) {
-                transporter.update(dt);
-            });
-
-            if (allPlayers.length > 0){
-                controlling.update(dt);
-            }
-
-            allPlayers.forEach(function(player){
-                player.catchIt();
-                player.wait();
-            });
-    */
+    if (game.refresh) {
+      update(dt);
+    }
   }
 
   /* This function initially draws the "game level", it will then call
@@ -192,8 +157,13 @@ var Engine = (function(global) {
    * they are flipbooks creating the illusion of animation but in reality
    * they are just drawing the entire screen over and over.
    */
+   /*
+   I modified the render function to render by row--background to foreground--
+   to maintain the illusion of depth. Also if a collectable is a projectile then
+   it renders outside of the row rendering logic.
+   */
   function render() {
-    cr('engine render');
+
     game.world.renderBackground(canvas);
 
     game.renderStatusBar();
@@ -214,7 +184,6 @@ var Engine = (function(global) {
        * so that we get the benefits of caching these images, since
        * we're using them over and over.
        */
-      // Modified so that it reads the tileMap array in world.
 
       game.world.render(row, numCols);
       renderEntities(row);
@@ -225,8 +194,6 @@ var Engine = (function(global) {
         collectable.render();
       }
     });
-
-    //game.enemy.renderNavPoints();
   }
 
   /* This function is called by the render function and is called on each game
@@ -234,7 +201,6 @@ var Engine = (function(global) {
    * on your enemy and player entities within app.js
    */
   function renderEntities(row) {
-    cr(' render entities row:' + row);
 
     game.allGoals.forEach(function(goal){
       goal.renderColorPulse(row);
@@ -264,85 +230,29 @@ var Engine = (function(global) {
       goal.renderColorPulseForeground(row);
     });
 
-    //console.log(game.currentMenu);
     if (game.world.cutscene || game.level === 0 || game.victory || game.defeat){
-        game.currentMenu.render(); // TODO dang it why are the titles not rendering right?
+        game.currentMenu.render();
     }
-
-    /* Loop through all of the objects within the allEnemies array and call
-     * the render function you have defined.
-     */
-
-    /*
-            transporters.forEach(function(transporter) {
-                transporter.render();
-            });
-
-            allCollectables.forEach(function(collectable) {
-                collectable.render();
-            });
-
-            allEnemies.forEach(function(enemy) {
-                enemy.render();
-            });
-
-            allPlayers.forEach(function(player){
-                player.render();
-            });
-    */
   }
 
 /*
-The reset function resets the canvas to display the currentMap. It turns off all components so that game.world.activateComponents can initialize the exiting components to their new locations.
+The reset function resets the canvas to display the currentMap. It turns off all
+ components so that game.world.activateComponents can initialize the exiting
+ components to their new locations.
+ game.world.init calculates required canvas size
+ menu.layout measures canvas size for proportional placement of titles
 */
   function reset() {
-//    console.log("engine reset");
 
-    game.world.init();//determine canvas size.
+    game.world.init();
 
     game.allMenus[0].layout(game.world);
     game.allMenus[1].layout(game.world);
     game.allMenus[2].layout(game.world);
-    game.allMenus[3].layout(game.world);//measures canvas size for proportional placement of titles
+    game.allMenus[3].layout(game.world);
 
     canvas.width = game.world.canvasSize.x;
     canvas.height = game.world.canvasSize.y;
-
-
-
-    //game.allPlayers.init(game.world.currentMap.playerStartTile);
-
- //   game.allEnemies.forEach(function(enemy) {
-// //     //enemy.simpleInit();
-// //   });
-//
-// //   game.allCollectables.forEach(function(collectable) {
-// //   //  collectable.init();
-// //   });
-//
-// //   if (game.world.currentMap.hasOwnProperty('bossStartTile')) {
-// //     game.boss.cutscene(game.world.currentMap.bossStartTile);
-// //     //console.log(game.boss.tile);
-// //     //console.log(game.boss.position);
-// //     game.boss.active = true;
-// //   }
-//
-// //   //console.log(game.world.currentMap);
-// //   if (game.world.currentMap.hasOwnProperty('goalTile')){
-// //     game.allGoals.forEach(function(goal){
-// //       goal.notNeeded();
-// //     });
-// //     var i = 0;
-// //     game.world.currentMap.goalTile.forEach(function (tile){
-// //       game.allGoals[i].init(tile);
-// //       i++;
-// //     });
-//
- //     for (var i = 0; i < 2; i++){
- //         game.allTransporters[i].init();
- //     }
-  //  }
-
   }
 
   /* Go ahead and load all of the images we know we're going to need to

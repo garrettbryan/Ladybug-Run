@@ -146,49 +146,8 @@ var World = function() {
         y: 8
       },
       enemyPaths: [
-        [{
-          x: -1,
-          y: 7
-        }, {
-          x: 9,
-          y: 7
-        }],
-        [{
-          x: 9,
-          y: 2
-        }, {
-          x: -1,
-          y: 2
-        }],
-        [{
-          x: -1,
-          y: 3
-        }, {
-          x: 9,
-          y: 3
-        }],
-        [{
-          x: 9,
-          y: 4
-        }, {
-          x: -1,
-          y: 4
-        }],
-        [{
-          x: -1,
-          y: 5
-        }, {
-          x: 9,
-          y: 5
-        }],
-        [{
-          x: 9,
-          y: 6
-        }, {
-          x: -1,
-          y: 6
-        }]
-      ],
+        [{  x: 2,  y: 7}, {  x: 9,  y: 7}, {  x: 9,  y: 2}, {  x: 2,  y: 2}]
+        ],
 
       enemyMessage : "A long time ago . . .",
 
@@ -258,21 +217,7 @@ var World = function() {
         y: 0
       },
       enemyPaths: [
-        [{
-          x: 0,
-          y: 1
-        }, {
-          x: 3,
-          y: 0
-        }, {
-          x: 5,
-          y: 3
-        }, {
-          x: 0,
-          y: 2
-        }],
-
-      ],
+        [{ x: 0, y: 1 }, { x: 3, y: 0 }, { x: 5, y: 3 }, { x: 0, y: 2 }]],
 
       enemyMessage : "A cold wind blows.",
 
@@ -593,9 +538,9 @@ World.prototype.characterVictory = function(player){
 }
 
 /*
-checkVictory controls most of the interlevel changes. allDead, playersPassed, boss.dead are the three possible outcomes for each level.
+levelCompleteCondition controls most of the interlevel changes. allDead, playersPassed, boss.dead are the three possible outcomes for each level.
 */
-World.prototype.checkVictory = function() {
+World.prototype.levelCompleteCondition = function() {
   var result = false;
   if (game.world.characterVictory(game.controlling)) {
     game.controlling.passedLevel();
@@ -619,7 +564,7 @@ World.prototype.checkVictory = function() {
       this.currentMap = this.randomMap;
       result = true;
     } else {
-      cl("victory sequence");
+
       this.init();
       game.world.characterVictory();
       result = true;
@@ -714,6 +659,9 @@ if (refresh) {
         game.allGoals[i].activate(this.currentMap.goalTile[i]);
       }
     }
+
+    //game.allEnemies[1].init();
+
     for (var i = 1; i < 5 * game.level; i++){
       game.allEnemies[i].simpleInit();
     }
@@ -761,7 +709,7 @@ World.prototype.init = function() {
 updates the running game time.
 */
 World.prototype.updateTime = function(dt) {
-  cl('world updateTime');
+
   if (game.active && !game.world.cutscene){
     this.worldTime += dt;
   }
@@ -778,7 +726,7 @@ World.prototype.subtractTimeFromScore = function() {
 Calculates the screen space needed by each additional elevation unit. It is required that the first row of the topoMap array, have the tallest block for proper rendering.
 */
 World.prototype.maximumBlockElevation = function() {
-  cl('world maximumBlockElevation');
+
   ////console.log("game level " + game.level);
   var max = this.currentMap.topoMap[0];
   for (var i = 1; i < this.currentMap.totalTiles.x; i++) {
@@ -792,7 +740,7 @@ World.prototype.maximumBlockElevation = function() {
 The world render method checks for a scrolling map. If the scrolling map is in use, the for loop needs to be adjusted so that the tile removal is not rendered to the canvas.
 */
 World.prototype.render = function(row, numCols) {
-  cr('world render row:' + row);
+
   if (this.currentMap === this.randomMap){
     numCols++;
   }
@@ -862,7 +810,7 @@ World.prototype.createRandomMapColumn = function(currentMap) {
 The world update checks for the randomMap which is the scrolling map. If random map is in use, then it updates the offset.x property for a simulated tracking shot.
 */
 World.prototype.update = function(dt) {
-  cl('world update');
+
   if (this.currentMap === this.randomMap){
     this.offset.x += dt;
     if (this.offset.x >= 0) {

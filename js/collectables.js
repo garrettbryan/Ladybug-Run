@@ -56,7 +56,7 @@ Collectable.prototype.update = function(dt) {
     this.position.y = this.position.y + this.speed * dt * this.direction.y;
   }
   if (this.speed && this.distance > 500 ){
-    this.calculateTile();
+    //this.calculateTile();
     this.init();
   }
 };

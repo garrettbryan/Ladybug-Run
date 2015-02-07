@@ -68,12 +68,10 @@ var GamePiece = function() {
   };
 }
 
+/*
+generic update updates the collision boundaries
+*/
 GamePiece.prototype.update = function(dt) {
-  cg('GamePiece update');
-  if (this.carriedBy) {
-    this.x = this.carriedBy.x + 20;
-    this.y = this.carriedBy.y + 30;
-  }
   for (boundary in this.collisionBoundary) {
     this.collisionBoundary[boundary].x = this.position.x + this.collisionBoundary[boundary].offset.x;
     this.collisionBoundary[boundary].y = this.position.y + this.collisionBoundary[boundary].offset.y
@@ -84,7 +82,6 @@ GamePiece.prototype.update = function(dt) {
 CollisionCheck determines if an object has collided with this. Then runs a result method on this object. CollisonCheck returns a boolean objectsCollide.
 */
 GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
-  cg('GamePiece collisionCheck');
   var that = this,
     objectsCollide = false;
   if (that !== gamePiece){
@@ -104,8 +101,6 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
             var radiiSum = (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r) *
               (gamePiece.collisionBoundary[boundary].r + that.collisionBoundary.primary.r);
             if (distanceBetweenGamePieces < radiiSum) {
-              ////console.log("collision");
-              ////console.log(result);
               console.log(that.elementName + " acts on " + gamePiece.elementName);
               result.call(that, gamePiece);
               objectsCollide = true;
@@ -118,12 +113,18 @@ GamePiece.prototype.collisionCheck = function(gamePiece, boundary, result) {
   return objectsCollide;
 }
 
+/*
+removes collision objects from the collideswith array, effectively turning off colisions.
+*/
 GamePiece.prototype.collidesWithNothing = function(){
   for (boundary in this.collisionBoundary){
     this.collisionBoundary[boundary].collidesWith = [];
   }
 }
 
+/*
+activate places the gamePiece onto the screen on the proper tile, and activates a steed and any collectble.
+*/
 GamePiece.prototype.activate = function(tile) {
   this.draw = true;
   this.active = true;
@@ -147,12 +148,6 @@ GamePiece.prototype.activate = function(tile) {
       collectable.tile = this.tile;
     });
   }
-//  for (boundary in this.collisionBoundary) {
-//    if (this.collisionBoundary[boundary].savedCollidesWith){
-//      this.collisionBoundary[boundary].collidesWith = this.collisionBoundary[boundary].savedCollidesWith;
-//      this.collisionBoundary[boundary].savedCollidesWith = [];//
-//    }
-//  }
 }
 
 GamePiece.prototype.noCollisions = function() {
@@ -170,40 +165,12 @@ GamePiece.prototype.noCollisions = function() {
   };
   this.speed = 0;
   this.rotation = 0; //about the z axis
-
-//  for (boundary in this.collisionBoundary) {
-//    if (this.collisionBoundary[boundary].collidesWith.length){
-//      this.collisionBoundary[boundary].savedCollidesWith = this.collisionBoundary[boundary].collidesWith;//
-//      this.collisionBoundary[boundary].collidesWith = [];//
-//    }
-//  }
 }
 
-GamePiece.prototype.retarget = function(targetPt) {
-  ce('retarget');
-  ce(this.position);
-  ce(targetPt);
-  var vector = {},
-    vectorMagnitude = 0,
-    normal = {};
-
-  vector = {
-    x: targetPt.x - (this.position.x + this.center.x),
-    y: targetPt.y - (this.position.y + this.center.y)
-  };
-  vectorMagnitude = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-
-  this.direction = {
-    x: vector.x / vectorMagnitude,
-    y: vector.y / vectorMagnitude
-  };
-
-  ce(this.direction);
-
-};
-
+/*
+render the game Piece only if its current row is the same as the row passed into the the render function.
+*/
 GamePiece.prototype.render = function(row) {
-  cg('GamePiece ' + this.name + ' render' + row);
   if (this.draw) {
     if (this.steed) this.steed.render(row);
     if (!row) {
@@ -215,18 +182,14 @@ GamePiece.prototype.render = function(row) {
         this.position.x - this.center.x + this.offset.x,
         this.position.y - this.center.y - this.offset.y,
         this.spriteDimensions.x, this.spriteDimensions.y);
-      for (boundary in this.collisionBoundary) {
-        //      //console.log(this);
-//        ctx.beginPath();
-//        ctx.arc(this.position.x + this.collisionBoundary[boundary].offset.x + this.offset.x, this.position.y - this.collisionBoundary[boundary].offset.y, this.collisionBoundary[boundary].r, 0, 2 * Math.PI, false);
-//        ctx.stroke();
-      }
     }
   }
 };
 
+/*
+move takes the current tile, speed, direction and dt to determine the new position. (tile based not screen position based.)
+*/
 GamePiece.prototype.move = function(dt) {
-  cg('GamePiece move ' + this.name);
   if (this.active) {
     this.tile = {
       x: this.tile.x + this.speed * dt * this.direction.x,
@@ -236,8 +199,10 @@ GamePiece.prototype.move = function(dt) {
   }
 }
 
+/*
+converts tile position into a screen position.
+*/
 GamePiece.prototype.calculatePosition = function() {
-  cg('GamePiece calculatePosition ' + this.name);
   if (this.draw) {
     this.position = {
       x: this.tile.x * game.world.pixelsPerTileUnit.x +
@@ -250,16 +215,9 @@ GamePiece.prototype.calculatePosition = function() {
   }
 }
 
-GamePiece.prototype.calculateTile = function() {
-  cg('GamePiece calculate tile');
-  this.tile = {
-    x: (this.position.x + this.center.x - game.world.pixelsPerTileUnit.x / 2) / game.world.pixelsPerTileUnit.x,
-    y: (this.position.y + this.center.y - game.world.elevationOffset +
-        game.world.pixelsPerElevationUnit.y * game.world.currentMap.topoMap[this.tile.y * game.world.currentMap.totalTiles.x + this.tile.x]) /
-      game.world.pixelsPerTileUnit.y - 1
-  };
-}
-
+/*
+drop any collectables that have been picked up.
+*/
 GamePiece.prototype.drop = function() {
   if (this.collectables.length > 0) {
     while (this.collectables.length > 0) {
@@ -281,30 +239,18 @@ GamePiece.prototype.drop = function() {
   }
 };
 
+/*
+use a transporter to change gamePiece position. then reinitialize the transporters position.
+*/
 GamePiece.prototype.transport = function(p) {
-  ////console.log(p.tile);
-  ////console.log(this.tile);
-
-  cg('GamePiece transport');
   for (var i = 0; i < game.allTransporters.length; i++) {
     if (game.allTransporters[i] === this) {
-//      p.tile.x = game.allTransporters[0].tile.x;
-//      p.tile.y = game.allTransporters[0].tile.y;
-//      //console.log(game.allTransporters[i].tile);
       game.allTransporters.splice(i, 1);
       game.allTransporters.push(this);
       p.tile = game.allTransporters[0].tile;
- //     //console.log(p.tile);
       game.allTransporters[0].init();
       game.allTransporters[1].init();
-    //  game.allTransporters[0].collisionBoundary.primary.collidesWith = [];
-    //  game.allTransporters[1].collisionBoundary.primary.collidesWith = [];
     break;
     }
   }
-//  game.allTransporters = [];
-// for (var t = 0; t <  this.numberOfTransporters; t++){
-//    this.allTransporters.push(new Transporter());
-//    //console.log(this.allTransporters[t]);
-//  }
 }

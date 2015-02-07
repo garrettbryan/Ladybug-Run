@@ -34,17 +34,6 @@ var Menu = function(menuName) {
   },
 
   this.menuContent = [];
-  //  {
-  //    tag : '',
-  //    active : false,
-  //    content: '',
-  //    gameVariable : '',
-  //    position : {
-  //      x : '',
-  //      y : ''
-  //    },
-  //  },
-  //];
 }
 
 Menu.prototype.init = function(menuName, data) {
@@ -65,6 +54,9 @@ Menu.prototype.update = function() {
   }
 }
 
+/*
+Layout the titles based on the canvas size.
+*/
 Menu.prototype.layout = function(world, context){
   var metrics,
     verticalOffset = 0;
@@ -76,15 +68,19 @@ Menu.prototype.layout = function(world, context){
   }
 }
 
+/*
+Layout the position of the status bar based on the size of the canvas
+*/
 Menu.prototype.layoutStatusBar = function(world, context){
-  var metrics,
-    verticalOffset = 0;
   for(var i = 0; i < this.menuContent.length; i++){
     this.menuContent[i].position.x = world.canvasSize.x / 4 * i ;
     this.menuContent[i].position.y =  30;
   }
 }
 
+/*
+Render the title.
+*/
 Menu.prototype.render = function(){
   for (var i = 0 ; i < this.menuContent.length; i++){
     ctx.save();
@@ -103,39 +99,3 @@ Menu.prototype.render = function(){
     ctx.restore();
   }
 }
-
-
-//Game.prototype.renderTitle = function() {
-//  cl("game renderTitle");
-//  ctx.save();
-//  ctx.font = 'Bold 300px Sans-Serif';
-//  ctx.fillStyle = '#667AD9';
-//  ctx.shadowColor = '#000';
-//  ctx.shadowOffsetX = 5;
-//  ctx.shadowOffsetY = 5;
-//  ctx.shadowBlur = 5;
-//  ctx.textBaseline = 'Top';
-//  ctx.fillText('Ladybug Run', game.world.canvasSize.x * 0.025, game.world.canvasSize.y * 0.3);
-//  ctx.font = 'Italic 100px Sans-Serif';
-//  ctx.fillText('An Epic Five Levels', game.world.canvasSize.x * 0.025, game.world.canvasSize.y * 0.8);
-//  ctx.font = 'Italic 50px Sans-Serif';
-//  //ctx.fillText('By: Garrett Bryan', game.world.canvasSize.x * 0.025 , game.world.canvasSize.y * 0.9);
-//  ctx.fillText('Press the Spacebar to Play',game.world.canvasSize.x * 0.025 , game.world.canvasSize.y * 0.9);
-//  ctx.restore();
-//}
-//
-//Game.prototyp//e.renderDifficultyOption = function() {//
-//  cl("game re//nderDifficultyOption");//
-//  ctx.save();//
-//  ctx.font = 'Italic 8//0px// Sans-Serif';//
-//  ctx.fillStyle = '#ff//f';//
-//  ctx.shadowColor = '#//000//';//
-//  ctx.shadowOffsetX = //10;//
-//  ctx.shadowOffsetY = //10;//
-//  ctx.shadowBlur = 10;//
-//  ctx.textBaseline = 'Top';//
-//  ctx.font = 'Italic 30px Sans-Serif';//
-//  ctx.fillText('Difficulty', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 + 50);//
-//  ctx.fillText('Press the Spacebar to Select', game.world.canvasSize.x / 4 , game.world.canvasSize.y / 2 + 50 //+ 50 + 50);
-//  ctx.restore();
-//}

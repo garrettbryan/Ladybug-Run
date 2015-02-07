@@ -1,3 +1,6 @@
+/*
+Boss uses the player class as the basis, and adds additional functionality.
+*/
 var Boss = function() {
   Player.call(this, characters[0], 2);
 }
@@ -5,8 +8,9 @@ var Boss = function() {
 Boss.prototype = Object.create(Player.prototype);
 Boss.prototype.constructor = Boss;
 
-/* When creating a Boss and his steed it is important to verify the directions
-are set properly so that the collisionBoundaries are placed properly. */
+/*
+When creating a Boss and his steed it is important to verify the directions are set properly so that the collisionBoundaries are placed properly.
+*/
 Boss.prototype.init = function(tile) {
   this.tile = tile;
   this.direction = {
@@ -32,6 +36,9 @@ Boss.prototype.init = function(tile) {
   game.allEnemies[game.numberOfEnemies] = e;
 };
 
+/*
+creates 7 collectables and asssigns them to the boss for the final boss fight.
+*/
 Boss.prototype.armaments = function(){
   for (var i = 0; i < 7; i++) {
     var c = new Collectable(collectables[6]);
@@ -42,67 +49,72 @@ Boss.prototype.armaments = function(){
   }
 };
 
+/*
+places the boss on his cutscene tile and empties his movment array.
+*/
 Boss.prototype.cutscene = function(tile){
   this.init(tile);
   this.moveAI = [''];
 };
 
+/*
+populates the bosses move array.
+*/
 Boss.prototype.bossFight = function(){
   this.moveAI = ['left', 'right', 'up', 'down', 'space'];
 };
 
+/*
+uses vector analysis to target the player in case, the boss throws a projectile.
+*/
 Boss.prototype.target = function(player) {
-  ce('target');
-
   var vector = {},
     vector1 = this.position;
   vector2 = player.position;
   vectorMagnitude = 0,
     normal = {};
-
   vector = {
     x: vector2.x - (vector1.x),
     y: vector2.y - (vector1.y)
   };
   vectorMagnitude = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-
   this.direction = {
     x: vector.x / vectorMagnitude,
     y: vector.y / vectorMagnitude
   };
-
-  ce(this.direction);
 };
 
+/*
+decrements a random moveinterval when it reaches zero the boss performs a random action and the  moveInterval is randomly set.
+*/
 Boss.prototype.move = function(dt) {
   this.moveInterval -= dt;
   this.target(game.controlling);
-
   if (this.moveInterval < 0) {
     this.handleInput(this.moveAI[Math.floor(Math.random() * this.moveAI.length)])
     this.moveInterval = Math.random();
   }
 };
 
+/*
+If the boss is riding a steed then any call to death will result in the boss falling off.
+*/
 Boss.prototype.death = function() {
-  cp('Player death');
   this.collectables.forEach(function(collectable) {
-    //console.log(collectable);
     collectable.placeRandomly(game.world.currentMap);
   });
-
   if (this.steed) {
     this.dismount();
-    //console.log("dismount");
-
   } else {
-    //console.log("Boss died");
     this.drop();
     this.noCollisions();
     this.dead = true;
   }
 };
 
+/*
+boss update makes a call to boss.move to allow for random movemnet.
+*/
 Boss.prototype.update = function(dt) {
   if (this.active){
     this.move(dt);
@@ -127,8 +139,10 @@ Boss.prototype.update = function(dt) {
   }
 };
 
+/*
+Determines if the boss has picked up a collectable or been hit by a projectile.
+*/
 Boss.prototype.anyCollisions = function() {
-  ////console.log("player collision checks");
   if (this.active){
     for (var enemy in game.allEnemies) {
       if (!this.steed) {
@@ -146,15 +160,5 @@ Boss.prototype.anyCollisions = function() {
         this.collisionCheck(game.allCollectables[collectable], "primary", this.pickup);
       }
     }
-
-//    for (var transporter in game.allTransporters){
-//    //  this.collisionCheck(game.allTransporters[transporter], "primary", this.transport);
-//    }
-
-//    for (var i = 0; i < game.allPlayers.length; i++) {
-//      if(this.collisionCheck(game.allPlayers[i], "primary", this.tag)){
-//        console.log("tagged");
-//      }
-//    }
   }
 }

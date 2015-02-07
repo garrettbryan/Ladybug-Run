@@ -92,8 +92,10 @@ var Enemy = function(scale) {
 Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
+/*
+initMessageBug creates a bug from the passed in bugValues.
+*/
 Enemy.prototype.initMessageBug = function(bugValues){
-  ////console.log(bugValues);
   this.draw = true;
   this.tile.x = bugValues[0];
   this.tile.y = bugValues[1];
@@ -106,14 +108,17 @@ Enemy.prototype.initMessageBug = function(bugValues){
   this.scale = 1;
 }
 
+/*
+init has not been fully implemented it uses a simple navigation system that uses navPooints asscociated with each map.
+*/
 Enemy.prototype.init = function() {
-  ce('enemy init');
-  //TODO SET ALL PARAMETERS FOR AN ENEMY
   this.assignPath(game.world.currentMap.enemyPaths);
 };
 
+/*
+  simpleInit randomly places an enemy on the map to travel from the right to left side of the screen.
+*/
 Enemy.prototype.simpleInit = function(){
-  ce('enemy simple init');
   this.tile = {
     x: Math.floor(Math.random() * game.world.currentMap.totalTiles.x),
     y: Math.floor(Math.random() * game.world.currentMap.totalTiles.y)
@@ -138,16 +143,15 @@ Enemy.prototype.simpleInit = function(){
   ];
 }
 
+/*
+assignPath is used by the incomplete navigation system. not currently used in game.
+*/
 Enemy.prototype.assignPath = function(enemyPaths) {
-  ce('enemy assignPath');
-
   var vector = {},
     vectorMagnitude,
     normal = {};
   this.navData.directions = [];
-  //randomly pick a possible enemy path in the current map
   this.navData.navNodes = enemyPaths[Math.floor(Math.random() * enemyPaths.length)];
-
   this.navData.currentNodeIndex = 0;
   this.navData.currentNode = this.navData.navNodes[0];
   this.navData.targetNode = this.navData.navNodes[1];
@@ -162,48 +166,38 @@ Enemy.prototype.assignPath = function(enemyPaths) {
       x: vector.x / vectorMagnitude,
       y: vector.y / vectorMagnitude
     });
-
   };
   this.direction = this.navData.directions[0];
   this.tile = this.navData.currentNode;
-
   this.calculatePosition();
   this.navData.navPoints = this.calculateNavPoints(this.navData.navNodes);
   this.navData.targetPoint = this.navData.navPoints[1];
 };
 
+/*
+cutscene update cis used on enemies in the cutscene marquee.
+*/
 Enemy.prototype.cutsceneUpdate = function(dt) {
-  ce('enemy update');
   if (this.rider) {
     this.tile = this.rider.tile;
-    //direction with a rider comes from the riders handleInput method.
     this.calculatePosition();
   } else {
-    //        this.navigate(this.navData, this.reachedTarget);
-    //        ce(this.navData.targetPoint);
-    //        ce(this.position);
-    //        this.retarget(this.navData.targetPoint);
     this.move(dt);
-    ////console.log(this.position.x);
   }
   this.reflectCollisionBoundaries();
   this.chooseSpriteDirection();
 };
 
+/*
+update is used during gameplay to check for collisions with projectiles.
+*/
 Enemy.prototype.update = function(dt) {
-  ce('enemy update');
   if (this.active){
     if (this.rider) {
       this.tile = this.rider.tile;
-      //direction with a rider comes from the riders handleInput method.
       this.calculatePosition();
     } else {
-      //        this.navigate(this.navData, this.reachedTarget);
-      //        ce(this.navData.targetPoint);
-      //        ce(this.position);
-      //        this.retarget(this.navData.targetPoint);
       this.move(dt);
-      ////console.log(this.position.x);
     }
     this.reflectCollisionBoundaries();
     this.chooseSpriteDirection();
@@ -227,9 +221,10 @@ Enemy.prototype.update = function(dt) {
   }
 };
 
-
+/*
+calculateNavPoints is used by the incomplete navigation system. It converts navNodes in tiles to a screen position.
+*/
 Enemy.prototype.calculateNavPoints = function(navNodes) {
-  ce('enemy calculateNavPoints');
   var i = 0,
     navPoints = [];
   while (i < navNodes.length) {
@@ -239,8 +234,11 @@ Enemy.prototype.calculateNavPoints = function(navNodes) {
   return navPoints;
 }
 
+/*
+navigate determines the procimity to the next nav node and if distance is smaller than a certain threshold runs the result function passsed to it.
+*/
 GamePiece.prototype.navigate = function(navData, result) {
-  ce('enemy navigate');
+
   var distanceToNextNavPoint =
     (navData.targetPoint.x - this.collisionBoundary.navigatory.x) *
     (navData.targetPoint.x - this.collisionBoundary.navigatory.x) +
@@ -249,14 +247,14 @@ GamePiece.prototype.navigate = function(navData, result) {
   var radiiSum = (navData.r + this.collisionBoundary.navigatory.r) *
     (navData.r + this.collisionBoundary.navigatory.r);
   if (distanceToNextNavPoint < radiiSum) {
-
     result.call(this);
   }
 }
 
+/*
+used in the incomplete navigation system. It updates the current target nav point
+*/
 Enemy.prototype.reachedTarget = function() {
-  ce('enemy reachedTarget');
-
   if (this.navData.currentNodeIndex < this.navData.directions.length) {
     this.navData.currentNodeIndex++;
     this.navData.currentNode = this.navData.targetNode;
@@ -270,19 +268,21 @@ Enemy.prototype.reachedTarget = function() {
     this.navData.targetPoint = this.navData.navPoints[1];
     this.direction = this.navData.directions[0];
     this.tile = this.navData.navNodes[0];
-    //this.tile = this.currentNode;
   }
 }
 
+/*
+death inactivates the enemy with nocollisions.
+*/
 Enemy.prototype.death = function() {
-  ce('enemy death');
   this.noCollisions();
 };
 
+/*
+draws a black circle around the nav point for debugging.
+*/
 Enemy.prototype.renderNavPoints = function() {
-  ce('enemy renderNavPoints');
   for (navPoint in this.navData.navNodes) {
-
     ctx.beginPath();
     ctx.arc(this.navData.navPoints[navPoint].x, this.navData.navPoints[navPoint].y, this.navData.r, 0, 2 * Math.PI, false);
     ctx.stroke();
@@ -293,7 +293,6 @@ Enemy.prototype.renderNavPoints = function() {
 When an enemy changes x direction, the sprite changes to show the current x direction, the collision boundaries reflect about the y axis.
 */
 Enemy.prototype.reflectCollisionBoundaries = function() {
-  ce('enemy reflectCollisionBoundaries');
   if (this.direction.x >= 0) {
     this.collisionBoundary.primary.offset.x = Math.abs(this.collisionBoundary.primary.offset.x);
     this.collisionBoundary.secondary.offset.x = -Math.abs(this.collisionBoundary.secondary.offset.x);
@@ -303,10 +302,10 @@ Enemy.prototype.reflectCollisionBoundaries = function() {
   }
 }
 
+/*
+Determines the sprite ditection of the enemy.
+*/
 Enemy.prototype.chooseSpriteDirection = function() {
-  ce('enemy chooseSpriteDirection');
-
-
   if (this.direction.x >= 0) {
     this.sx = 0;
     this.sy = 0;
