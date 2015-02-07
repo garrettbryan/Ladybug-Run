@@ -1,3 +1,18 @@
+Note to the evaluator:
+I really pushed myself on this one. I kept thinking of new features and adding them before I had a strong grasp of how to organize the code. I finally had a good dialog here:
+https://piazza.com/class/i36sqlrb9xu332?cid=254
+and got some good insight from studying vincenzo's code. I basically had to start over and introduce new features one at a time. I realized that I was adding way tooo much when I got into design patterns. I know there is a future project that deals with design patterns and I figure that I will revisit the video game after I gain more experience. Overall a great experience.
 
+https://piazza.com/class/i36sqlrb9xu332?cid=254
 
 https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+
+https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent.keyCode
+
+https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images
+
+http://gameprogrammingpatterns.com/command.html
+
+http://dev.housetrip.com/2014/09/15/decoupling-javascript-apps-using-pub-sub-pattern/
+
+http://commons.wikimedia.org/wiki/File:Aurora_Borealis_and_Australis_Poster.jpg#mediaviewer/File:Polarlicht_2.jpg
