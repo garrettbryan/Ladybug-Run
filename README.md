@@ -1,4 +1,4 @@
-**Ladybug Run
+Ladybug Run
 
 You control a group of friends who are on a quest to overcome the ladybug hordes and their leader Big Boss Bug Boy.
 
